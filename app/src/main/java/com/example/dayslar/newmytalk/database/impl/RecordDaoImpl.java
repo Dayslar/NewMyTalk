@@ -41,7 +41,7 @@ public class RecordDaoImpl implements RecordDAO {
         cv.put(RecordTableConfig.INCOMING, record.isIncoming());
 
         long id = dbController.getDatabase().insert(DbConfig.RECORD_TABLE_NAME, null, cv);
-        MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Запись с " + id + "успешно добавлена");
+        MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Запись с " + id + " успешно добавлена");
     }
 
     @Override
@@ -49,6 +49,8 @@ public class RecordDaoImpl implements RecordDAO {
         dbController.getDatabase().delete(DbConfig.RECORD_TABLE_NAME,
                 RecordTableConfig._ID + " = ?",
                 new String[]{id + ""});
+
+        MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Запись с " + id + " успешно удалена");
     }
 
     @Override
@@ -64,6 +66,8 @@ public class RecordDaoImpl implements RecordDAO {
             record = readRecord(cursor);
         }
         cursor.close();
+
+        MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Запись с " + id + " успешно получена");
         return record;
     }
 
@@ -76,13 +80,10 @@ public class RecordDaoImpl implements RecordDAO {
             do {
                 records.add(readRecord(cursor));
             }
-
             while (cursor.moveToNext());
-
         }
 
         cursor.close();
-
         return records;
     }
 

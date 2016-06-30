@@ -40,6 +40,7 @@ public class DbHelper extends SQLiteOpenHelper {
                     RecordTableConfig.CONTACT_NAME + " text," +
                     RecordTableConfig.MANAGER_ID + " integer," +
                     RecordTableConfig.ANSWER + " tinyint(1)," +
+                    RecordTableConfig.INCOMING + " tinyint(1)," +
                     RecordTableConfig.SUBDIVISION_ID + " integer);");
         }
 
