@@ -16,7 +16,8 @@ class DbHelper extends SQLiteOpenHelper {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-            createRecordTable(db);
+            createRecordBaseTable(db, DbConfig.RECORD_TABLE_NAME);
+            createRecordBaseTable(db, DbConfig.CURRENT_RECORD_TABLE_NAME);
             createManagerTable(db);
         }
 
@@ -28,8 +29,8 @@ class DbHelper extends SQLiteOpenHelper {
                     ManagerTableConfig.PHOTO_PATCH + " text);");
         }
 
-        private void createRecordTable(SQLiteDatabase db) {
-            db.execSQL("CREATE TABLE " + DbConfig.RECORD_TABLE_NAME + "( " +
+        private void createRecordBaseTable(SQLiteDatabase db, String tableName) {
+            db.execSQL("CREATE TABLE " + tableName + "( " +
                     RecordTableConfig._ID + " integer primary key autoincrement," +
                     RecordTableConfig.PATCH + " text," +
                     RecordTableConfig.FILE_NAME + " text," +
