@@ -14,6 +14,8 @@ import com.example.dayslar.newmytalk.entity.Record;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.dayslar.newmytalk.database.Utils.readRecord;
+
 public class RecordDaoImpl implements RecordDAO {
 
     private DataBaseController dbController;
@@ -86,22 +88,5 @@ public class RecordDaoImpl implements RecordDAO {
         return records;
     }
 
-    private Record readRecord(Cursor cursor){
-        Record record = new Record();
-        record.set_id(cursor.getInt(cursor.getColumnIndex(RecordTableConfig._ID)));
-        record.setManager_id(cursor.getInt(cursor.getColumnIndex(RecordTableConfig.MANAGER_ID)));
-        record.setSubdivision_id(cursor.getInt(cursor.getColumnIndex(RecordTableConfig.SUBDIVISION_ID)));
-        record.setCallNumber(cursor.getString(cursor.getColumnIndex(RecordTableConfig.CALL_NUMBER)));
-        record.setPhoneNumber(cursor.getString(cursor.getColumnIndex(RecordTableConfig.PHONE_NUMBER)));
-        record.setCallTime(cursor.getLong(cursor.getColumnIndex(RecordTableConfig.CALL_TIME)));
-        record.setStartRecord(cursor.getLong(cursor.getColumnIndex(RecordTableConfig.START_CALL)));
-        record.setEndRecord(cursor.getLong(cursor.getColumnIndex(RecordTableConfig.END_CALL)));
-        record.setContactName(cursor.getString(cursor.getColumnIndex(RecordTableConfig.CONTACT_NAME)));
-        record.setFileName(cursor.getString(cursor.getColumnIndex(RecordTableConfig.FILE_NAME)));
-        record.setPatch(cursor.getString(cursor.getColumnIndex(RecordTableConfig.PATCH)));
-        record.setAnswer(cursor.getInt(cursor.getColumnIndex(RecordTableConfig.ANSWER)) == 1);
-        record.setIncoming(cursor.getInt(cursor.getColumnIndex(RecordTableConfig.INCOMING)) == 1);
 
-        return record;
-    }
 }

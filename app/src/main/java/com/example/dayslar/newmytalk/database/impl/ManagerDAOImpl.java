@@ -14,6 +14,8 @@ import com.example.dayslar.newmytalk.entity.Manager;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.dayslar.newmytalk.database.Utils.readManager;
+
 public class ManagerDAOImpl implements ManagerDAO {
 
     private DataBaseController dbController;
@@ -86,15 +88,5 @@ public class ManagerDAOImpl implements ManagerDAO {
         cursor.close();
 
         return managers;
-    }
-
-    private Manager readManager(Cursor cursor) {
-        Manager manager = new Manager();
-        manager.set_id(cursor.getInt(cursor.getColumnIndex(ManagerTableConfig._ID)));
-        manager.setManager_id(cursor.getInt(cursor.getColumnIndex(ManagerTableConfig.MANAGER_ID)));
-        manager.setName(cursor.getString(cursor.getColumnIndex(ManagerTableConfig.NAME)));
-        manager.setPhotoPatch(cursor.getString(cursor.getColumnIndex(ManagerTableConfig.PHOTO_PATCH)));
-
-        return manager;
     }
 }
