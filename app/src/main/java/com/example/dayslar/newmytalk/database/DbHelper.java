@@ -8,7 +8,7 @@ import com.example.dayslar.newmytalk.database.config.DbConfig;
 import com.example.dayslar.newmytalk.database.config.ManagerTableConfig;
 import com.example.dayslar.newmytalk.database.config.RecordTableConfig;
 
-public class DbHelper extends SQLiteOpenHelper {
+class DbHelper extends SQLiteOpenHelper {
 
         DbHelper(Context context) {
             super(context, DbConfig.DB_NAME, null, DbConfig.DB_VERSION);
@@ -35,7 +35,8 @@ public class DbHelper extends SQLiteOpenHelper {
                     RecordTableConfig.FILE_NAME + " text," +
                     RecordTableConfig.PHONE_NUMBER + " text," +
                     RecordTableConfig.CALL_NUMBER + " text," +
-                    RecordTableConfig.DURATION + " integer," +
+                    RecordTableConfig.START_CALL + " bigint(19)," +
+                    RecordTableConfig.END_CALL + " bigint(19)," +
                     RecordTableConfig.CALL_TIME + " bigint(19)," +
                     RecordTableConfig.CONTACT_NAME + " text," +
                     RecordTableConfig.MANAGER_ID + " integer," +

@@ -4,16 +4,11 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.example.dayslar.newmytalk.database.impl.ManagerDAOImpl;
 import com.example.dayslar.newmytalk.database.impl.RecordDaoImpl;
-import com.example.dayslar.newmytalk.entity.Manager;
 import com.example.dayslar.newmytalk.entity.Record;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
 public class RecordsTest {
@@ -29,7 +24,8 @@ public class RecordsTest {
         record.setCallNumber("+375295642388");
         record.setPhoneNumber("+375295642388");
         record.setCallTime(146734857343L);
-        record.setDuration(200);
+        record.setStartRecord(146734857344L);
+        record.setEndRecord(146734857399L);
         record.setContactName("Питюня");
         record.setAnswer(true);
         record.setIncoming(true);
@@ -40,7 +36,6 @@ public class RecordsTest {
 
     }
 
-
     @Test
     public void deleteRecord() throws Exception {
 
@@ -48,7 +43,6 @@ public class RecordsTest {
 
         new RecordDaoImpl(appContext).delete(2);
     }
-
 
     @Test
     public void getRecord() throws Exception  {

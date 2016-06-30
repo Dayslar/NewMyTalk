@@ -9,18 +9,19 @@ public class Record {
     private String fileName;
     private String phoneNumber;
     private String callNumber;
-    private int duration;
+    private long startRecord;
+    private long endRecord;
     private long callTime;
     private String contactName;
     private boolean answer;
     private boolean incoming;
 
-    public void set_id(int _id) {
-        this._id = _id;
-    }
-
     public int get_id() {
         return _id;
+    }
+
+    public void set_id(int _id) {
+        this._id = _id;
     }
 
     public int getSubdivision_id() {
@@ -71,12 +72,20 @@ public class Record {
         this.callNumber = callNumber;
     }
 
-    public int getDuration() {
-        return duration;
+    public long getStartRecord() {
+        return startRecord;
     }
 
-    public void setDuration(int duration) {
-        this.duration = duration;
+    public void setStartRecord(long startRecord) {
+        this.startRecord = startRecord;
+    }
+
+    public long getEndRecord() {
+        return endRecord;
+    }
+
+    public void setEndRecord(long endRecord) {
+        this.endRecord = endRecord;
     }
 
     public long getCallTime() {
@@ -110,5 +119,4 @@ public class Record {
     public void setIncoming(boolean incoming) {
         this.incoming = incoming;
     }
-
 }
