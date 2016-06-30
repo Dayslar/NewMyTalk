@@ -15,8 +15,8 @@ public class Record {
     private boolean answer;
     private boolean incoming;
 
-    public Record(int id) {
-        _id = id;
+    public void set_id(int _id) {
+        this._id = _id;
     }
 
     public int get_id() {
@@ -110,4 +110,5 @@ public class Record {
     public void setIncoming(boolean incoming) {
         this.incoming = incoming;
     }
+
 }
