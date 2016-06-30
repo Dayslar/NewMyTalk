@@ -43,15 +43,15 @@ public class ManagersTest {
         managers.add(manager1);
 
         Manager manager2 = new Manager();
-        manager1.setManager_id(2);
-        manager1.setName("Петя");
-        manager1.setPhotoPatch("Фото Петя");
+        manager2.setManager_id(2);
+        manager2.setName("Петя");
+        manager2.setPhotoPatch("Фото Петя");
         managers.add(manager2);
 
         Manager manager3 = new Manager();
-        manager1.setManager_id(3);
-        manager1.setName("Игорь");
-        manager1.setPhotoPatch("Фото Игорь");
+        manager3.setManager_id(3);
+        manager3.setName("Игорь");
+        manager3.setPhotoPatch("Фото Игорь");
         managers.add(manager3);
 
         new ManagerDAOImpl(appContext).add(managers);
