@@ -7,6 +7,10 @@ public class Manager {
     private String name;
     private String photoPatch;
 
+    public void set_id(int _id) {
+        this._id = _id;
+    }
+
     public int get_id() {
         return _id;
     }
@@ -33,5 +37,15 @@ public class Manager {
 
     public void setPhotoPatch(String photoPatch) {
         this.photoPatch = photoPatch;
+    }
+
+    @Override
+    public String toString() {
+        return "Manager{" +
+                "_id=" + _id +
+                ", manager_id=" + manager_id +
+                ", name='" + name + '\'' +
+                ", photoPatch='" + photoPatch + '\'' +
+                '}';
     }
 }

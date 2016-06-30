@@ -11,4 +11,7 @@ public interface ManagerDAO {
 
     void delete(int id);
     void delete(List<Integer> listManagerId);
+
+    Manager get(int id);
+    List<Manager> getManagers();
 }
