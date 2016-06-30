@@ -1,4 +1,4 @@
-package com.example.dayslar.newmytalk.config;
+package com.example.dayslar.newmytalk.utils;
 
 import android.util.Log;
 

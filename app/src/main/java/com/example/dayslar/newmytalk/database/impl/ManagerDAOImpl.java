@@ -3,9 +3,8 @@ package com.example.dayslar.newmytalk.database.impl;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
 
-import com.example.dayslar.newmytalk.config.MyLogger;
+import com.example.dayslar.newmytalk.utils.MyLogger;
 import com.example.dayslar.newmytalk.database.DataBaseController;
 import com.example.dayslar.newmytalk.database.config.DbConfig;
 import com.example.dayslar.newmytalk.database.config.ManagerTableConfig;
