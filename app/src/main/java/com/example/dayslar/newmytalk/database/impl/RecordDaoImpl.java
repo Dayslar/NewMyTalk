@@ -31,8 +31,8 @@ public class RecordDaoImpl implements RecordDAO {
         cv.put(RecordTableConfig.CALL_NUMBER, record.getCallNumber());
         cv.put(RecordTableConfig.PHONE_NUMBER, record.getPhoneNumber());
         cv.put(RecordTableConfig.CALL_TIME, record.getCallTime());
-        cv.put(RecordTableConfig.START_CALL, record.getCallTime());
-        cv.put(RecordTableConfig.END_CALL, record.getCallTime());
+        cv.put(RecordTableConfig.START_CALL, record.getStartRecord());
+        cv.put(RecordTableConfig.END_CALL, record.getEndRecord());
         cv.put(RecordTableConfig.CONTACT_NAME, record.getContactName());
         cv.put(RecordTableConfig.FILE_NAME, record.getFileName());
         cv.put(RecordTableConfig.PATCH, record.getPatch());
@@ -101,7 +101,6 @@ public class RecordDaoImpl implements RecordDAO {
         record.setPatch(cursor.getString(cursor.getColumnIndex(RecordTableConfig.PATCH)));
         record.setAnswer(cursor.getInt(cursor.getColumnIndex(RecordTableConfig.ANSWER)) == 1);
         record.setIncoming(cursor.getInt(cursor.getColumnIndex(RecordTableConfig.INCOMING)) == 1);
-
 
         return record;
     }
