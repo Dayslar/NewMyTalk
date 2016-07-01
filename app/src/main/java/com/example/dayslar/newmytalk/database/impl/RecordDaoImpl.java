@@ -14,7 +14,6 @@ import com.example.dayslar.newmytalk.entity.Record;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static com.example.dayslar.newmytalk.database.Utils.readRecord;
 
@@ -93,7 +92,6 @@ public class RecordDaoImpl implements RecordDAO, CurrentRecord {
         cursor.close();
         return records;
     }
-
 
     @Override
     public void update(long recordId, String column, Object value) throws Exception {
