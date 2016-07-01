@@ -20,33 +20,33 @@ class DbHelper extends SQLiteOpenHelper {
             createManagerTable(db);
         }
 
-        private void createManagerTable(SQLiteDatabase db) {
-            db.execSQL("CREATE TABLE " + DbConfig.MANAGER_TABLE_NAME + "(" +
-                    ManagerTableConfig._ID + " integer primary key autoincrement," +
-                    ManagerTableConfig.NAME + " text, " +
-                    ManagerTableConfig.MANAGER_ID + " integer, " +
-                    ManagerTableConfig.PHOTO_PATCH + " text);");
-        }
-
-        private void createRecordTable(SQLiteDatabase db, String tableName) {
-            db.execSQL("CREATE TABLE " + tableName + "( " +
-                    RecordTableConfig._ID + " integer primary key autoincrement," +
-                    RecordTableConfig.PATCH + " text," +
-                    RecordTableConfig.FILE_NAME + " text," +
-                    RecordTableConfig.PHONE_NUMBER + " text," +
-                    RecordTableConfig.CALL_NUMBER + " text," +
-                    RecordTableConfig.START_CALL + " bigint(19)," +
-                    RecordTableConfig.END_CALL + " bigint(19)," +
-                    RecordTableConfig.CALL_TIME + " bigint(19)," +
-                    RecordTableConfig.CONTACT_NAME + " text," +
-                    RecordTableConfig.MANAGER_ID + " integer," +
-                    RecordTableConfig.ANSWER + " tinyint(1)," +
-                    RecordTableConfig.INCOMING + " tinyint(1)," +
-                    RecordTableConfig.SUBDIVISION_ID + " integer);");
-        }
-
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         }
+
+    private void createManagerTable(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE " + DbConfig.MANAGER_TABLE_NAME + "(" +
+                ManagerTableConfig._ID + " integer primary key autoincrement," +
+                ManagerTableConfig.NAME + " text, " +
+                ManagerTableConfig.MANAGER_ID + " integer, " +
+                ManagerTableConfig.PHOTO_PATCH + " text);");
+    }
+
+    private void createRecordTable(SQLiteDatabase db, String tableName) {
+        db.execSQL("CREATE TABLE " + tableName + "( " +
+                RecordTableConfig._ID + " integer primary key autoincrement," +
+                RecordTableConfig.PATCH + " text," +
+                RecordTableConfig.FILE_NAME + " text," +
+                RecordTableConfig.PHONE_NUMBER + " text," +
+                RecordTableConfig.CALL_NUMBER + " text," +
+                RecordTableConfig.START_CALL + " bigint(19)," +
+                RecordTableConfig.END_CALL + " bigint(19)," +
+                RecordTableConfig.CALL_TIME + " bigint(19)," +
+                RecordTableConfig.CONTACT_NAME + " text," +
+                RecordTableConfig.MANAGER_ID + " integer," +
+                RecordTableConfig.ANSWER + " tinyint(1)," +
+                RecordTableConfig.INCOMING + " tinyint(1)," +
+                RecordTableConfig.SUBDIVISION_ID + " integer);");
+    }
     }
