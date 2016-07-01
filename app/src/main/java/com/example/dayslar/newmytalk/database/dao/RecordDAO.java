@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface RecordDAO {
 
-    void add(Record record);
+    long add(Record record);
     void delete(int id);
 
     Record get(int id);

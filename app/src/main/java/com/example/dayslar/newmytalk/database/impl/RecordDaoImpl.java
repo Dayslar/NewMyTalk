@@ -25,7 +25,7 @@ public class RecordDaoImpl implements RecordDAO {
     }
 
     @Override
-    public void add(Record record) {
+    public long add(Record record) {
         ContentValues cv = new ContentValues();
 
         cv.put(RecordTableConfig.MANAGER_ID, record.getManager_id());
@@ -43,6 +43,8 @@ public class RecordDaoImpl implements RecordDAO {
 
         long id = dbController.getDatabase().insert(DbConfig.RECORD_TABLE_NAME, null, cv);
         MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Запись с " + id + " успешно добавлена");
+
+        return id;
     }
 
     @Override

@@ -25,7 +25,7 @@ public class ManagerDAOImpl implements ManagerDAO {
     }
 
     @Override
-    public void add(Manager manager) {
+    public long add(Manager manager) {
         ContentValues cv = new ContentValues();
 
         cv.put(ManagerTableConfig.MANAGER_ID, manager.getManager_id());
@@ -34,12 +34,17 @@ public class ManagerDAOImpl implements ManagerDAO {
 
         long id = dbController.getDatabase().insert(DbConfig.MANAGER_TABLE_NAME, null, cv);
         MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Запись успешно добавлена " + id);
+
+        return id;
     }
 
     @Override
-    public void add(List<Manager> managers) {
-        for (Manager manager: managers)
-            add(manager);
+    public List<Long> add(List<Manager> managers) {
+        List<Long> longManagers = new ArrayList<>();
+        for (Manager manager: managers) {
+            longManagers.add(add(manager));
+        }
+        return longManagers;
     }
 
     @Override
