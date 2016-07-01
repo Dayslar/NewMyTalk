@@ -17,7 +17,6 @@ class DbHelper extends SQLiteOpenHelper {
         @Override
         public void onCreate(SQLiteDatabase db) {
             createRecordTable(db, DbConfig.RECORD_TABLE_NAME);
-            createRecordTable(db, DbConfig.CURRENT_RECORD_TABLE_NAME);
             createManagerTable(db);
         }
 

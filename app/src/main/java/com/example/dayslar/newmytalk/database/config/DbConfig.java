@@ -4,9 +4,8 @@ public class DbConfig {
 
     public static final String DB_NAME = "RecordDB";
     public static final String RECORD_TABLE_NAME = "RecordTable";
-    public static final String CURRENT_RECORD_TABLE_NAME = "CurrentRecordTable";
     public static final String MANAGER_TABLE_NAME = "ManagerTable";
 
-    public static final int DB_VERSION = 2;
+    public static final int DB_VERSION = 3;
 
 }
