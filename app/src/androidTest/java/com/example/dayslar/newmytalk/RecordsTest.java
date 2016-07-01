@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.example.dayslar.newmytalk.database.config.RecordTableConfig;
 import com.example.dayslar.newmytalk.database.impl.RecordDaoImpl;
 import com.example.dayslar.newmytalk.entity.Record;
 
@@ -32,7 +33,7 @@ public class RecordsTest {
         record.setPatch("d://");
         record.setFileName("1.mp3");
 
-        new RecordDaoImpl(appContext).add(record);
+        long id = new RecordDaoImpl(appContext).add(record);
 
     }
 

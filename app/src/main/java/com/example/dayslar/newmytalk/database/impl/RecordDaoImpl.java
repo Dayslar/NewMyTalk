@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
+import com.example.dayslar.newmytalk.database.interfaces.CurrentRecord;
 import com.example.dayslar.newmytalk.utils.MyLogger;
 import com.example.dayslar.newmytalk.database.DataBaseController;
 import com.example.dayslar.newmytalk.database.config.DbConfig;
@@ -13,20 +14,23 @@ import com.example.dayslar.newmytalk.entity.Record;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.example.dayslar.newmytalk.database.Utils.readRecord;
 
-public class RecordDaoImpl implements RecordDAO {
+public class RecordDaoImpl implements RecordDAO, CurrentRecord {
 
     private DataBaseController dbController;
+    private ContentValues cv;
 
-    public RecordDaoImpl(Context context){
+    public RecordDaoImpl(Context context) {
         dbController = new DataBaseController(context);
+        cv = new ContentValues();
     }
 
     @Override
     public long add(Record record) {
-        ContentValues cv = new ContentValues();
+        cv.clear();
 
         cv.put(RecordTableConfig.MANAGER_ID, record.getManager_id());
         cv.put(RecordTableConfig.SUBDIVISION_ID, record.getSubdivision_id());
@@ -65,7 +69,7 @@ public class RecordDaoImpl implements RecordDAO {
                 new String[]{id + ""},
                 null, null, null);
 
-        if (cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             record = readRecord(cursor);
         }
         cursor.close();
@@ -91,4 +95,19 @@ public class RecordDaoImpl implements RecordDAO {
     }
 
 
+    @Override
+    public void update(long recordId, String column, Object value) throws Exception {
+        cv.clear();
+
+        if (value instanceof Integer)
+            cv.put(column, (int) value);
+        else if (value instanceof Long)
+            cv.put(column, (long) value);
+        else if (value instanceof Boolean)
+            cv.put(column, (Boolean) value);
+        else if (value instanceof String)
+            cv.put(column, (String) value);
+
+        dbController.getDatabase().update(DbConfig.RECORD_TABLE_NAME, cv, RecordTableConfig._ID + "= ?", new String[]{recordId + ""});
+    }
 }
