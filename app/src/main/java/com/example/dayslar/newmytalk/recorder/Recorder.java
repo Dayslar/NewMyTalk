@@ -4,11 +4,12 @@ import android.media.MediaRecorder;
 
 public interface Recorder {
 
-    void startRecord();
+    void startRecord(String outputFile);
     void stopRecord();
 
-    void setAutioSource(MediaRecorder.AudioSource audioSource);
-    void setOutputFormat(MediaRecorder.OutputFormat outputFormat);
-    void setOutputFile(String fileName);
+    void setAudioSource(int audioSource);
+    void setOutputFormat(int outputFormat);
+    void setAudioEncoder(int audioEncoder);
+    void setAudioChannels(int audioChannels);
 
 }
