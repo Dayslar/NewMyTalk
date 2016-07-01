@@ -10,20 +10,20 @@ import com.example.dayslar.newmytalk.database.config.RecordTableConfig;
 
 class DbHelper extends SQLiteOpenHelper {
 
-        DbHelper(Context context) {
-            super(context, DbConfig.DB_NAME, null, DbConfig.DB_VERSION);
-        }
+    DbHelper(Context context) {
+        super(context, DbConfig.DB_NAME, null, DbConfig.DB_VERSION);
+    }
 
-        @Override
-        public void onCreate(SQLiteDatabase db) {
-            createRecordTable(db, DbConfig.RECORD_TABLE_NAME);
-            createManagerTable(db);
-        }
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        createRecordTable(db, DbConfig.RECORD_TABLE_NAME);
+        createManagerTable(db);
+    }
 
-        @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        }
+    }
 
     private void createManagerTable(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + DbConfig.MANAGER_TABLE_NAME + "(" +
@@ -49,4 +49,4 @@ class DbHelper extends SQLiteOpenHelper {
                 RecordTableConfig.INCOMING + " tinyint(1)," +
                 RecordTableConfig.SUBDIVISION_ID + " integer);");
     }
-    }
+}
