@@ -1,7 +1,5 @@
 package com.example.dayslar.newmytalk.recorder;
 
-import android.media.MediaRecorder;
-
 public interface Recorder {
 
     void startRecord(String outputFile);

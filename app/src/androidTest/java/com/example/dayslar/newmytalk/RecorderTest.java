@@ -5,7 +5,7 @@ import android.os.Environment;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.example.dayslar.newmytalk.recorder.Recorder;
-import com.example.dayslar.newmytalk.recorder.RecorderImpl;
+import com.example.dayslar.newmytalk.recorder.MediaRecorderImpl;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +19,7 @@ public class RecorderTest {
 
         String fileName = Environment.getExternalStorageDirectory() + "/record.mp4";
 
-        Recorder recorder = RecorderImpl.getInstance();
+        Recorder recorder = MediaRecorderImpl.getInstance();
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);

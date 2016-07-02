@@ -7,22 +7,22 @@ import com.example.dayslar.newmytalk.utils.MyLogger;
 
 import java.io.IOException;
 
-public class RecorderImpl implements Recorder {
+public class MediaRecorderImpl implements Recorder {
 
-    private static RecorderImpl instance;
+    private static MediaRecorderImpl instance;
 
     private MediaRecorder mediaRecorder;
     private boolean isRecording = false;
 
-    public static RecorderImpl getInstance(){
+    public static MediaRecorderImpl getInstance(){
         if (instance == null){
-            instance = new RecorderImpl();
+            instance = new MediaRecorderImpl();
         }
 
         return instance;
     }
 
-    private RecorderImpl(){
+    private MediaRecorderImpl(){
         mediaRecorder = new MediaRecorder();
     }
 
