@@ -14,6 +14,11 @@ public class MediaRecorderImpl implements Recorder {
     private MediaRecorder mediaRecorder;
     private boolean isRecording = false;
 
+    private int outputFormat;
+    private int audioSource;
+    private int audioEncoder;
+    private int audioChannels;
+
     public static MediaRecorderImpl getInstance(){
         if (instance == null){
             instance = new MediaRecorderImpl();
@@ -23,14 +28,18 @@ public class MediaRecorderImpl implements Recorder {
     }
 
     private MediaRecorderImpl(){
-        mediaRecorder = new MediaRecorder();
+
     }
 
     @Override
     public void startRecord(String outputFile) {
-        if (!isRecording && mediaRecorder != null){
+        if (!isRecording){
             try {
-                mediaRecorder.release();
+                mediaRecorder = new MediaRecorder();
+                mediaRecorder.setAudioSource(audioSource);
+                mediaRecorder.setOutputFormat(outputFormat);
+                mediaRecorder.setAudioEncoder(audioEncoder);
+                mediaRecorder.setAudioChannels(audioChannels);
                 mediaRecorder.setOutputFile(outputFile);
                 mediaRecorder.prepare();
                 mediaRecorder.start();
@@ -49,6 +58,8 @@ public class MediaRecorderImpl implements Recorder {
     public void stopRecord() {
         if (isRecording && mediaRecorder != null) {
             mediaRecorder.stop();
+            mediaRecorder.release();
+
             isRecording = false;
 
             MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Запись остановлена");
@@ -57,21 +68,21 @@ public class MediaRecorderImpl implements Recorder {
 
     @Override
     public void setAudioSource(int audioSource) {
-        mediaRecorder.setAudioSource(audioSource);
+        this.audioSource = audioSource;
     }
 
     @Override
     public void setOutputFormat(int outputFormat) {
-        mediaRecorder.setOutputFormat(outputFormat);
+        this.outputFormat = outputFormat;
     }
 
     @Override
     public void setAudioEncoder(int audioEncoder) {
-        mediaRecorder.setAudioEncoder(audioEncoder);
+        this.audioEncoder = audioEncoder;
     }
 
     @Override
     public void setAudioChannels(int audioChannels) {
-        mediaRecorder.setAudioChannels(1);
+        this.audioChannels = audioChannels;
     }
 }
