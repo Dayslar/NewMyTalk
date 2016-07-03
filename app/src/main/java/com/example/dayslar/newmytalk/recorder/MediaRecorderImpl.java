@@ -35,13 +35,7 @@ public class MediaRecorderImpl implements Recorder {
     public void startRecord(String outputFile) {
         if (!isRecording){
             try {
-                mediaRecorder = new MediaRecorder();
-                mediaRecorder.setAudioSource(audioSource);
-                mediaRecorder.setOutputFormat(outputFormat);
-                mediaRecorder.setAudioEncoder(audioEncoder);
-                mediaRecorder.setAudioChannels(audioChannels);
-                mediaRecorder.setOutputFile(outputFile);
-                mediaRecorder.prepare();
+                initRecorder(outputFile);
                 mediaRecorder.start();
 
                 isRecording = true;
@@ -59,11 +53,11 @@ public class MediaRecorderImpl implements Recorder {
         if (isRecording && mediaRecorder != null) {
             mediaRecorder.stop();
             mediaRecorder.release();
-
-            isRecording = false;
-
-            MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Запись остановлена");
+            mediaRecorder = null;
         }
+
+        isRecording = false;
+        MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Запись остановлена");
     }
 
     @Override
@@ -85,4 +79,17 @@ public class MediaRecorderImpl implements Recorder {
     public void setAudioChannels(int audioChannels) {
         this.audioChannels = audioChannels;
     }
+
+    private void initRecorder(String outputFile) throws IOException {
+
+        mediaRecorder = new MediaRecorder();
+        mediaRecorder.setAudioSource(audioSource);
+        mediaRecorder.setOutputFormat(outputFormat);
+        mediaRecorder.setAudioEncoder(audioEncoder);
+        mediaRecorder.setAudioChannels(audioChannels);
+        mediaRecorder.setOutputFile(outputFile);
+
+        mediaRecorder.prepare();
+    }
+
 }
