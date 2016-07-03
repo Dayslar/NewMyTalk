@@ -94,7 +94,7 @@ public class RecordDaoImpl implements RecordDAO, CurrentRecord {
     }
 
     @Override
-    public void update(long recordId, String column, Object value) throws Exception {
+    public void update(long recordId, String column, Object value) {
         cv.clear();
 
         if (value instanceof Integer)
