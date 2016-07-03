@@ -1,10 +1,7 @@
 package com.example.dayslar.newmytalk.recorder;
 
-
 import android.media.MediaRecorder;
-
 import com.example.dayslar.newmytalk.utils.MyLogger;
-
 import java.io.IOException;
 
 public class MediaRecorderImpl implements Recorder {
