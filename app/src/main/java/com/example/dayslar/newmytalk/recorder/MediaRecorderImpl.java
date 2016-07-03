@@ -35,10 +35,7 @@ public class MediaRecorderImpl implements Recorder {
     public void startRecord(String outputFile) {
         if (!isRecording){
             try {
-                initRecorder(outputFile);
-                mediaRecorder.start();
-
-                isRecording = true;
+                startRecorder(outputFile);
                 MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Запись запущена");
 
             } catch (IOException e) {
@@ -51,9 +48,7 @@ public class MediaRecorderImpl implements Recorder {
     @Override
     public void stopRecord() {
         if (isRecording && mediaRecorder != null) {
-            mediaRecorder.stop();
-            mediaRecorder.release();
-            mediaRecorder = null;
+            stopRecorder();
         }
 
         isRecording = false;
@@ -90,6 +85,19 @@ public class MediaRecorderImpl implements Recorder {
         mediaRecorder.setOutputFile(outputFile);
 
         mediaRecorder.prepare();
+    }
+
+    private void startRecorder(String outputFile) throws IOException {
+        initRecorder(outputFile);
+        mediaRecorder.start();
+
+        isRecording = true;
+    }
+
+    private void stopRecorder() {
+        mediaRecorder.stop();
+        mediaRecorder.release();
+        mediaRecorder = null;
     }
 
 }
