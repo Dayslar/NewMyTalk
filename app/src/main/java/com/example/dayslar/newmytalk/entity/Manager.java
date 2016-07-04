@@ -7,36 +7,40 @@ public class Manager {
     private String name;
     private String photoPatch;
 
-    public void set_id(int _id) {
-        this._id = _id;
+    public int getManager_id() {
+        return manager_id;
+    }
+
+    public Manager setManager_id(int manager_id) {
+        this.manager_id = manager_id;
+        return this;
     }
 
     public int get_id() {
         return _id;
     }
 
-    public int getManager_id() {
-        return manager_id;
-    }
-
-    public void setManager_id(int manager_id) {
-        this.manager_id = manager_id;
+    public Manager set_id(int _id) {
+        this._id = _id;
+        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public Manager setName(String name) {
         this.name = name;
+        return this;
     }
 
     public String getPhotoPatch() {
         return photoPatch;
     }
 
-    public void setPhotoPatch(String photoPatch) {
+    public Manager setPhotoPatch(String photoPatch) {
         this.photoPatch = photoPatch;
+        return this;
     }
 
     @Override

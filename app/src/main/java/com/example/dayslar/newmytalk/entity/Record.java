@@ -20,103 +20,135 @@ public class Record {
         return _id;
     }
 
-    public void set_id(int _id) {
+    public Record set_id(int _id) {
         this._id = _id;
+        return this;
     }
 
     public int getSubdivision_id() {
         return subdivision_id;
     }
 
-    public void setSubdivision_id(int subdivision_id) {
+    public Record setSubdivision_id(int subdivision_id) {
         this.subdivision_id = subdivision_id;
+        return this;
     }
 
     public int getManager_id() {
         return manager_id;
     }
 
-    public void setManager_id(int manager_id) {
+    public Record setManager_id(int manager_id) {
         this.manager_id = manager_id;
+        return this;
     }
 
     public String getPatch() {
         return patch;
     }
 
-    public void setPatch(String patch) {
+    public Record setPatch(String patch) {
         this.patch = patch;
+        return this;
     }
 
     public String getFileName() {
         return fileName;
     }
 
-    public void setFileName(String fileName) {
+    public Record setFileName(String fileName) {
         this.fileName = fileName;
+        return this;
     }
 
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
+    public Record setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+        return this;
     }
 
     public String getCallNumber() {
         return callNumber;
     }
 
-    public void setCallNumber(String callNumber) {
+    public Record setCallNumber(String callNumber) {
         this.callNumber = callNumber;
+        return this;
     }
 
     public long getStartRecord() {
         return startRecord;
     }
 
-    public void setStartRecord(long startRecord) {
+    public Record setStartRecord(long startRecord) {
         this.startRecord = startRecord;
+        return this;
     }
 
     public long getEndRecord() {
         return endRecord;
     }
 
-    public void setEndRecord(long endRecord) {
+    public Record setEndRecord(long endRecord) {
         this.endRecord = endRecord;
+        return this;
     }
 
     public long getCallTime() {
         return callTime;
     }
 
-    public void setCallTime(long callTime) {
+    public Record setCallTime(long callTime) {
         this.callTime = callTime;
+        return this;
     }
 
     public String getContactName() {
         return contactName;
     }
 
-    public void setContactName(String contactName) {
+    public Record setContactName(String contactName) {
         this.contactName = contactName;
+        return this;
     }
 
     public boolean isAnswer() {
         return answer;
     }
 
-    public void setAnswer(boolean answer) {
+    public Record setAnswer(boolean answer) {
         this.answer = answer;
+        return this;
     }
 
     public boolean isIncoming() {
         return incoming;
     }
 
-    public void setIncoming(boolean incoming) {
+    public Record setIncoming(boolean incoming) {
         this.incoming = incoming;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Record{" +
+                "_id=" + _id +
+                ", subdivision_id=" + subdivision_id +
+                ", manager_id=" + manager_id +
+                ", patch='" + patch + '\'' +
+                ", fileName='" + fileName + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", callNumber='" + callNumber + '\'' +
+                ", startRecord=" + startRecord +
+                ", endRecord=" + endRecord +
+                ", callTime=" + callTime +
+                ", contactName='" + contactName + '\'' +
+                ", answer=" + answer +
+                ", incoming=" + incoming +
+                '}';
     }
 }
