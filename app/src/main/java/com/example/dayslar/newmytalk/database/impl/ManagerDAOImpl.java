@@ -8,7 +8,7 @@ import com.example.dayslar.newmytalk.utils.MyLogger;
 import com.example.dayslar.newmytalk.database.DataBaseController;
 import com.example.dayslar.newmytalk.database.config.DbConfig;
 import com.example.dayslar.newmytalk.database.config.ManagerTableConfig;
-import com.example.dayslar.newmytalk.database.dao.ManagerDAO;
+import com.example.dayslar.newmytalk.database.interfaces.dao.ManagerDAO;
 import com.example.dayslar.newmytalk.entity.Manager;
 
 import java.util.ArrayList;

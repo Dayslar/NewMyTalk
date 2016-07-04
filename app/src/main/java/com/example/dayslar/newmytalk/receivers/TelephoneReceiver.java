@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.example.dayslar.newmytalk.database.config.RecordTableConfig;
-import com.example.dayslar.newmytalk.database.dao.RecordDAO;
+import com.example.dayslar.newmytalk.database.interfaces.dao.RecordDAO;
 import com.example.dayslar.newmytalk.database.impl.RecordDaoImpl;
 import com.example.dayslar.newmytalk.database.interfaces.CurrentRecord;
 import com.example.dayslar.newmytalk.entity.Record;

@@ -1,4 +1,4 @@
-package com.example.dayslar.newmytalk.database.dao;
+package com.example.dayslar.newmytalk.database.interfaces.dao;
 
 import com.example.dayslar.newmytalk.entity.Record;
 
