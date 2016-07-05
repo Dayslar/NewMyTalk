@@ -18,7 +18,11 @@ public class MediaRecorderImpl implements Recorder {
 
     public static MediaRecorderImpl getInstance(){
         if (instance == null){
-            instance = new MediaRecorderImpl();
+           synchronized (MediaRecorderImpl.class){
+               if (instance == null){
+                   instance = new MediaRecorderImpl();
+               }
+           }
         }
 
         return instance;
