@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.example.dayslar.newmytalk.database.impl.SqlRecordDaoImpl;
 import com.example.dayslar.newmytalk.database.entity.Record;
+import com.example.dayslar.newmytalk.database.interfaces.dao.RecordDAO;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,8 +16,8 @@ public class RecordsTest {
 
     @Test
     public void addRecord() throws Exception {
-
         Context appContext = InstrumentationRegistry.getTargetContext();
+        RecordDAO recordDAO = SqlRecordDaoImpl.getInstance(appContext);
 
         Record record = new Record()
                 .setSubdivision_id(1)
@@ -32,30 +33,31 @@ public class RecordsTest {
                 .setPatch("d://")
                 .setFileName("1.mp3");
 
-        new SqlRecordDaoImpl(appContext).add(record);
+        recordDAO.add(record);
 
     }
 
     @Test
     public void deleteRecord() throws Exception {
         Context appContext = InstrumentationRegistry.getTargetContext();
+        RecordDAO recordDAO = SqlRecordDaoImpl.getInstance(appContext);
 
-        new SqlRecordDaoImpl(appContext).delete(10);
+        recordDAO.delete(10);
     }
 
     @Test
     public void getRecord() throws Exception  {
-
         Context appContext = InstrumentationRegistry.getTargetContext();
+        RecordDAO recordDAO = SqlRecordDaoImpl.getInstance(appContext);
 
-        new SqlRecordDaoImpl(appContext).get(3);
+        recordDAO.get(3);
     }
 
     @Test
     public void getRecords() throws Exception {
-
         Context appContext = InstrumentationRegistry.getTargetContext();
+        RecordDAO recordDAO = SqlRecordDaoImpl.getInstance(appContext);
 
-        new SqlRecordDaoImpl(appContext).getRecords();
+        recordDAO.getRecords();
     }
 }
