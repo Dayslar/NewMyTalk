@@ -7,6 +7,10 @@ public class Manager {
     private String name;
     private String photoPatch;
 
+    public Manager() {
+
+    }
+
     public int getManager_id() {
         return manager_id;
     }
