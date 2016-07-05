@@ -16,25 +16,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
-        Manager manager = new Manager();
-
-        manager.setManager_id(1);
-        manager.setName("Петя петров");
-        manager.setPhotoPatch("Вася пупкин фото");
-
-        ManagerDAO mDAO = new ManagerDAOImpl(this);
-        mDAO.add(manager);
-        mDAO.delete(1);
-
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
 }
