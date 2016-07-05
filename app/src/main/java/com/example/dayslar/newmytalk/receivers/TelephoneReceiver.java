@@ -7,7 +7,6 @@ import android.content.Intent;
 import com.example.dayslar.newmytalk.database.config.RecordTableConfig;
 import com.example.dayslar.newmytalk.database.interfaces.dao.RecordDAO;
 import com.example.dayslar.newmytalk.database.impl.SqlRecordDaoImpl;
-import com.example.dayslar.newmytalk.database.interfaces.CurrentRecord;
 import com.example.dayslar.newmytalk.database.entity.Record;
 import com.example.dayslar.newmytalk.utils.MyLogger;
 
@@ -18,8 +17,7 @@ public class TelephoneReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        RecordDAO recordDAO = new SqlRecordDaoImpl(context);
-        CurrentRecord currentRecord = new SqlRecordDaoImpl(context);
+        RecordDAO recordDAO = SqlRecordDaoImpl.getInstance(context);
 
         switch (intent.getAction()) {
             case TelephoneConfig.NEW_OUTGOING_CALL:
@@ -37,14 +35,13 @@ public class TelephoneReceiver extends BroadcastReceiver {
 
                 if (phoneState.equals(TelephoneConfig.EXTRA_STATE_OFFHOOK)) {
                     MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Отвечаем на звонок");
-                    currentRecord.update(id, RecordTableConfig.ANSWER, true);
-                    currentRecord.update(id, RecordTableConfig.START_CALL, System.currentTimeMillis());
+                    recordDAO.getCurrentRecord().update(id, RecordTableConfig.ANSWER, true);
+                    recordDAO.getCurrentRecord().update(id, RecordTableConfig.START_CALL, System.currentTimeMillis());
                 }
 
                 if (phoneState.equals(TelephoneConfig.EXTRA_STATE_IDLE)) {
                     MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Ложим трубку");
-                    currentRecord.update(id, RecordTableConfig.END_CALL, System.currentTimeMillis());
-
+                    recordDAO.getCurrentRecord().update(id, RecordTableConfig.END_CALL, System.currentTimeMillis());
                 }
 
                 break;
