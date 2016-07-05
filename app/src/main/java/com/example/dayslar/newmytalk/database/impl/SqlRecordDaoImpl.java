@@ -17,12 +17,12 @@ import java.util.List;
 
 import static com.example.dayslar.newmytalk.database.Utils.readRecord;
 
-public class RecordDaoImpl implements RecordDAO, CurrentRecord {
+public class SqlRecordDaoImpl implements RecordDAO, CurrentRecord {
 
     private DataBaseController dbController;
     private ContentValues cv;
 
-    public RecordDaoImpl(Context context) {
+    public SqlRecordDaoImpl(Context context) {
         dbController = DataBaseController.getInstance(context);
         cv = new ContentValues();
     }

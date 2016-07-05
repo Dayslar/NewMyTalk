@@ -6,7 +6,7 @@ import android.content.Intent;
 
 import com.example.dayslar.newmytalk.database.config.RecordTableConfig;
 import com.example.dayslar.newmytalk.database.interfaces.dao.RecordDAO;
-import com.example.dayslar.newmytalk.database.impl.RecordDaoImpl;
+import com.example.dayslar.newmytalk.database.impl.SqlRecordDaoImpl;
 import com.example.dayslar.newmytalk.database.interfaces.CurrentRecord;
 import com.example.dayslar.newmytalk.database.entity.Record;
 import com.example.dayslar.newmytalk.utils.MyLogger;
@@ -18,8 +18,8 @@ public class TelephoneReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        RecordDAO recordDAO = new RecordDaoImpl(context);
-        CurrentRecord currentRecord = new RecordDaoImpl(context);
+        RecordDAO recordDAO = new SqlRecordDaoImpl(context);
+        CurrentRecord currentRecord = new SqlRecordDaoImpl(context);
 
         switch (intent.getAction()) {
             case TelephoneConfig.NEW_OUTGOING_CALL:

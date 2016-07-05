@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.example.dayslar.newmytalk.database.impl.RecordDaoImpl;
+import com.example.dayslar.newmytalk.database.impl.SqlRecordDaoImpl;
 import com.example.dayslar.newmytalk.database.entity.Record;
 
 import org.junit.Test;
@@ -32,7 +32,7 @@ public class RecordsTest {
                 .setPatch("d://")
                 .setFileName("1.mp3");
 
-        new RecordDaoImpl(appContext).add(record);
+        new SqlRecordDaoImpl(appContext).add(record);
 
     }
 
@@ -40,7 +40,7 @@ public class RecordsTest {
     public void deleteRecord() throws Exception {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        new RecordDaoImpl(appContext).delete(10);
+        new SqlRecordDaoImpl(appContext).delete(10);
     }
 
     @Test
@@ -48,7 +48,7 @@ public class RecordsTest {
 
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        new RecordDaoImpl(appContext).get(3);
+        new SqlRecordDaoImpl(appContext).get(3);
     }
 
     @Test
@@ -56,6 +56,6 @@ public class RecordsTest {
 
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        new RecordDaoImpl(appContext).getRecords();
+        new SqlRecordDaoImpl(appContext).getRecords();
     }
 }
