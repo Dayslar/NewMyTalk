@@ -1,6 +1,7 @@
 package com.example.dayslar.newmytalk.database.interfaces.dao;
 
 import com.example.dayslar.newmytalk.database.entity.Record;
+import com.example.dayslar.newmytalk.database.interfaces.CurrentRecord;
 
 import java.util.List;
 
@@ -11,4 +12,6 @@ public interface RecordDAO {
 
     Record get(int id);
     List<Record> getRecords();
+
+    CurrentRecord getCurrentRecord();
 }

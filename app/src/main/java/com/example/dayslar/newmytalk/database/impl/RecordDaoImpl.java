@@ -94,6 +94,11 @@ public class RecordDaoImpl implements RecordDAO, CurrentRecord {
     }
 
     @Override
+    public CurrentRecord getCurrentRecord() {
+        return this;
+    }
+
+    @Override
     public void update(long recordId, String column, Object value) {
         cv.clear();
 
