@@ -18,9 +18,22 @@ import static com.example.dayslar.newmytalk.database.Utils.readManager;
 
 public class ManagerDAOImpl implements ManagerDAO {
 
+    private static ManagerDAOImpl instance;
     private DataBaseController dbController;
 
-    public ManagerDAOImpl(Context context) {
+    public static ManagerDAOImpl getInstance(Context context){
+        if (instance == null) {
+            synchronized (ManagerDAOImpl.class) {
+                if (instance == null) {
+                    instance = new ManagerDAOImpl(context);
+                }
+            }
+        }
+
+        return instance;
+    }
+
+    private ManagerDAOImpl(Context context) {
         dbController = DataBaseController.getInstance(context);
     }
 
