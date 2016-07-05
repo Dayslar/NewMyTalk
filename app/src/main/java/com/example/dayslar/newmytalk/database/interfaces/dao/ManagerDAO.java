@@ -9,9 +9,9 @@ public interface ManagerDAO {
     long add(Manager manager);
     List<Long> add(List<Manager> managers);
 
-    void delete(int id);
-    void delete(List<Integer> listManagerId);
+    void delete(long id);
+    void delete(List<Long> listManagerId);
 
-    Manager get(int id);
+    Manager get(long id);
     List<Manager> getManagers();
 }

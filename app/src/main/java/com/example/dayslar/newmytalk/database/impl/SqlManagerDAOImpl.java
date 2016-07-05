@@ -61,19 +61,19 @@ public class SqlManagerDAOImpl implements ManagerDAO {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(long id) {
         dbController.getDatabase().delete(DbConfig.MANAGER_TABLE_NAME, ManagerTableConfig._ID + "=" + id, null);
         MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Запись с " + ManagerTableConfig.MANAGER_ID + " = " + id + " успешно удалена");
     }
 
     @Override
-    public void delete(List<Integer> listManagerId) {
-        for (Integer id : listManagerId)
+    public void delete(List<Long> listManagerId) {
+        for (Long id : listManagerId)
             delete(id);
     }
 
     @Override
-    public Manager get(int id) {
+    public Manager get(long id) {
         Manager manager = null;
         Cursor cursor = dbController.getDatabase().query(DbConfig.MANAGER_TABLE_NAME, null, "manager_id = ?", new String[]{id + ""}, null, null, null);
 
