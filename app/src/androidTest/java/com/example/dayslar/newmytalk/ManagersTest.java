@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.example.dayslar.newmytalk.database.impl.ManagerDAOImpl;
+import com.example.dayslar.newmytalk.database.impl.SqlManagerDAOImpl;
 import com.example.dayslar.newmytalk.database.entity.Manager;
 
 import org.junit.runner.RunWith;
@@ -26,7 +26,7 @@ public class ManagersTest {
                 .setName("Питюня")
                 .setPhotoPatch("Фотка питюни");
 
-        new ManagerDAOImpl(appContext).add(manager);
+        new SqlManagerDAOImpl(appContext).add(manager);
     }
 
     @Test
@@ -54,7 +54,7 @@ public class ManagersTest {
         manager3.setPhotoPatch("Фото Игорь");
         managers.add(manager3);
 
-        new ManagerDAOImpl(appContext).add(managers);
+        new SqlManagerDAOImpl(appContext).add(managers);
 
 
     }
@@ -64,7 +64,7 @@ public class ManagersTest {
 
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        new ManagerDAOImpl(appContext).delete(4);
+        new SqlManagerDAOImpl(appContext).delete(4);
     }
 
 
@@ -73,7 +73,7 @@ public class ManagersTest {
 
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        new ManagerDAOImpl(appContext).get(2);
+        new SqlManagerDAOImpl(appContext).get(2);
     }
 
     @Test
@@ -81,6 +81,6 @@ public class ManagersTest {
 
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        new ManagerDAOImpl(appContext).getManagers();
+        new SqlManagerDAOImpl(appContext).getManagers();
     }
 }

@@ -16,16 +16,16 @@ import java.util.List;
 
 import static com.example.dayslar.newmytalk.database.Utils.readManager;
 
-public class ManagerDAOImpl implements ManagerDAO {
+public class SqlManagerDAOImpl implements ManagerDAO {
 
-    private static ManagerDAOImpl instance;
+    private static SqlManagerDAOImpl instance;
     private DataBaseController dbController;
 
-    public static ManagerDAOImpl getInstance(Context context){
+    public static SqlManagerDAOImpl getInstance(Context context){
         if (instance == null) {
-            synchronized (ManagerDAOImpl.class) {
+            synchronized (SqlManagerDAOImpl.class) {
                 if (instance == null) {
-                    instance = new ManagerDAOImpl(context);
+                    instance = new SqlManagerDAOImpl(context);
                 }
             }
         }
@@ -33,7 +33,7 @@ public class ManagerDAOImpl implements ManagerDAO {
         return instance;
     }
 
-    private ManagerDAOImpl(Context context) {
+    private SqlManagerDAOImpl(Context context) {
         dbController = DataBaseController.getInstance(context);
     }
 
