@@ -1,6 +1,6 @@
 package com.example.dayslar.newmytalk.database.interfaces.dao;
 
-import com.example.dayslar.newmytalk.entity.Manager;
+import com.example.dayslar.newmytalk.database.entity.Manager;
 
 import java.util.List;
 

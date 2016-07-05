@@ -10,7 +10,7 @@ import com.example.dayslar.newmytalk.database.DataBaseController;
 import com.example.dayslar.newmytalk.database.config.DbConfig;
 import com.example.dayslar.newmytalk.database.config.RecordTableConfig;
 import com.example.dayslar.newmytalk.database.interfaces.dao.RecordDAO;
-import com.example.dayslar.newmytalk.entity.Record;
+import com.example.dayslar.newmytalk.database.entity.Record;
 
 import java.util.ArrayList;
 import java.util.List;

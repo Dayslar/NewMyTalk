@@ -1,4 +1,4 @@
-package com.example.dayslar.newmytalk.entity;
+package com.example.dayslar.newmytalk.database.entity;
 
 public class Record {
 

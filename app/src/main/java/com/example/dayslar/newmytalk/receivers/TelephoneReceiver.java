@@ -8,7 +8,7 @@ import com.example.dayslar.newmytalk.database.config.RecordTableConfig;
 import com.example.dayslar.newmytalk.database.interfaces.dao.RecordDAO;
 import com.example.dayslar.newmytalk.database.impl.RecordDaoImpl;
 import com.example.dayslar.newmytalk.database.interfaces.CurrentRecord;
-import com.example.dayslar.newmytalk.entity.Record;
+import com.example.dayslar.newmytalk.database.entity.Record;
 import com.example.dayslar.newmytalk.utils.MyLogger;
 
 public class TelephoneReceiver extends BroadcastReceiver {

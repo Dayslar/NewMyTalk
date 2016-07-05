@@ -5,7 +5,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.example.dayslar.newmytalk.database.impl.ManagerDAOImpl;
-import com.example.dayslar.newmytalk.entity.Manager;
+import com.example.dayslar.newmytalk.database.entity.Manager;
 
 import org.junit.runner.RunWith;
 import org.junit.Test;

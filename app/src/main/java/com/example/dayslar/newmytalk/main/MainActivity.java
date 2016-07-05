@@ -5,9 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.dayslar.newmytalk.R;
-import com.example.dayslar.newmytalk.database.interfaces.dao.ManagerDAO;
-import com.example.dayslar.newmytalk.database.impl.ManagerDAOImpl;
-import com.example.dayslar.newmytalk.entity.Manager;
 
 public class MainActivity extends AppCompatActivity {
 

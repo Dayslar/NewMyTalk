@@ -4,8 +4,8 @@ import android.database.Cursor;
 
 import com.example.dayslar.newmytalk.database.config.ManagerTableConfig;
 import com.example.dayslar.newmytalk.database.config.RecordTableConfig;
-import com.example.dayslar.newmytalk.entity.Manager;
-import com.example.dayslar.newmytalk.entity.Record;
+import com.example.dayslar.newmytalk.database.entity.Manager;
+import com.example.dayslar.newmytalk.database.entity.Record;
 
 public class Utils {
 
