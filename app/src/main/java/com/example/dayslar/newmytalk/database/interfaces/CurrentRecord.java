@@ -8,7 +8,5 @@ public interface CurrentRecord {
      * @param column - column in table for update
      * @param value - information for update
      */
-
-
     void update(long recordId, String column, Object value);
 }
