@@ -19,10 +19,23 @@ import static com.example.dayslar.newmytalk.database.Utils.readRecord;
 
 public class SqlRecordDaoImpl implements RecordDAO, CurrentRecord {
 
+    private static SqlRecordDaoImpl instance;
+
     private DataBaseController dbController;
     private ContentValues cv;
 
-    public SqlRecordDaoImpl(Context context) {
+    public static SqlRecordDaoImpl getInstance(Context context){
+        if (instance == null){
+            synchronized (SqlRecordDaoImpl.class){
+                if (instance == null)
+                    instance = new SqlRecordDaoImpl(context);
+            }
+        }
+
+        return instance;
+    }
+
+    private SqlRecordDaoImpl(Context context) {
         dbController = DataBaseController.getInstance(context);
         cv = new ContentValues();
     }
