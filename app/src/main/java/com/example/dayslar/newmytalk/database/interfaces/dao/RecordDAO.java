@@ -8,9 +8,9 @@ import java.util.List;
 public interface RecordDAO {
 
     long add(Record record);
-    void delete(int id);
+    void delete(long id);
 
-    Record get(int id);
+    Record get(long id);
     List<Record> getRecords();
 
     CurrentRecord getCurrentRecord();

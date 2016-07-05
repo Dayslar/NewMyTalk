@@ -64,7 +64,7 @@ public class SqlRecordDaoImpl implements RecordDAO, CurrentRecord {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(long id) {
         dbController.getDatabase().delete(DbConfig.RECORD_TABLE_NAME,
                 RecordTableConfig._ID + " = ?",
                 new String[]{id + ""});
@@ -73,7 +73,7 @@ public class SqlRecordDaoImpl implements RecordDAO, CurrentRecord {
     }
 
     @Override
-    public Record get(int id) {
+    public Record get(long id) {
         Record record = null;
         Cursor cursor = dbController.getDatabase().query(DbConfig.RECORD_TABLE_NAME,
                 null,
