@@ -8,7 +8,6 @@ public class DataBaseController {
     private static DataBaseController instance;
 
     private SQLiteDatabase database;
-    private DbHelper dbHelper;
 
     public static DataBaseController getInstance(Context context){
         if (instance == null){
@@ -23,7 +22,7 @@ public class DataBaseController {
     }
 
     private DataBaseController(Context context){
-        dbHelper = new DbHelper(context);
+        DbHelper dbHelper = new DbHelper(context);
         database = dbHelper.getWritableDatabase();
     }
 
