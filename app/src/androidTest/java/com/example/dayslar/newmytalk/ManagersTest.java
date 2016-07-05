@@ -21,10 +21,10 @@ public class ManagersTest {
 
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        Manager manager = new Manager();
-        manager.setManager_id(2);
-        manager.setName("Питюня");
-        manager.setPhotoPatch("Фотка питюни");
+        Manager manager = new Manager()
+                .setManager_id(2)
+                .setName("Питюня")
+                .setPhotoPatch("Фотка питюни");
 
         new ManagerDAOImpl(appContext).add(manager);
     }

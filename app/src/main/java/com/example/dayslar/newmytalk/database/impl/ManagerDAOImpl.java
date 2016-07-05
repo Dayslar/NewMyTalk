@@ -21,7 +21,7 @@ public class ManagerDAOImpl implements ManagerDAO {
     private DataBaseController dbController;
 
     public ManagerDAOImpl(Context context) {
-        dbController = new DataBaseController(context);
+        dbController = DataBaseController.getInstance(context);
     }
 
     @Override

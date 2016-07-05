@@ -16,6 +16,10 @@ public class Record {
     private boolean answer;
     private boolean incoming;
 
+    public Record(){
+
+    }
+
     public int get_id() {
         return _id;
     }

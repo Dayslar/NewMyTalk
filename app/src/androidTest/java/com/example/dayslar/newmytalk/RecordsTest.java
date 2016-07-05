@@ -18,30 +18,29 @@ public class RecordsTest {
 
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        Record record = new Record();
-        record.setSubdivision_id(1);
-        record.setManager_id(2);
-        record.setCallNumber("+375295642388");
-        record.setPhoneNumber("+375295642388");
-        record.setCallTime(146734857343L);
-        record.setStartRecord(146734857344L);
-        record.setEndRecord(146734857399L);
-        record.setContactName("Питюня");
-        record.setAnswer(true);
-        record.setIncoming(true);
-        record.setPatch("d://");
-        record.setFileName("1.mp3");
+        Record record = new Record()
+                .setSubdivision_id(1)
+                .setManager_id(2)
+                .setCallNumber("+375295642388")
+                .setPhoneNumber("+375295642388")
+                .setCallTime(146734857343L)
+                .setStartRecord(146734857344L)
+                .setEndRecord(146734857399L)
+                .setContactName("Питюня")
+                .setAnswer(true)
+                .setIncoming(true)
+                .setPatch("d://")
+                .setFileName("1.mp3");
 
-        long id = new RecordDaoImpl(appContext).add(record);
+        new RecordDaoImpl(appContext).add(record);
 
     }
 
     @Test
     public void deleteRecord() throws Exception {
-
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        new RecordDaoImpl(appContext).delete(2);
+        new RecordDaoImpl(appContext).delete(10);
     }
 
     @Test

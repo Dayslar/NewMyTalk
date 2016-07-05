@@ -23,7 +23,7 @@ public class RecordDaoImpl implements RecordDAO, CurrentRecord {
     private ContentValues cv;
 
     public RecordDaoImpl(Context context) {
-        dbController = new DataBaseController(context);
+        dbController = DataBaseController.getInstance(context);
         cv = new ContentValues();
     }
 

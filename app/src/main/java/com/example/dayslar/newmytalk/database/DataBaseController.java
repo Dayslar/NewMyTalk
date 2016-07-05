@@ -5,11 +5,28 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class DataBaseController {
 
-    private SQLiteDatabase database;
+    private static DataBaseController instance;
 
-    public DataBaseController(Context context){
-        database = new DbHelper(context).getWritableDatabase();
+    private SQLiteDatabase database;
+    private DbHelper dbHelper;
+
+    public static DataBaseController getInstance(Context context){
+        if (instance == null){
+            synchronized (DataBaseController.class){
+                if (instance == null){
+                    instance = new DataBaseController(context);
+                }
+            }
+        }
+
+        return instance;
     }
+
+    private DataBaseController(Context context){
+        dbHelper = new DbHelper(context);
+        database = dbHelper.getWritableDatabase();
+    }
+
 
     public SQLiteDatabase getDatabase() {
         return database;
