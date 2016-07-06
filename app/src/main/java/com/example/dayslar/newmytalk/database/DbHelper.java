@@ -40,8 +40,8 @@ class DbHelper extends SQLiteOpenHelper {
                 RecordTableConfig.FILE_NAME + " text," +
                 RecordTableConfig.PHONE_NUMBER + " text," +
                 RecordTableConfig.CALL_NUMBER + " text," +
-                RecordTableConfig.START_CALL + " bigint(19)," +
-                RecordTableConfig.END_CALL + " bigint(19)," +
+                RecordTableConfig.START_RECORDING + " bigint(19)," +
+                RecordTableConfig.END_RECORDING + " bigint(19)," +
                 RecordTableConfig.CALL_TIME + " bigint(19)," +
                 RecordTableConfig.CONTACT_NAME + " text," +
                 RecordTableConfig.MANAGER_ID + " integer," +

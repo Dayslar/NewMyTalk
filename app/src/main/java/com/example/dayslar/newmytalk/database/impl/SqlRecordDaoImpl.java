@@ -49,8 +49,8 @@ public class SqlRecordDaoImpl implements RecordDAO, CurrentRecord {
         cv.put(RecordTableConfig.CALL_NUMBER, record.getCallNumber());
         cv.put(RecordTableConfig.PHONE_NUMBER, record.getPhoneNumber());
         cv.put(RecordTableConfig.CALL_TIME, record.getCallTime());
-        cv.put(RecordTableConfig.START_CALL, record.getStartRecord());
-        cv.put(RecordTableConfig.END_CALL, record.getEndRecord());
+        cv.put(RecordTableConfig.START_RECORDING, record.getStartRecord());
+        cv.put(RecordTableConfig.END_RECORDING, record.getEndRecord());
         cv.put(RecordTableConfig.CONTACT_NAME, record.getContactName());
         cv.put(RecordTableConfig.FILE_NAME, record.getFileName());
         cv.put(RecordTableConfig.PATCH, record.getPatch());

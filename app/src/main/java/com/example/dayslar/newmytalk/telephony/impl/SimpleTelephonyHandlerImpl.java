@@ -2,6 +2,8 @@ package com.example.dayslar.newmytalk.telephony.impl;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaRecorder;
+import android.os.Environment;
 
 import com.example.dayslar.newmytalk.database.config.RecordTableConfig;
 import com.example.dayslar.newmytalk.database.entity.Record;
@@ -20,6 +22,7 @@ public class SimpleTelephonyHandlerImpl implements TelephonyHandler {
     private Recorder recorder;
 
     private long idRecord;
+    private String DIRECTORY = Environment.getExternalStorageDirectory() + "/";
 
     public static SimpleTelephonyHandlerImpl getInstance(Context context){
         if (instance == null) {
@@ -34,22 +37,21 @@ public class SimpleTelephonyHandlerImpl implements TelephonyHandler {
 
     private SimpleTelephonyHandlerImpl(Context context){
         recordDAO = SqlRecordDaoImpl.getInstance(context);
-        recorder = MediaRecorderImpl.getInstance();
+        recorder = initPlayer();
     }
 
     @Override
     public void outgoingCall(Intent intent) {
         String callNumber = intent.getExtras().getString("android.intent.extra.PHONE_NUMBER");
 
-        if (callNumber.endsWith("*") || callNumber.endsWith("#")){
-            MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Выполянем ussd запрос" + callNumber);
-            return;
-        }
+        if (checkUSSD(callNumber)) return;
 
         MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Звоним на " + callNumber);
 
         idRecord = recordDAO.add(Record.emptyRecord());
         recordDAO.getCurrentRecord().update(idRecord, RecordTableConfig.CALL_NUMBER, callNumber);
+        recordDAO.getCurrentRecord().update(idRecord, RecordTableConfig.INCOMING, false);
+        recordDAO.getCurrentRecord().update(idRecord, RecordTableConfig.CALL_TIME, System.currentTimeMillis());
     }
 
     @Override
@@ -60,16 +62,47 @@ public class SimpleTelephonyHandlerImpl implements TelephonyHandler {
                 "Скрытый номер";
 
         MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Получаем звонок от " + callNumber);
+
+        idRecord = recordDAO.add(Record.emptyRecord());
+        recordDAO.getCurrentRecord().update(idRecord, RecordTableConfig.INCOMING, true);
         recordDAO.getCurrentRecord().update(idRecord, RecordTableConfig.CALL_NUMBER, callNumber);
+        recordDAO.getCurrentRecord().update(idRecord, RecordTableConfig.CALL_TIME, System.currentTimeMillis());
     }
 
     @Override
     public void offhookCall(Intent intent) {
         MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Отвечаем на звонок");
+        recorder.startRecord(DIRECTORY + "record" + idRecord + ".mp4");
+
+        recordDAO.getCurrentRecord().update(idRecord, RecordTableConfig.PATCH, DIRECTORY);
+        recordDAO.getCurrentRecord().update(idRecord, RecordTableConfig.FILE_NAME, "record" + idRecord + ".mp4");
+        recordDAO.getCurrentRecord().update(idRecord, RecordTableConfig.ANSWER, true);
+        recordDAO.getCurrentRecord().update(idRecord, RecordTableConfig.START_RECORDING, System.currentTimeMillis());
     }
 
     @Override
     public void idleCall(Intent intent) {
         MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Ложим трубку");
+
+        recorder.stopRecord();
+        recordDAO.getCurrentRecord().update(idRecord, RecordTableConfig.END_RECORDING, System.currentTimeMillis());
+    }
+
+    private boolean checkUSSD(String callNumber) {
+        if (callNumber.endsWith("*") || callNumber.endsWith("#")){
+            MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Выполянем ussd запрос" + callNumber);
+            return true;
+        }
+        return false;
+    }
+
+    private Recorder initPlayer(){
+        Recorder recorder = MediaRecorderImpl.getInstance();
+        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+        recorder.setAudioChannels(1);
+
+        return recorder;
     }
 }
