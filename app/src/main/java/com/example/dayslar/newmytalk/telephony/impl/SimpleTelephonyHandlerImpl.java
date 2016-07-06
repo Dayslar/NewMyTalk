@@ -9,6 +9,7 @@ import com.example.dayslar.newmytalk.database.config.RecordTableConfig;
 import com.example.dayslar.newmytalk.database.entity.Record;
 import com.example.dayslar.newmytalk.database.impl.SqlRecordDaoImpl;
 import com.example.dayslar.newmytalk.database.interfaces.dao.RecordDAO;
+import com.example.dayslar.newmytalk.main.MainActivity;
 import com.example.dayslar.newmytalk.recorder.impl.MediaRecorderImpl;
 import com.example.dayslar.newmytalk.recorder.interfaces.Recorder;
 import com.example.dayslar.newmytalk.telephony.interfaces.TelephonyHandler;
@@ -20,6 +21,7 @@ public class SimpleTelephonyHandlerImpl implements TelephonyHandler {
 
     private RecordDAO recordDAO;
     private Recorder recorder;
+    private Context context;
 
     private long idRecord;
     private String DIRECTORY = Environment.getExternalStorageDirectory() + "/";
@@ -38,6 +40,8 @@ public class SimpleTelephonyHandlerImpl implements TelephonyHandler {
     private SimpleTelephonyHandlerImpl(Context context){
         recordDAO = SqlRecordDaoImpl.getInstance(context);
         recorder = initPlayer();
+
+        this.context = context;
     }
 
     @Override
@@ -60,6 +64,8 @@ public class SimpleTelephonyHandlerImpl implements TelephonyHandler {
                 .getString("incoming_number") != null ?
                 intent.getExtras().getString("incoming_number"):
                 "Скрытый номер";
+
+        startActivity();
 
         MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Получаем звонок от " + callNumber);
 
@@ -105,4 +111,11 @@ public class SimpleTelephonyHandlerImpl implements TelephonyHandler {
 
         return recorder;
     }
+
+    private void startActivity() {
+        Intent activityIntent = new Intent(context, MainActivity.class);
+        activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(activityIntent);
+    }
+
 }
