@@ -5,8 +5,8 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.example.dayslar.newmytalk.recorder.MediaRecorderImpl;
-import com.example.dayslar.newmytalk.recorder.Recorder;
+import com.example.dayslar.newmytalk.recorder.impl.MediaRecorderImpl;
+import com.example.dayslar.newmytalk.recorder.interfaces.Recorder;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

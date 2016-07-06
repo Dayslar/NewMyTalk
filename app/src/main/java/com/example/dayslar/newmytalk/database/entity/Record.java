@@ -20,6 +20,10 @@ public class Record {
 
     }
 
+    public static Record emptyRecord(){
+        return new Record();
+    }
+
     public int get_id() {
         return _id;
     }
