@@ -8,12 +8,14 @@ import android.support.v7.app.AppCompatActivity;
 import com.example.dayslar.newmytalk.R;
 import com.example.dayslar.newmytalk.utils.MyLogger;
 
+import org.androidannotations.annotations.EActivity;
+
+@EActivity(R.layout.main_activity)
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_activity);
 
         MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Активите создана заново");
 
