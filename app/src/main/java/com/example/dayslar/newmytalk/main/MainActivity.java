@@ -25,4 +25,9 @@ public class MainActivity extends AppCompatActivity {
 
         MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Активите не пересоздавала второй раз");
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 }

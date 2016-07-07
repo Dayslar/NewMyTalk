@@ -1,9 +1,11 @@
 package com.example.dayslar.newmytalk.telephony.impl;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaRecorder;
 import android.os.Environment;
+import android.os.Handler;
 
 import com.example.dayslar.newmytalk.database.config.RecordTableConfig;
 import com.example.dayslar.newmytalk.database.entity.Record;
@@ -65,7 +67,6 @@ public class SimpleTelephonyHandlerImpl implements TelephonyHandler {
                 intent.getExtras().getString("incoming_number"):
                 "Скрытый номер";
 
-        startActivity();
 
         MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Получаем звонок от " + callNumber);
 
@@ -73,6 +74,8 @@ public class SimpleTelephonyHandlerImpl implements TelephonyHandler {
         recordDAO.getCurrentRecord().update(idRecord, RecordTableConfig.INCOMING, true);
         recordDAO.getCurrentRecord().update(idRecord, RecordTableConfig.CALL_NUMBER, callNumber);
         recordDAO.getCurrentRecord().update(idRecord, RecordTableConfig.CALL_TIME, System.currentTimeMillis());
+
+        startActivity(MainActivity.class, 0);
     }
 
     @Override
@@ -92,6 +95,7 @@ public class SimpleTelephonyHandlerImpl implements TelephonyHandler {
 
         recorder.stopRecord();
         recordDAO.getCurrentRecord().update(idRecord, RecordTableConfig.END_RECORDING, System.currentTimeMillis());
+
     }
 
     private boolean checkUSSD(String callNumber) {
@@ -112,10 +116,20 @@ public class SimpleTelephonyHandlerImpl implements TelephonyHandler {
         return recorder;
     }
 
-    private void startActivity() {
-        Intent activityIntent = new Intent(context, MainActivity.class);
-        activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(activityIntent);
+    private void startActivity(final Class<?extends Activity> clazz, final int code) {
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent activityIntent = new Intent(context, clazz);
+                activityIntent.putExtra("code", code);
+                activityIntent.putExtra("recordID", idRecord);
+                activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(activityIntent);
+            }
+        }, 700);
+
     }
 
 }
