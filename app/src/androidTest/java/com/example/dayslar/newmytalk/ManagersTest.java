@@ -4,9 +4,9 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.example.dayslar.newmytalk.database.impl.SqlManagerDAOImpl;
-import com.example.dayslar.newmytalk.database.entity.Manager;
-import com.example.dayslar.newmytalk.database.interfaces.dao.ManagerDAO;
+import com.example.dayslar.newmytalk.db.impl.SqlManagerDao;
+import com.example.dayslar.newmytalk.db.entity.Manager;
+import com.example.dayslar.newmytalk.db.interfaces.dao.ManagerDao;
 
 import org.junit.runner.RunWith;
 import org.junit.Test;
@@ -21,43 +21,42 @@ public class ManagersTest {
     public void addManager() throws Exception {
 
         Context appContext = InstrumentationRegistry.getTargetContext();
-        ManagerDAO managerDAO = SqlManagerDAOImpl.getInstance(appContext);
+        ManagerDao managerDao = SqlManagerDao.getInstance(appContext);
 
         Manager manager = new Manager()
-                .setManager_id(2)
                 .setName("Питюня")
                 .setPhotoPatch("Фотка питюни");
 
-        managerDAO.add(manager);
+        managerDao.insert(manager);
     }
 
     @Test
     public void addManagers() throws Exception{
 
         Context appContext = InstrumentationRegistry.getTargetContext();
-        ManagerDAO managerDAO = SqlManagerDAOImpl.getInstance(appContext);
+        ManagerDao managerDao = SqlManagerDao.getInstance(appContext);
 
         List<Manager> managers = new ArrayList<>();
 
         Manager manager1 = new Manager()
-                .setManager_id(1)
+                .setId(1)
                 .setName("Вася")
                 .setPhotoPatch("Фото Васи");
         managers.add(manager1);
 
         Manager manager2 = new Manager()
-                .setManager_id(2)
+                .setId(2)
                 .setName("Петя")
                 .setPhotoPatch("Фото Петя");
         managers.add(manager2);
 
         Manager manager3 = new Manager()
-                .setManager_id(3)
+                .setId(3)
                 .setName("Игорь")
                 .setPhotoPatch("Фото Игорь");
         managers.add(manager3);
 
-        managerDAO.add(managers);
+        managerDao.insert(managers);
 
 
     }
@@ -66,9 +65,9 @@ public class ManagersTest {
     public void deleteManager() throws Exception {
 
         Context appContext = InstrumentationRegistry.getTargetContext();
-        ManagerDAO managerDAO = SqlManagerDAOImpl.getInstance(appContext);
+        ManagerDao managerDao = SqlManagerDao.getInstance(appContext);
 
-        managerDAO.delete(4);
+        managerDao.delete(4);
     }
 
 
@@ -76,17 +75,17 @@ public class ManagersTest {
     public void getManager() throws Exception {
 
         Context appContext = InstrumentationRegistry.getTargetContext();
-        ManagerDAO managerDAO = SqlManagerDAOImpl.getInstance(appContext);
+        ManagerDao managerDao = SqlManagerDao.getInstance(appContext);
 
-        managerDAO.get(2);
+        managerDao.get(2);
     }
 
     @Test
     public void getManagers() throws Exception {
 
         Context appContext = InstrumentationRegistry.getTargetContext();
-        ManagerDAO managerDAO = SqlManagerDAOImpl.getInstance(appContext);
+        ManagerDao managerDao = SqlManagerDao.getInstance(appContext);
 
-        managerDAO.getManagers();
+        managerDao.getManagers();
     }
 }

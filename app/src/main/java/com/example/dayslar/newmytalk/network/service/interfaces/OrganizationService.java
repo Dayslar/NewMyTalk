@@ -1,0 +1,9 @@
+package com.example.dayslar.newmytalk.network.service.interfaces;
+
+import com.example.dayslar.newmytalk.utils.Organization;
+import com.example.dayslar.newmytalk.utils.calback.RetrofitCallback;
+
+public interface OrganizationService {
+
+    void loadOrganization(RetrofitCallback<Organization> callback);
+}

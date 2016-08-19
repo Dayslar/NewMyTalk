@@ -9,16 +9,30 @@
         android:theme="@style/AppTheme">
 
         <!--Экраны-->
-        <activity android:name=".main.MainActivity"
-            android:launchMode="singleTop">
+        <activity android:name=".ui.activity.LoginActivity_"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.activity.MainActivity_"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.activity.RegisterActivity_"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.activity.SettingActivity_"
+        android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.activity.PinActivity_"
+            android:noHistory="true"
+            android:screenOrientation="portrait"/>
+
         <!--Ресиверы-->
-        <receiver android:name=".telephony.receivers.TelephoneReceiver"
+        <receiver android:name=".receivers.TelephoneReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE"/>
@@ -28,19 +42,37 @@
 
         </receiver>
 
+        <receiver android:name="com.example.dayslar.newmytalk.receivers.AdminReceiver"
+            android:description="@string/app_admin_receiver_description"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_DEVICE_ADMIN" >
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/device_admin" />
+
+            <intent-filter>
+                <action android:name="android.app.action.ACTION_DEVICE_ADMIN_DISABLED" />
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
+
         <!--Службы-->
-        <service android:name=".telephony.service.TelephonyService"
-            android:process=":telephoneService"
+        <service android:name=".services.TelephonyService"
             android:enabled="true"/>
 
     </application>
 
     <!--Разрешения-->
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
 </manifest>

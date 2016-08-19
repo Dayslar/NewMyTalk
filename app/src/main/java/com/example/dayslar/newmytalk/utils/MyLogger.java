@@ -12,4 +12,16 @@ public  class MyLogger {
     public static void print(Class clazz, String logLevel,  String message){
         Log.d(logLevel, clazz + " : " + message);
     }
+
+    public static void printDebug(Class clazz,  String message){
+       MyLogger.print(clazz, MyLogger.LOG_DEBUG, message);
+    }
+
+    public static void printRelease(Class clazz, String message){
+        MyLogger.print(clazz, MyLogger.LOG_RELEASE, message);
+    }
+
+    public static void printTest(Class clazz, String message){
+        MyLogger.print(clazz, MyLogger.LOG_TEST, message);
+    }
 }
