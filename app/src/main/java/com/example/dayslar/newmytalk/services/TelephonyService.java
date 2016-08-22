@@ -40,6 +40,7 @@ public class TelephonyService extends Service{
         if (code.equals(TelephoneConfig.NEW_OUTGOING_CALL)){
             telManager.outgoingCall(intent);
         }
+
         else if (code.equals(TelephoneConfig.EXTRA_STATE_RUNNING)){
             telManager.runningCall(intent);
         }
@@ -52,12 +53,11 @@ public class TelephonyService extends Service{
             telManager.idleCall(intent);
         }
 
-        return START_STICKY;
-    }
+        else if (code.equals(TelephoneConfig.EXTRA_STATE_MANAGER)){
+            telManager.setManagerInfo(intent.getIntExtra("managerId", -1));
+        }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+        return START_STICKY;
     }
 
     @Nullable
@@ -70,7 +70,7 @@ public class TelephonyService extends Service{
         return PendingIntent.getActivity(this, 0, new Intent(this, MainActivity_.class), 0);
     }
 
-    private void initNotification(PendingIntent intent) {
+       private void initNotification(PendingIntent intent) {
         notification = new Notification.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle("Мои разговоры")

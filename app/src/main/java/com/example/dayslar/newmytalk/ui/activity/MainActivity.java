@@ -17,6 +17,7 @@ import com.example.dayslar.newmytalk.db.impl.SqlManagerDao;
 import com.example.dayslar.newmytalk.db.interfaces.dao.ManagerDao;
 import com.example.dayslar.newmytalk.network.service.impl.NetworkManagerService;
 import com.example.dayslar.newmytalk.network.service.interfaces.ManagerService;
+import com.example.dayslar.newmytalk.telephony.impl.SimpleTelephonyHandler;
 import com.example.dayslar.newmytalk.ui.adapter.ManagerAdapter;
 import com.example.dayslar.newmytalk.utils.MyLogger;
 import com.example.dayslar.newmytalk.utils.calback.RetrofitCallback;
@@ -42,11 +43,14 @@ public class MainActivity extends AppCompatActivity {
     private Snackbar snackbar;
 
     private Context context;
+    private View.OnClickListener managerListener;
+    private boolean isRecording;
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
+        this.isRecording = intent.getBooleanExtra("isRecording", false);
         MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Активите не пересоздавалось второй раз");
     }
 
@@ -55,12 +59,14 @@ public class MainActivity extends AppCompatActivity {
         this.context = this;
         this.managerDao = SqlManagerDao.getInstance(this);
         this.managerService = new NetworkManagerService(this);
+        this.managerListener = managerClickListener();
+        this.isRecording = getIntent().getBooleanExtra("isRecording", false);
 
         initRecycleView();
         initToolbar();
         initFab();
-    }
 
+    }
 
     private void getServerMangers() {
         managerService.loadManagers(new RetrofitCallback<List<Manager>>() {
@@ -72,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSuccess(Call<List<Manager>> call, Response<List<Manager>> response) {
-                recyclerView.setAdapter(new ManagerAdapter(response.body()));
+                recyclerView.setAdapter(new ManagerAdapter(response.body(), managerListener));
                 snackbar.setText("Обновление успешно завершено.").setDuration(3000).show();
             }
 
@@ -109,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
         toolbar.inflateMenu(R.menu.main_menu);
     }
 
@@ -116,6 +123,18 @@ public class MainActivity extends AppCompatActivity {
 
         GridLayoutManager glm = new GridLayoutManager(this, 3);
         recyclerView.setLayoutManager(glm);
-        recyclerView.setAdapter(new ManagerAdapter(managerDao.getManagers()));
+        recyclerView.setAdapter(new ManagerAdapter(managerDao.getManagers(), managerListener));
     }
+
+    private View.OnClickListener managerClickListener(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isRecording) SimpleTelephonyHandler.answerCall(context);
+                else Snackbar.make(fab, "Сейчас никто не звонит!", Snackbar.LENGTH_LONG).show();
+
+            }
+        };
+    }
+
 }

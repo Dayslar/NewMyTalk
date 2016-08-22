@@ -5,7 +5,6 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
         <!--Экраны-->
@@ -19,7 +18,7 @@
 
         <activity android:name=".ui.activity.MainActivity_"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <activity android:name=".ui.activity.RegisterActivity_"
             android:screenOrientation="portrait"/>
@@ -37,7 +36,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE"/>
                 <action android:name="android.intent.action.NEW_OUTGOING_CALL"/>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
 
         </receiver>
@@ -57,8 +55,9 @@
         </receiver>
 
         <!--Службы-->
+
         <service android:name=".services.TelephonyService"
-            android:enabled="true"/>
+            android:process=":telephony" />
 
     </application>
 

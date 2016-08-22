@@ -3,18 +3,26 @@ package com.example.dayslar.newmytalk.telephony.impl;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.Handler;
+import android.os.IBinder;
+import android.util.Log;
+import android.view.KeyEvent;
 
 import com.example.dayslar.newmytalk.db.entity.Record;
 import com.example.dayslar.newmytalk.db.impl.SqlRecordDao;
 import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDao;
 import com.example.dayslar.newmytalk.recorder.impl.SimpleMediaRecorder;
 import com.example.dayslar.newmytalk.recorder.interfaces.Recorder;
+import com.example.dayslar.newmytalk.telephony.TelephoneConfig;
 import com.example.dayslar.newmytalk.telephony.interfaces.TelephonyHandler;
 import com.example.dayslar.newmytalk.ui.activity.MainActivity_;
 import com.example.dayslar.newmytalk.utils.MyLogger;
+import com.example.dayslar.newmytalk.utils.ServiceUtils;
 import com.example.dayslar.newmytalk.utils.SettingUtil;
 
+import java.io.IOException;
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 
 public class SimpleTelephonyHandler implements TelephonyHandler {
@@ -56,6 +64,7 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
         if (checkUSSD(callPhone)) return;
         MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Звоним на " + callPhone);
 
+        initBaseRecord(callPhone);
         record.setIncoming(false);
 
     }
@@ -69,30 +78,21 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
 
         MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Получаем звонок от " + callPhone);
 
-        record = Record.emptyRecord();
-        record.setId(recordDao.insert(record));
+        initBaseRecord(callPhone);
         record.setIncoming(true);
-        record.setCallPhone(callPhone);
-        record.setCallTime(System.currentTimeMillis());
 
-
-        if(settingUtil.getManagerActive())
-            startActivity(MainActivity_.class);
+        if(settingUtil.getManagerActive()) startActivity(MainActivity_.class, true);
     }
 
     @Override
     public void offhookCall(Intent intent) {
         String callPhone = intent.getExtras().getString("incoming_number") != null ?
-                intent.getExtras().getString("incoming_number") : "Скрытый номер";
+                intent.getExtras().getString("incoming_number") :
+                "Скрытый номер";
 
         MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Отвечаем на звонок от " + callPhone);
 
-        if (record == null){
-            record = Record.emptyRecord();
-            record.setId(recordDao.insert(record));
-            record.setCallPhone(callPhone);
-            record.setCallTime(System.currentTimeMillis());
-        }
+        if (record == null) initBaseRecord(callPhone);
 
         record.setFileName(record.getCallPhone() + "_" + sdf.format(record.getCallTime())  + ".mp4");
         record.setAnswer(true);
@@ -111,6 +111,20 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
 
         recordDao.update(record, record.getId());
         record = null;
+
+//        startActivity(MainActivity_.class, false);
+    }
+
+    @Override
+    public void setManagerInfo(int managerId) {
+        record.setManagerId(managerId);
+    }
+
+    private void initBaseRecord(String callPhone) {
+        record = Record.emptyRecord();
+        record.setId(recordDao.insert(record));
+        record.setCallPhone(callPhone);
+        record.setCallTime(System.currentTimeMillis());
     }
 
     private boolean checkUSSD(String callNumber) {
@@ -121,7 +135,7 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
         return false;
     }
 
-    private void startActivity(final Class<?extends Activity> clazz) {
+    private void startActivity(final Class<?extends Activity> clazz, final boolean code) {
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -129,10 +143,64 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
             public void run() {
                 Intent activityIntent = new Intent(context, clazz);
                 activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                if (code) activityIntent.putExtra("isRecording", code);
+
                 context.startActivity(activityIntent);
             }
         }, 700);
 
+    }
+
+    public static void answerCall(Context context) {
+        MyLogger.printDebug(SimpleTelephonyHandler.class, "На звонок ответили");
+
+        try {
+            Runtime.getRuntime().exec("input keyevent " + Integer.toString(KeyEvent.KEYCODE_HEADSETHOOK));
+
+        } catch (IOException e) {
+            String enforcedPerm = "android.permission.CALL_PRIVILEGED";
+            Intent btnDown = new Intent(Intent.ACTION_MEDIA_BUTTON).putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_HEADSETHOOK));
+            Intent btnUp = new Intent(Intent.ACTION_MEDIA_BUTTON).putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_HEADSETHOOK));
+
+            context.sendOrderedBroadcast(btnDown, enforcedPerm);
+            context.sendOrderedBroadcast(btnUp, enforcedPerm);
+        }
+
+        ServiceUtils.sendTelephoneService(context, new Intent(), TelephoneConfig.EXTRA_STATE_MANAGER);
+
+    }
+
+    public static void endCall(){
+        try {
+            String serviceManagerName = "android.os.ServiceManager";
+            String serviceManagerNativeName = "android.os.ServiceManagerNative";
+            String telephonyName = "com.android.internal.telephony.ITelephony";
+            Class<?> telephonyClass;
+            Class<?> telephonyStubClass;
+            Class<?> serviceManagerClass;
+            Class<?> serviceManagerNativeClass;
+            Method telephonyEndCall;
+            Object telephonyObject;
+            Object serviceManagerObject;
+            telephonyClass = Class.forName(telephonyName);
+            telephonyStubClass = telephonyClass.getClasses()[0];
+            serviceManagerClass = Class.forName(serviceManagerName);
+            serviceManagerNativeClass = Class.forName(serviceManagerNativeName);
+            Method getService = serviceManagerClass.getMethod("getService", String.class);
+            Method tempInterfaceMethod = serviceManagerNativeClass.getMethod("asInterface", IBinder.class);
+            Binder tmpBinder = new Binder();
+            tmpBinder.attachInterface(null, "fake");
+            serviceManagerObject = tempInterfaceMethod.invoke(null, tmpBinder);
+            IBinder rebind = (IBinder) getService.invoke(serviceManagerObject, "phone");
+            Method serviceMethod = telephonyStubClass.getMethod("asInterface", IBinder.class);
+            telephonyObject = serviceMethod.invoke(null, rebind);
+            telephonyEndCall = telephonyClass.getMethod("endCall");
+            telephonyEndCall.invoke(telephonyObject);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("RECORD_ERROR", e.toString());
+        }
     }
 
 }

@@ -16,15 +16,17 @@ import java.util.List;
 public class ManagerAdapter extends RecyclerView.Adapter<ManagerAdapter.ManagerViewHolder>{
 
     private List<Manager> managerList;
+    private View.OnClickListener listener;
 
-    public ManagerAdapter(List<Manager> managerList) {
+    public ManagerAdapter(List<Manager> managerList, View.OnClickListener listener) {
         this.managerList = managerList;
+        this.listener  = listener;
     }
 
     @Override
     public ManagerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.manager, parent, false);
-        return new ManagerViewHolder(v);
+        return new ManagerViewHolder(v, listener);
     }
 
     @Override
@@ -48,11 +50,14 @@ public class ManagerAdapter extends RecyclerView.Adapter<ManagerAdapter.ManagerV
         TextView managerName;
         ImageView managerPhoto;
 
-        ManagerViewHolder(View itemView) {
+        ManagerViewHolder(View itemView, View.OnClickListener listener) {
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.cv);
             managerName = (TextView)itemView.findViewById(R.id.managerName);
             managerPhoto = (ImageView) itemView.findViewById(R.id.managerPhoto);
+
+            managerPhoto.setOnClickListener(listener);
+
         }
     }
 }

@@ -9,6 +9,7 @@ import com.example.dayslar.newmytalk.R;
 public class SettingUtil {
 
     private static SettingUtil instance;
+
     private Resources resources;
     private SharedPreferences preferences;
 
@@ -40,7 +41,7 @@ public class SettingUtil {
         return instance;
     }
 
-    public Boolean getRecordingActive() {
+    public Boolean isRecordActive() {
         return recordingActive;
     }
 
@@ -48,11 +49,11 @@ public class SettingUtil {
         return managerActive;
     }
 
-    public Boolean getAdminActive() {
+    public Boolean isManagerActive() {
         return adminActive;
     }
 
-    public Boolean getUnloadActive() {
+    public Boolean isUnloadActive() {
         return unloadActive;
     }
 

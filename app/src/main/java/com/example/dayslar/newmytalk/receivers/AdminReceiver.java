@@ -9,7 +9,6 @@ import android.widget.Toast;
 public class AdminReceiver extends DeviceAdminReceiver {
 
 
-
     void showToast(Context context, String msg) {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
