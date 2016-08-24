@@ -31,27 +31,30 @@ import retrofit2.Response;
 @EActivity(R.layout.login_activity)
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
-    @ViewById(R.id.et_username)EditText etUsername;
-    @ViewById(R.id.et_password)EditText etPassword;
-    @ViewById(R.id.btnLogin)Button btGo;
-    @ViewById(R.id.cv)CardView cv;
-    @ViewById(R.id.fab)FloatingActionButton fab;
+    @ViewById(R.id.et_username) EditText etUsername;
+    @ViewById(R.id.et_password) EditText etPassword;
+    @ViewById(R.id.btnLogin) Button btGo;
+    @ViewById(R.id.cv) CardView cv;
+    @ViewById(R.id.fab) FloatingActionButton fab;
     @ViewById(R.id.toolbar) Toolbar toolbar;
 
     private TokenService tokenService;
     private Snackbar snackbar;
 
     @AfterViews
-    void init(){
-
+    void init() {
         tokenService = new NetworkTokenService(this);
 
         initToolbar();
+        initSnackbar();
 
         fab.setOnClickListener(this);
         btGo.setOnClickListener(this);
     }
 
+    private void initSnackbar() {
+        snackbar = Snackbar.make(fab, "", Snackbar.LENGTH_SHORT);
+    }
 
     @Override
     public void onClick(View view) {
@@ -78,44 +81,52 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void initToolbar() {
         toolbar.setLogo(R.mipmap.ic_launcher);
-        toolbar.setTitle("Вход");
+        toolbar.setTitle(R.string.tvLogin);
         toolbar.setSubtitle(R.string.app_name);
     }
 
-    private void login(String username, String password){
+    private void login(String username, String password) {
 
-        snackbar = Snackbar.make(fab, "Отправка данных на сервер", Snackbar.LENGTH_INDEFINITE);
-        snackbar.show();
+        if (checkUserData(username, password)) {
+            tokenService.loadToken(username, password, new RetrofitCallback<Token>() {
+                @Override
+                public void onProcess() {
+                    enabledButtons(false);
+                    snackbar.setText(R.string.loginServerProcess).setDuration(Snackbar.LENGTH_INDEFINITE).show();
+                }
 
-        enabledButtons(false);
+                @Override
+                public void onSuccess(Call<Token> call, Response<Token> response) {
+                    snackbar.setText(R.string.loginServerSuccess).setDuration(2000).show();
+                    enabledButtons(true);
+                    goToMailActivity();
+                }
 
-        tokenService.loadToken(username, password, new RetrofitCallback<Token>() {
-            @Override
-            public void onProcess() {
-
-            }
-
-            @Override
-            public void onSuccess(Call<Token> call, Response<Token> response) {
-                snackbar.setText("Обновление завершено").setDuration(2000).show();
-                goToMailActivity();
-
-                enabledButtons(true);
-            }
-
-            @Override
-            public void onFailure(Call<Token> call, Throwable e) {
-                snackbar.setText("Ошибка подколючения к серверу, " +
-                        "проверьте ваши сетевые настройи и попробуйте сново").setDuration(2000).show();
-
-                enabledButtons(true);
-            }
-        });
-
-
+                @Override
+                public void onFailure(Call<Token> call, Throwable e) {
+                    snackbar.setText(R.string.loginServerFailure).setDuration(2000).show();
+                    enabledButtons(true);
+                }
+            });
+        }
     }
 
-    private void enabledButtons(boolean value){
+    private boolean checkUserData(String username, String password) {
+        if (!username.isEmpty() && !username.trim().isEmpty()){
+            snackbar.setText(R.string.checkUsernameError).setDuration(3000).show();
+            return false;
+        }
+
+        else if (password.isEmpty() && password.trim().isEmpty()){
+            snackbar.setText(R.string.checkPasswordError).setDuration(Snackbar.LENGTH_LONG).show();
+            return false;
+        }
+
+        return true;
+    }
+
+
+    private void enabledButtons(boolean value) {
         btGo.setEnabled(value);
         fab.setEnabled(value);
     }

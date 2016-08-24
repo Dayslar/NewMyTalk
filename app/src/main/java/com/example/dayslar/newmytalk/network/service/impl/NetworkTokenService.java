@@ -28,6 +28,9 @@ public class NetworkTokenService implements TokenService {
     @Override
     public void loadToken(String username, String password, final RetrofitCallback<Token> callback) {
         Call<Token> call = tokenApi.getToken("my_talk_rest_client", "my_talk_rest_secret", username, password, "write", "password");
+
+        callback.onProcess();
+
         call.enqueue(new Callback<Token>() {
             @Override
             public void onResponse(Call<Token> call, Response<Token> response) {

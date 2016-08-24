@@ -13,6 +13,13 @@
     <string name="tvLogin">Вход</string>
     <string name="btnLogin">Войти</string>
 
+    <string name="checkUsernameError">Введите имя пользователя</string>
+    <string name="checkPasswordError">Введите пароль</string>
+
+    <string name="loginServerProcess">Отправляем данные на сервер</string>
+    <string name="loginServerSuccess">Данные верны</string>
+    <string name="loginServerFailure">"Ошибка подколючения к серверу, проверьте ваши сетевые настройи и попробуйте сново"</string>
+
 
     <!--Registration Activity-->
     <string name="tvForgotPassword">Забыли пароль?</string>
