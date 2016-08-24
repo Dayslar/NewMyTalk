@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.dayslar.newmytalk.db.DataBaseController;
-import com.example.dayslar.newmytalk.db.CursurUtils;
+import com.example.dayslar.newmytalk.db.CursorUtils;
 import com.example.dayslar.newmytalk.db.config.DbConfig;
 import com.example.dayslar.newmytalk.db.config.TokenTableConfig;
 import com.example.dayslar.newmytalk.db.entity.Token;
@@ -78,7 +78,7 @@ public class SqlTokenDao implements TokenDao {
         Cursor cursor = database.query(DbConfig.TOKEN_TABLE_NAME, null, null, null, null, null, null);
 
         if (cursor.moveToFirst()){
-            token = CursurUtils.readToken(cursor);
+            token = CursorUtils.readToken(cursor);
         }
 
         return token;

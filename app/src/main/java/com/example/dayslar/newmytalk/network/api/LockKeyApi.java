@@ -1,6 +1,6 @@
 package com.example.dayslar.newmytalk.network.api;
 
-import com.example.dayslar.newmytalk.utils.LockKey;
+import com.example.dayslar.newmytalk.utils.entity.LockKey;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

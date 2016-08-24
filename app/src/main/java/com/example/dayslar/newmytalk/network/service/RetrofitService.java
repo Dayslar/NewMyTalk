@@ -68,7 +68,7 @@ public class RetrofitService {
 
     private void initLockKeyApi() {
         Retrofit retrofitManager = new Retrofit.Builder()
-                .baseUrl("http://" + settingUtil.getServerIp() + ":" + settingUtil.getServerPort() + "/app/api/user/lock-key/")
+                .baseUrl("http://" + settingUtil.getSetting().getServerIp() + ":" + settingUtil.getSetting().getServerPort() + "/app/api/user/lock-key/")
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
 
@@ -78,7 +78,7 @@ public class RetrofitService {
 
     private void initManagerApi() {
         Retrofit retrofitManager = new Retrofit.Builder()
-                .baseUrl("http://" + settingUtil.getServerIp() + ":" + settingUtil.getServerPort() + "/app/api/user/manager/")
+                .baseUrl("http://" + settingUtil.getSetting().getServerIp() + ":" + settingUtil.getSetting().getServerPort() + "/app/api/user/manager/")
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
 
@@ -87,7 +87,7 @@ public class RetrofitService {
 
     private void initOrganizationApi() {
         Retrofit retrofitManager = new Retrofit.Builder()
-                .baseUrl("http://" + settingUtil.getServerIp() + ":" + settingUtil.getServerPort() + "/app/api/user/organization/")
+                .baseUrl("http://" + settingUtil.getSetting().getServerIp() + ":" + settingUtil.getSetting().getServerPort() + "/app/api/user/organization/")
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
 
@@ -96,7 +96,7 @@ public class RetrofitService {
 
     private void initAccessTokenApi() {
         Retrofit retrofitManager = new Retrofit.Builder()
-                .baseUrl("http://" + settingUtil.getServerIp() + ":" + settingUtil.getServerPort() + "/app/oauth/")
+                .baseUrl("http://" + settingUtil.getSetting().getServerIp() + ":" + settingUtil.getSetting().getServerPort() + "/app/oauth/")
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
 

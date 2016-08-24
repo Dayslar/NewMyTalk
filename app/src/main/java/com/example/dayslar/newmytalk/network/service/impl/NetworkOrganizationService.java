@@ -8,7 +8,7 @@ import com.example.dayslar.newmytalk.db.impl.SqlTokenDao;
 import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDao;
 import com.example.dayslar.newmytalk.network.service.RetrofitService;
 import com.example.dayslar.newmytalk.network.service.interfaces.OrganizationService;
-import com.example.dayslar.newmytalk.utils.Organization;
+import com.example.dayslar.newmytalk.utils.entity.Organization;
 import com.example.dayslar.newmytalk.utils.calback.RetrofitCallback;
 
 import retrofit2.Call;

@@ -1,4 +1,4 @@
-package com.example.dayslar.newmytalk.utils;
+package com.example.dayslar.newmytalk.utils.entity;
 
 
 public class LockKey {

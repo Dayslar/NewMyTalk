@@ -1,6 +1,6 @@
 package com.example.dayslar.newmytalk.network.api;
 
-import com.example.dayslar.newmytalk.utils.Organization;
+import com.example.dayslar.newmytalk.utils.entity.Organization;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

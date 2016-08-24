@@ -51,7 +51,7 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
 
     private SimpleTelephonyHandler(Context context){
         recordDao = SqlRecordDao.getInstance(context);
-        recorder = SimpleMediaRecorder.getInstance();
+        recorder = SimpleMediaRecorder.getInstance(context);
         settingUtil = SettingUtil.getInstance(context);
 
         this.context = context;
@@ -81,7 +81,7 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
         initBaseRecord(callPhone);
         record.setIncoming(true);
 
-        if(settingUtil.getManagerActive()) startActivity(MainActivity_.class, true);
+        if(settingUtil.getSetting().isManagerActive()) startActivity(MainActivity_.class, true);
     }
 
     @Override

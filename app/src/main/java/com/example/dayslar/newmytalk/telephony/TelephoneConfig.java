@@ -2,7 +2,7 @@ package com.example.dayslar.newmytalk.telephony;
 
 import  android.telephony.TelephonyManager;
 
-public class TelephoneConfig {
+public final class TelephoneConfig {
 
     public static final String NEW_OUTGOING_CALL = "android.intent.action.NEW_OUTGOING_CALL";
     public static final String PHONE_STATE = TelephonyManager.ACTION_PHONE_STATE_CHANGED;

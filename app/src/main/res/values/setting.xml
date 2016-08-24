@@ -3,6 +3,7 @@
     <!-- Для экрана настроек -->
     <string name="generalSettingTitle">Основные настройки</string>
     <string name="additionalSettingTitle">Дополнительные настройки</string>
+    <string name="recordingSettingTitle">Настройки записи</string>
     <string name="networkSettingTitle">Сетевые настройки</string>
     <string name="networkSettingSummary">Общее сетевые настройки (ip, порт и тд)</string>
 
@@ -22,7 +23,7 @@
     <string name="etDelayRecordIsCallKey">etDelayRecordIsCall</string>
     <string name="etDelayRecordTitle">Задержка</string>
     <string name="etDelaySummary">Задержка перед началом записи при исходящем звонке (в сек)</string>
-    <string name="etDelayDialogTitle">Введите значения (0 - 20)</string>
+    <string name="etDelayDialogTitle">Введите значения (0 – 20)</string>
     <string name="etDelayDependence">@string/chActiveRecordKey</string>
 
     <!-- устанавливает администратора устройства-->
@@ -49,12 +50,69 @@
     <string name="etSettingPortSummary">Укажите порт</string>
     <string name="etSettingPortDependency">@string/chUnLoadRecordKey</string>
 
-    <!-- для подразделения -->
-    <string name="etSettingSubdivisionKey">etSettingSubdivision</string>
-    <string name="etSettingSubdivisionTitle">Subdivision</string>
-    <string name="etSettingSubdivisionSummary">Pleas input subdivision</string>
-    <string name="etSettingSubdivisionDependency">@string/chUnLoadRecordKey</string>
+    <!--Каналы записи-->
+    <string name="chanelRecordingKey">chanelRecordKey</string>
+    <string name="chanelRecordingTitle">Колличество каналов записи</string>
+    <string name="chanelRecordingSummary">Определеяет колл. каналов во время записи</string>
+    <string name="chanelRecordingDialogTitle">Введите значения (1 – 2), размер записи увеличется пропорционально</string>
 
+    <!--Формат файла запаси-->
+    <string name="listOutputFormatKey">listOutputFormatKey</string>
+    <string name="listOutputFormatTitle">Формат файла записи</string>
+    <string name="listOutputFormatSummary">Определеяет формат файла записи</string>
+
+    <!--Источник записи-->
+    <string name="listAudioSourceKey">listAudioSourceKey</string>
+    <string name="listAudioSourceTitle">Источник записи</string>
+    <string name="listAudioSourceSummary">Источник с записи звука</string>
+
+    <!--Encoder для записи-->
+    <string name="listAudioEncoderKey">listAudionEncoderKey</string>
+    <string name="listAudioEncoderTitle">Кодек для записи</string>
+    <string name="listAudioEncoderSummary">Определяет как кодировать запись</string>
+
+    <string name="listValueDefault">По умолчанию</string>
+
+    <!--Список форматов файла записи-->
+    <string name="listOutputFormatAac">AAC формат файла ADTS</string>
+    <string name="listOutputFormat3gpp">3GPP формат медиа-файл</string>
+    <string name="listOutputFormatMPEG4">MPEG4 формат медиа-файл</string>
+    <string-array name="listOutputFormat">
+        <item>@string/listValueDefault</item>
+        <item>@string/listOutputFormatAac</item>
+        <item>@string/listOutputFormat3gpp</item>
+        <item>@string/listOutputFormatMPEG4</item>
+    </string-array>
+
+    <!--Список источников записи-->
+    <string name="listAudioSourceMic">Микрофон устройства</string>
+    <string name="listAudioSourceVoiceCall">Входящая и исходящая линия</string>
+    <string name="listAudioSourceVoiceDowlink">Только входящая линия</string>
+    <string name="listAudioSourceVoiceUplink">Только исходящая часть записи</string>
+    <string name="listAudioSourceVoiceCamcorder">Микрофон с камеры(если имеется)</string>
+    <string-array name="listAudioSource">
+        <item>@string/listValueDefault</item>
+        <item>@string/listAudioSourceMic</item>
+        <item>@string/listAudioSourceVoiceCall</item>
+        <item>@string/listAudioSourceVoiceDowlink</item>
+        <item>@string/listAudioSourceVoiceUplink</item>
+        <item>@string/listAudioSourceVoiceCamcorder</item>
+    </string-array>
+
+    <!--Список кодеков-->
+    <string name="listAudioEncoderAac">AAC Low Complexity (AAC-LC) audio codec</string>
+    <string name="listAudioEncoderAacEld">Enhanced Low Delay AAC (AAC-ELD) audio codec</string>
+    <string name="listAudioEncoderAmrNb">AMR (Narrowband) audio codec</string>
+    <string name="listAudioEncoderAmrWb">AMR (Wideband) audio codec</string>
+    <string name="listAudioEncoderHeAac">High Efficiency AAC (HE-AAC) audio codec</string>
+    <string-array name="listAudioEncoder">
+        <item>@string/listValueDefault</item>
+        <item>@string/listAudioEncoderAac</item>
+        <item>@string/listAudioEncoderAacEld</item>
+        <item>@string/listAudioEncoderAmrNb</item>
+        <item>@string/listAudioEncoderAmrWb</item>
+        <item>@string/listAudioEncoderHeAac</item>
+    </string-array>
 
 
 </resources>

@@ -1,8 +1,9 @@
 package com.example.dayslar.newmytalk;
 
-import android.media.MediaRecorder;
+import android.content.Context;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.example.dayslar.newmytalk.recorder.impl.SimpleMediaRecorder;
@@ -32,12 +33,8 @@ public class RecorderTest {
 
     @NonNull
     private Recorder initPlayer() {
-        Recorder recorder = SimpleMediaRecorder.getInstance();
-        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-        recorder.setAudioChannels(1);
-        return recorder;
+        Context appContext = InstrumentationRegistry.getTargetContext();
+        return SimpleMediaRecorder.getInstance(appContext);
     }
 
 }

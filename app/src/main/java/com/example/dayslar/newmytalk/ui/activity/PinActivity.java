@@ -14,7 +14,7 @@ import com.example.dayslar.newmytalk.db.entity.Token;
 import com.example.dayslar.newmytalk.db.impl.SqlTokenDao;
 import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDao;
 import com.example.dayslar.newmytalk.network.service.RetrofitService;
-import com.example.dayslar.newmytalk.utils.LockKey;
+import com.example.dayslar.newmytalk.utils.entity.LockKey;
 import com.example.dayslar.newmytalk.utils.MyLogger;
 
 import org.androidannotations.annotations.AfterViews;

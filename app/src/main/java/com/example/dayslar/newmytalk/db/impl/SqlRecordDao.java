@@ -15,7 +15,7 @@ import com.example.dayslar.newmytalk.db.entity.Record;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.dayslar.newmytalk.db.CursurUtils.readRecord;
+import static com.example.dayslar.newmytalk.db.CursorUtils.readRecord;
 
 public class SqlRecordDao implements RecordDao {
 

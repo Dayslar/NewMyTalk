@@ -15,7 +15,7 @@ public class TelephoneReceiver extends BroadcastReceiver {
 
         SettingUtil settingUtil = SettingUtil.getInstance(context);
 
-        if (settingUtil.isRecordActive()) {
+        if (settingUtil.getSetting().isRecordingActive()) {
             switch (intent.getAction()) {
                 case TelephoneConfig.NEW_OUTGOING_CALL:
                     ServiceUtils.sendTelephoneService(context, intent, TelephoneConfig.NEW_OUTGOING_CALL);

@@ -10,7 +10,7 @@ import com.example.dayslar.newmytalk.db.entity.Manager;
 import com.example.dayslar.newmytalk.db.entity.Record;
 import com.example.dayslar.newmytalk.db.entity.Token;
 
-public class CursurUtils {
+public final class CursorUtils {
 
     public static Record readRecord(Cursor cursor){
         return new Record()

@@ -15,7 +15,7 @@ import com.example.dayslar.newmytalk.db.entity.Manager;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.dayslar.newmytalk.db.CursurUtils.readManager;
+import static com.example.dayslar.newmytalk.db.CursorUtils.readManager;
 
 public class SqlManagerDao implements ManagerDao {
 

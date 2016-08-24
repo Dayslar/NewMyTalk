@@ -1,10 +1,12 @@
 package com.example.dayslar.newmytalk.recorder.impl;
 
+import android.content.Context;
 import android.media.MediaRecorder;
 import android.os.Environment;
 
 import com.example.dayslar.newmytalk.recorder.interfaces.Recorder;
 import com.example.dayslar.newmytalk.utils.MyLogger;
+import com.example.dayslar.newmytalk.utils.SettingUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +16,7 @@ public class SimpleMediaRecorder implements Recorder {
     private static SimpleMediaRecorder instance;
 
     private MediaRecorder mediaRecorder;
+    private SettingUtil settingUtil;
     private boolean isRecording = false;
 
     private int outputFormat;
@@ -21,11 +24,11 @@ public class SimpleMediaRecorder implements Recorder {
     private int audioEncoder;
     private int audioChannels;
 
-    public static SimpleMediaRecorder getInstance(){
+    public static SimpleMediaRecorder getInstance(Context context){
         if (instance == null){
            synchronized (SimpleMediaRecorder.class){
                if (instance == null){
-                   instance = new SimpleMediaRecorder();
+                   instance = new SimpleMediaRecorder(context);
                }
            }
         }
@@ -33,7 +36,8 @@ public class SimpleMediaRecorder implements Recorder {
         return instance;
     }
 
-    private SimpleMediaRecorder(){
+    private SimpleMediaRecorder(Context c){
+        settingUtil = SettingUtil.getInstance(c);
         initPlayer();
     }
 
@@ -61,29 +65,6 @@ public class SimpleMediaRecorder implements Recorder {
         MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Запись остановлена");
     }
 
-    @Override
-    public Recorder setAudioSource(int audioSource) {
-        this.audioSource = audioSource;
-        return this;
-    }
-
-    @Override
-    public Recorder setOutputFormat(int outputFormat) {
-        this.outputFormat = outputFormat;
-        return this;
-    }
-
-    @Override
-    public Recorder setAudioEncoder(int audioEncoder) {
-        this.audioEncoder = audioEncoder;
-        return this;
-    }
-
-    @Override
-    public Recorder setAudioChannels(int audioChannels) {
-        this.audioChannels = audioChannels;
-        return this;
-    }
 
     private void initRecorder(String outputFile) throws IOException {
         mediaRecorder = new MediaRecorder();
@@ -110,10 +91,11 @@ public class SimpleMediaRecorder implements Recorder {
     }
 
     private void initPlayer(){
-        this.setAudioSource(MediaRecorder.AudioSource.MIC)
-                .setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-                .setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
-                .setAudioChannels(1);
+        settingUtil.loadSettingForPlayer();
+        this.audioSource = settingUtil.getSetting().getAudioSource();
+        this.outputFormat = settingUtil.getSetting().getOutputFormat();
+        this.audioEncoder = settingUtil.getSetting().getAudioEncoder();
+        this.audioChannels = settingUtil.getSetting().getAudioChannels();
     }
 
     private String getFolder(){
