@@ -56,7 +56,7 @@ public class SettingUtil {
         String audioSource = preferences.getString(resources.getString(R.string.listAudioSourceKey), resources.getString(R.string.listValueDefault));
         String audioEncoder = preferences.getString(resources.getString(R.string.listAudioEncoderKey), resources.getString(R.string.listAudioEncoderKey));
 
-        int audioChanels = preferences.getInt(resources.getString(R.string.chanelRecordingKey), 1);
+        String audioChannels = preferences.getString(resources.getString(R.string.channelRecordingKey), "1");
 
         //output format
         if (outputFormat.equals(resources.getString(R.string.listOutputFormatAac)))
@@ -68,7 +68,7 @@ public class SettingUtil {
         else if (outputFormat.equals(resources.getString(R.string.listOutputFormat3gpp)))
             setting.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
 
-        else setting.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        else  setting.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
 
         //audio source
         if (audioSource.equals(resources.getString(R.string.listAudioSourceVoiceCall)))
@@ -107,7 +107,7 @@ public class SettingUtil {
 
         else setting.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
 
-        setting.setAudioChannels(audioChanels);
+        setting.setAudioChannels(Integer.parseInt(audioChannels));
     }
 
     private static String getDefaultSharedPreferencesName(Context context) {

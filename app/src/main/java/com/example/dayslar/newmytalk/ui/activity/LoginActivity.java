@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @ViewById(R.id.et_username)EditText etUsername;
     @ViewById(R.id.et_password)EditText etPassword;
-    @ViewById(R.id.bt_go)Button btGo;
+    @ViewById(R.id.btnLogin)Button btGo;
     @ViewById(R.id.cv)CardView cv;
     @ViewById(R.id.fab)FloatingActionButton fab;
     @ViewById(R.id.toolbar) Toolbar toolbar;
@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.fab:
                 startRegisterActivityAnimation();
                 break;
-            case R.id.bt_go:
+            case R.id.btnLogin:
                 login(etUsername.getText().toString(), etPassword.getText().toString());
                 break;
         }

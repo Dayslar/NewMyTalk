@@ -50,7 +50,7 @@
             android:summary="@string/listOutputFormatTitle"
             android:entryValues="@array/listAudioSource"
             android:entries="@array/listAudioSource"
-            android:defaultValue="1"/>
+            android:defaultValue="@string/listValueDefault"/>
 
         <ListPreference
             android:key="@string/listAudioEncoderKey"
@@ -61,12 +61,12 @@
             android:defaultValue="@string/listValueDefault"/>
 
         <EditTextPreference
-            android:key="@string/chanelRecordingKey"
-            android:title="@string/chanelRecordingTitle"
-            android:summary="@string/chanelRecordingSummary"
+            android:key="@string/channelRecordingKey"
+            android:title="@string/channelRecordingTitle"
+            android:summary="@string/channelRecordingSummary"
             android:defaultValue="1"
-            android:dialogTitle="@string/chanelRecordingDialogTitle"
-            android:maxLength="2"
+            android:dialogTitle="@string/channelRecordingDialogTitle"
+            android:maxLength="1"
             android:inputType="number"
             android:numeric="integer" />
 

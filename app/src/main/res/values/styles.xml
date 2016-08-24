@@ -18,7 +18,7 @@
 
     <!--Темная тема для диологов-->
     <style name="AlertDialogCustomDark" parent="Theme.AppCompat.Dialog">
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorAccentDark</item>
     </style>
 
 </resources>

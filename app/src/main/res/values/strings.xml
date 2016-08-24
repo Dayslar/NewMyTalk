@@ -1,6 +1,26 @@
 <resources>
     <string name="app_name">Мои разговоры</string>
 
+    <!--Setting-->
     <string name="app_admin_receiver_description">Для запрета удаления и остановки приложения нажмите кнопку активировать.</string>
     <string name="pin_layout_input_pin_title">Введите пароль</string>
+
+    <string name="etUsername">Имя пользователя</string>
+    <string name="etPassword">Пароль</string>
+
+
+    <!--Login Activity-->
+    <string name="tvLogin">Вход</string>
+    <string name="btnLogin">Войти</string>
+
+
+    <!--Registration Activity-->
+    <string name="tvForgotPassword">Забыли пароль?</string>
+    <string name="tvRegistrationTitle">Регистрация</string>
+    <string name="etPasswordRepeat">Повтор пароля</string>
+    <string name="btnReg">Дальше</string>
+
+    <!--Main Activity-->
+    <string name="tvManagers">МЕНЕДЖЕРЫ</string>
+
 </resources>

@@ -51,10 +51,10 @@
     <string name="etSettingPortDependency">@string/chUnLoadRecordKey</string>
 
     <!--Каналы записи-->
-    <string name="chanelRecordingKey">chanelRecordKey</string>
-    <string name="chanelRecordingTitle">Колличество каналов записи</string>
-    <string name="chanelRecordingSummary">Определеяет колл. каналов во время записи</string>
-    <string name="chanelRecordingDialogTitle">Введите значения (1 – 2), размер записи увеличется пропорционально</string>
+    <string name="channelRecordingKey">chanelRecordKey</string>
+    <string name="channelRecordingTitle">Колличество каналов записи</string>
+    <string name="channelRecordingSummary">Определеяет колл. каналов во время записи</string>
+    <string name="channelRecordingDialogTitle">Введите значения (1 – 2), размер записи увеличется пропорционально</string>
 
     <!--Формат файла запаси-->
     <string name="listOutputFormatKey">listOutputFormatKey</string>
