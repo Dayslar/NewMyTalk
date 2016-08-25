@@ -40,7 +40,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="32dp"
-                        android:text="@string/tvRegistrationTitle"
+                        android:text="@string/registTvTitle"
                         android:textColor="#fff"
                         android:textSize="18sp"
                         android:textStyle="bold"
@@ -114,7 +114,7 @@
                             <EditText
                                 android:textSize="13sp"
                                 android:textColor="#f0f7f4"
-                                android:hint="@string/etPasswordRepeat"
+                                android:hint="@string/registEtPasswordRepeat"
                                 android:id="@+id/et_repeatpassword"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -133,7 +133,7 @@
                         android:stateListAnimator="@drawable/state_list_animator_z"
                         android:layout_width="150dp"
                         android:layout_height="42dp"
-                        android:text="@string/btnReg"
+                        android:text="@string/registBtnReg"
                         android:textColor="#2fa881">
                     </Button>
 

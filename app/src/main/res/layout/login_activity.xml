@@ -44,7 +44,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="50dp"
-                        android:text="@string/tvLogin"
+                        android:text="@string/loginTvLogin"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -117,7 +117,7 @@
                         android:stateListAnimator="@drawable/state_list_animator_z"
                         android:layout_width="140dp"
                         android:layout_height="40dp"
-                        android:text="@string/btnLogin"
+                        android:text="@string/loginBtnLogin"
                         android:textColor="#d3d3d3"/>
                 </RelativeLayout>
 
@@ -128,7 +128,7 @@
                     android:textSize="12sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/tvForgotPassword"
+                    android:text="@string/registTvForgotPassword"
                     android:layout_marginBottom="5dp" />
 
             </LinearLayout>

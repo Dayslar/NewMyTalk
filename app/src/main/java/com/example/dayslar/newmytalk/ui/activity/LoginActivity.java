@@ -16,6 +16,8 @@ import android.widget.EditText;
 
 import com.example.dayslar.newmytalk.R;
 import com.example.dayslar.newmytalk.db.entity.Token;
+import com.example.dayslar.newmytalk.db.impl.SqlTokenDao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDao;
 import com.example.dayslar.newmytalk.network.service.impl.NetworkTokenService;
 import com.example.dayslar.newmytalk.network.service.interfaces.TokenService;
 import com.example.dayslar.newmytalk.utils.calback.RetrofitCallback;
@@ -39,21 +41,26 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @ViewById(R.id.toolbar) Toolbar toolbar;
 
     private TokenService tokenService;
+    private TokenDao tokenDao;
     private Snackbar snackbar;
 
     @AfterViews
     void init() {
+
         tokenService = new NetworkTokenService(this);
+        tokenDao = SqlTokenDao.getInstance(this);
 
         initToolbar();
         initSnackbar();
 
         fab.setOnClickListener(this);
         btGo.setOnClickListener(this);
+
+        checkActiveAccount();
     }
 
     private void initSnackbar() {
-        snackbar = Snackbar.make(fab, "", Snackbar.LENGTH_SHORT);
+        snackbar = Snackbar.make(cv, "", Snackbar.LENGTH_SHORT);
     }
 
     @Override
@@ -81,57 +88,55 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void initToolbar() {
         toolbar.setLogo(R.mipmap.ic_launcher);
-        toolbar.setTitle(R.string.tvLogin);
+        toolbar.setTitle(R.string.loginTvLogin);
         toolbar.setSubtitle(R.string.app_name);
     }
 
     private void login(String username, String password) {
 
-        if (checkUserData(username, password)) {
-            tokenService.loadToken(username, password, new RetrofitCallback<Token>() {
-                @Override
-                public void onProcess() {
-                    enabledButtons(false);
-                    snackbar.setText(R.string.loginServerProcess).setDuration(Snackbar.LENGTH_INDEFINITE).show();
-                }
-
-                @Override
-                public void onSuccess(Call<Token> call, Response<Token> response) {
-                    snackbar.setText(R.string.loginServerSuccess).setDuration(2000).show();
-                    enabledButtons(true);
-                    goToMailActivity();
-                }
-
-                @Override
-                public void onFailure(Call<Token> call, Throwable e) {
-                    snackbar.setText(R.string.loginServerFailure).setDuration(2000).show();
-                    enabledButtons(true);
-                }
-            });
+        if (checkUserData(username)){
+            Snackbar.make(cv, getString(R.string.loginCheckUsernameError), Snackbar.LENGTH_LONG).show();
+            return;
         }
+
+        else if (checkUserData(password)){
+            Snackbar.make(cv, R.string.loginCheckPasswordError, Snackbar.LENGTH_LONG).show();
+            return;
+        }
+
+        tokenService.loadToken(username, password, new RetrofitCallback<Token>() {
+            @Override
+            public void onProcess() {
+                enabledButtons(false);
+                snackbar.setText(R.string.loginServerProcess).setDuration(Snackbar.LENGTH_INDEFINITE).show();
+            }
+
+            @Override
+            public void onSuccess(Call<Token> call, Response<Token> response) {
+                snackbar.setText(R.string.loginServerSuccess).setDuration(2000).show();
+                enabledButtons(true);
+                startMailActivityAnimation();
+            }
+
+            @Override
+            public void onFailure(Call<Token> call, Throwable e) {
+                snackbar.setText(R.string.loginServerFailure).setDuration(2000).show();
+                enabledButtons(true);
+            }
+        });
+
     }
 
-    private boolean checkUserData(String username, String password) {
-        if (!username.isEmpty() && !username.trim().isEmpty()){
-            snackbar.setText(R.string.checkUsernameError).setDuration(3000).show();
-            return false;
-        }
-
-        else if (password.isEmpty() && password.trim().isEmpty()){
-            snackbar.setText(R.string.checkPasswordError).setDuration(Snackbar.LENGTH_LONG).show();
-            return false;
-        }
-
-        return true;
+    private boolean checkUserData(String value) {
+        return  (value.isEmpty() || value.trim().isEmpty());
     }
-
 
     private void enabledButtons(boolean value) {
         btGo.setEnabled(value);
         fab.setEnabled(value);
     }
 
-    private void goToMailActivity() {
+    private void startMailActivityAnimation() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Explode explode = new Explode();
             explode.setDuration(500);
@@ -143,5 +148,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         ActivityOptionsCompat oc2 = ActivityOptionsCompat.makeSceneTransitionAnimation(this);
         Intent mainIntent = new Intent(this, MainActivity_.class);
         startActivity(mainIntent, oc2.toBundle());
+    }
+
+    private void startMainActivity(){
+        startActivity(new Intent(this, MainActivity_.class));
+    }
+
+    private void checkActiveAccount(){
+        if (tokenDao.get() != null)
+            startMainActivity();
     }
 }

@@ -6,4 +6,5 @@ import com.example.dayslar.newmytalk.utils.calback.RetrofitCallback;
 public interface TokenService {
 
     void loadToken(String username, String password, RetrofitCallback<Token> callback);
+    void loadTokenByRefreshToken(String refreshToken, RetrofitCallback<Token> callback);
 }

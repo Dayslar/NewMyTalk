@@ -10,11 +10,11 @@
 
 
     <!--Login Activity-->
-    <string name="tvLogin">Вход</string>
-    <string name="btnLogin">Войти</string>
+    <string name="loginTvLogin">Вход</string>
+    <string name="loginBtnLogin">Войти</string>
 
-    <string name="checkUsernameError">Введите имя пользователя</string>
-    <string name="checkPasswordError">Введите пароль</string>
+    <string name="loginCheckUsernameError">Введите имя пользователя. Имя пользователя не может быть пустым.</string>
+    <string name="loginCheckPasswordError">Введите пароль. Пароль не может быть пустым</string>
 
     <string name="loginServerProcess">Отправляем данные на сервер</string>
     <string name="loginServerSuccess">Данные верны</string>
@@ -22,12 +22,12 @@
 
 
     <!--Registration Activity-->
-    <string name="tvForgotPassword">Забыли пароль?</string>
-    <string name="tvRegistrationTitle">Регистрация</string>
-    <string name="etPasswordRepeat">Повтор пароля</string>
-    <string name="btnReg">Дальше</string>
+    <string name="registTvForgotPassword">Забыли пароль?</string>
+    <string name="registTvTitle">Регистрация</string>
+    <string name="registEtPasswordRepeat">Повтор пароля</string>
+    <string name="registBtnReg">Дальше</string>
 
     <!--Main Activity-->
-    <string name="tvManagers">МЕНЕДЖЕРЫ</string>
+    <string name="mainTvManagers">МЕНЕДЖЕРЫ</string>
 
 </resources>

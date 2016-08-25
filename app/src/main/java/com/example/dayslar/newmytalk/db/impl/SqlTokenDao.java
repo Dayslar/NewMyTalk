@@ -61,7 +61,7 @@ public class SqlTokenDao implements TokenDao {
         cv.put(TokenTableConfig.SCOPE, token.getScope());
         cv.put(TokenTableConfig.TOKEN_TYPE, token.getToken_type());
 
-        int id = database.update(DbConfig.TOKEN_TABLE_NAME, cv, TokenTableConfig.ACCESS_TOKEN  + "= ?", new String[]{token.getAccess_token()});
+        int id = database.update(DbConfig.TOKEN_TABLE_NAME, cv, TokenTableConfig.REFRESH_TOKEN  + "= ?", new String[]{token.getRefresh_token()});
         MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Запись успешно добавлена " + id);
 
         return id;

@@ -11,10 +11,17 @@ public interface TokenApi {
 
     @FormUrlEncoded
     @POST("token")
-    Call<Token> getToken(@Field("client_id") String talkClient,
-                         @Field("client_secret") String secret,
-                         @Field("username") String username,
+    Call<Token> getToken(@Field("username") String username,
                          @Field("password") String password,
+                         @Field("client_id") String talkClient,
+                         @Field("client_secret") String secret,
                          @Field("scope") String scope,
                          @Field("grant_type") String grandType);
+
+    @FormUrlEncoded
+    @POST("token")
+    Call<Token> getTokenByRefresh(@Field("client_id") String talkClient,
+                                  @Field("client_secret") String secret,
+                                  @Field("grant_type") String grandType,
+                                  @Field("refresh_token") String refreshToken);
 }
