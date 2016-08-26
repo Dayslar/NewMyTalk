@@ -1,4 +1,4 @@
-package com.example.dayslar.newmytalk.network.service;
+package com.example.dayslar.newmytalk.network;
 
 public final class TokenConfig {
 

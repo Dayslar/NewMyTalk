@@ -13,8 +13,8 @@ public interface TokenApi {
     @POST("token")
     Call<Token> getToken(@Field("username") String username,
                          @Field("password") String password,
-                         @Field("client_id") String talkClient,
-                         @Field("client_secret") String secret,
+                         @Field("client_id") String clientId,
+                         @Field("client_secret") String clientSecret,
                          @Field("scope") String scope,
                          @Field("grant_type") String grandType);
 

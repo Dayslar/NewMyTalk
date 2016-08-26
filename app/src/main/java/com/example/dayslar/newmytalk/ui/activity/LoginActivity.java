@@ -18,16 +18,14 @@ import com.example.dayslar.newmytalk.R;
 import com.example.dayslar.newmytalk.db.entity.Token;
 import com.example.dayslar.newmytalk.db.impl.SqlTokenDao;
 import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDao;
+import com.example.dayslar.newmytalk.network.calback.RetrofitCallback;
 import com.example.dayslar.newmytalk.network.service.impl.NetworkTokenService;
 import com.example.dayslar.newmytalk.network.service.interfaces.TokenService;
-import com.example.dayslar.newmytalk.utils.calback.RetrofitCallback;
+import com.example.dayslar.newmytalk.network.utils.http.code.interfaces.HttpMessage;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
-
-import retrofit2.Call;
-import retrofit2.Response;
 
 
 @EActivity(R.layout.login_activity)
@@ -42,7 +40,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private TokenService tokenService;
     private TokenDao tokenDao;
-    private Snackbar snackbar;
 
     @AfterViews
     void init() {
@@ -51,16 +48,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         tokenDao = SqlTokenDao.getInstance(this);
 
         initToolbar();
-        initSnackbar();
 
         fab.setOnClickListener(this);
         btGo.setOnClickListener(this);
 
         checkActiveAccount();
-    }
-
-    private void initSnackbar() {
-        snackbar = Snackbar.make(cv, "", Snackbar.LENGTH_SHORT);
     }
 
     @Override
@@ -108,19 +100,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onProcess() {
                 enabledButtons(false);
-                snackbar.setText(R.string.loginServerProcess).setDuration(Snackbar.LENGTH_INDEFINITE).show();
+                Snackbar.make(cv,R.string.loginServerProcess,Snackbar.LENGTH_INDEFINITE).show();
             }
 
             @Override
-            public void onSuccess(Call<Token> call, Response<Token> response) {
-                snackbar.setText(R.string.loginServerSuccess).setDuration(2000).show();
+            public void onSuccess(Token token) {
+                Snackbar.make(cv,R.string.loginServerSuccess, Snackbar.LENGTH_SHORT).show();
                 enabledButtons(true);
                 startMailActivityAnimation();
             }
 
             @Override
-            public void onFailure(Call<Token> call, Throwable e) {
-                snackbar.setText(R.string.loginServerFailure).setDuration(2000).show();
+            public void onFailure(HttpMessage httpMessage) {
+                Snackbar.make(cv, httpMessage.getMessage(), Snackbar.LENGTH_LONG).show();
                 enabledButtons(true);
             }
         });

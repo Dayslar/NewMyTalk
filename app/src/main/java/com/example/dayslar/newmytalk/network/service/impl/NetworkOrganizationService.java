@@ -9,7 +9,7 @@ import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDao;
 import com.example.dayslar.newmytalk.network.service.RetrofitService;
 import com.example.dayslar.newmytalk.network.service.interfaces.OrganizationService;
 import com.example.dayslar.newmytalk.utils.entity.Organization;
-import com.example.dayslar.newmytalk.utils.calback.RetrofitCallback;
+import com.example.dayslar.newmytalk.network.calback.RetrofitCallback;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,7 +39,7 @@ public class NetworkOrganizationService implements OrganizationService {
 
             @Override
             public void onFailure(Call<Organization> call, Throwable t) {
-                callback.onFailure(call, t);
+
             }
         });
     }

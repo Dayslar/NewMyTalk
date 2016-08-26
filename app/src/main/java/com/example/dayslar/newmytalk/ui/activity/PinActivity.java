@@ -14,6 +14,7 @@ import com.example.dayslar.newmytalk.db.entity.Token;
 import com.example.dayslar.newmytalk.db.impl.SqlTokenDao;
 import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDao;
 import com.example.dayslar.newmytalk.network.service.RetrofitService;
+import com.example.dayslar.newmytalk.network.utils.http.code.impls.Http503Message;
 import com.example.dayslar.newmytalk.utils.entity.LockKey;
 import com.example.dayslar.newmytalk.utils.MyLogger;
 
@@ -68,9 +69,7 @@ public class PinActivity extends AppCompatActivity {
 
                 MyLogger.printDebug(this.getClass(), pin);
 
-                snackbar = Snackbar.make(pinLockView, "Началась проверка данных ожидайте", Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
-
+                Snackbar.make(pinLockView, "Началась проверка данных ожидайте", Snackbar.LENGTH_INDEFINITE);
                 Token token = tokenDao.get();
 
                 Call<LockKey> call = RetrofitService.getInstance(context).getLockKeyApi().getKey(token.getAccess_token());
@@ -81,12 +80,11 @@ public class PinActivity extends AppCompatActivity {
                         LockKey lockKey = response.body();
 
                         if (lockKey != null){
-                            snackbar.setText("Пароль подтвержеден").setDuration(2000).show();
                             if (lockKey.getKey() == Integer.parseInt(pin))
                                 startActivity(new Intent(context, SettingActivity_.class));
 
                             else {
-                                snackbar.setText("Введен неверный пароль").setDuration(4000).show();
+                                Snackbar.make(pinLockView, "Введен неверный пароль", Snackbar.LENGTH_LONG).show();
                                 pinLockView.resetPinLockView();
                             }
                         }
@@ -96,7 +94,7 @@ public class PinActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<LockKey> call, Throwable t) {
-                        snackbar.setText("Произошла ошибка подключения, проверьте ваши сетевые настройки.").setDuration(4000).show();
+                        Snackbar.make(pinLockView ,new Http503Message().getMessage(), Snackbar.LENGTH_LONG).show();
                     }
                 });
             }

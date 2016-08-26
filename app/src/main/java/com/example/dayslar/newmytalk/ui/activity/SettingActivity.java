@@ -20,7 +20,7 @@ public class SettingActivity extends AppCompatActivity {
     @AfterViews
     void init(){
         initToolbar();
-        getFragmentManager().beginTransaction().replace(R.id.content_frame, new SettingBaseFragment_().builder().build()).commit();
+        getFragmentManager().beginTransaction().replace(R.id.content_frame, SettingBaseFragment_.builder().build()).commit();
     }
 
     private void initToolbar() {

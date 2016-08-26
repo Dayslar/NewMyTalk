@@ -15,21 +15,19 @@ import com.example.dayslar.newmytalk.R;
 import com.example.dayslar.newmytalk.db.entity.Manager;
 import com.example.dayslar.newmytalk.db.impl.SqlManagerDao;
 import com.example.dayslar.newmytalk.db.interfaces.dao.ManagerDao;
+import com.example.dayslar.newmytalk.network.calback.RetrofitCallback;
 import com.example.dayslar.newmytalk.network.service.impl.NetworkManagerService;
 import com.example.dayslar.newmytalk.network.service.interfaces.ManagerService;
+import com.example.dayslar.newmytalk.network.utils.http.code.interfaces.HttpMessage;
 import com.example.dayslar.newmytalk.telephony.impl.SimpleTelephonyHandler;
 import com.example.dayslar.newmytalk.ui.adapter.ManagerAdapter;
 import com.example.dayslar.newmytalk.utils.MyLogger;
-import com.example.dayslar.newmytalk.utils.calback.RetrofitCallback;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Response;
 
 @EActivity(R.layout.main_activity)
 public class MainActivity extends AppCompatActivity {
@@ -77,14 +75,14 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onSuccess(Call<List<Manager>> call, Response<List<Manager>> response) {
-                recyclerView.setAdapter(new ManagerAdapter(response.body(), managerListener));
+            public void onSuccess(List<Manager> managers) {
+                recyclerView.setAdapter(new ManagerAdapter(managers, managerListener));
                 snackbar.setText("Обновление успешно завершено.").setDuration(3000).show();
             }
 
             @Override
-            public void onFailure(Call<List<Manager>> call, Throwable e) {
-                snackbar.setText("Не удалось подключиться к серверу.").setDuration(4000).show();
+            public void onFailure(HttpMessage httpMessage) {
+                snackbar.setText(httpMessage.getMessage()).setDuration(4000).show();
             }
         });
     }
