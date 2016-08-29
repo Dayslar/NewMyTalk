@@ -1,6 +1,7 @@
 package com.example.dayslar.newmytalk.ui.activity;
 
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
@@ -10,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.transition.Explode;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -82,6 +84,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         toolbar.setLogo(R.mipmap.ic_launcher);
         toolbar.setTitle(R.string.loginTvLogin);
         toolbar.setSubtitle(R.string.app_name);
+        toolbar.inflateMenu(R.menu.login_menu);
+        toolbar.setOnMenuItemClickListener(initToolbarListener(this));
     }
 
     private void login(String username, String password) {
@@ -149,5 +153,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void checkActiveAccount(){
         if (tokenDao.get() != null)
             startMainActivity();
+    }
+
+    private Toolbar.OnMenuItemClickListener initToolbarListener(final Context context){
+        return new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent settingInt = new Intent(context, SettingActivity_.class);
+                settingInt.putExtra(SettingActivity.SettingType.TYPE, SettingActivity.SettingType.SETTING_NETWORK);
+                startActivity(settingInt);
+
+                return true;
+            }
+        };
     }
 }

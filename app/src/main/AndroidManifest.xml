@@ -24,7 +24,8 @@
             android:screenOrientation="portrait"/>
 
         <activity android:name=".ui.activity.SettingActivity_"
-        android:screenOrientation="portrait"/>
+            android:noHistory="true"
+            android:screenOrientation="portrait"/>
 
         <activity android:name=".ui.activity.PinActivity_"
             android:noHistory="true"

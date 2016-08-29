@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/networkSettingTitle">
+
+        <EditTextPreference
+            android:key="@string/etSettingIpKey"
+            android:title="@string/etSettingIpTitle"
+            android:summary="@string/etSettingIpSummary"
+            android:defaultValue="192.168.21.112" />
+        <EditTextPreference
+            android:key="@string/etSettingPortKey"
+            android:title="@string/etSettingPortTitle"
+            android:summary="@string/etSettingPortSummary"
+            android:defaultValue="8080"
+            android:maxLength="6"
+            android:inputType="number"
+            android:numeric="integer" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

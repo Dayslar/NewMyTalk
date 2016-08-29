@@ -6,6 +6,7 @@ import android.view.MenuItem;
 
 import com.example.dayslar.newmytalk.R;
 import com.example.dayslar.newmytalk.ui.fragment.SettingBaseFragment_;
+import com.example.dayslar.newmytalk.ui.fragment.SettingNetworkFragment_;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -20,7 +21,7 @@ public class SettingActivity extends AppCompatActivity {
     @AfterViews
     void init(){
         initToolbar();
-        getFragmentManager().beginTransaction().replace(R.id.content_frame, SettingBaseFragment_.builder().build()).commit();
+        initSettingFragment();
     }
 
     private void initToolbar() {
@@ -29,6 +30,12 @@ public class SettingActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void initSettingFragment() {
+        if (getIntent().getIntExtra(SettingType.TYPE, SettingType.SETTING_BASE) == SettingType.SETTING_NETWORK)
+            getFragmentManager().beginTransaction().replace(R.id.content_frame, SettingNetworkFragment_.builder().build()).commit();
+        else getFragmentManager().beginTransaction().replace(R.id.content_frame, SettingBaseFragment_.builder().build()).commit();
     }
 
 
@@ -42,5 +49,11 @@ public class SettingActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public static final class SettingType {
+        static final String TYPE = "setting_type";
+        static final int SETTING_BASE = 0;
+        static final int SETTING_NETWORK = 1;
     }
 }
