@@ -6,11 +6,9 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
-import android.transition.Explode;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -42,6 +40,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private TokenService tokenService;
     private TokenDao tokenDao;
+    private Snackbar snackBar;
 
     @AfterViews
     void init() {
@@ -69,6 +68,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+
     private void startRegisterActivityAnimation() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setExitTransition(null);
@@ -90,13 +90,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void login(String username, String password) {
 
+        snackBar = Snackbar.make(fab, "", Snackbar.LENGTH_SHORT);
+
         if (checkUserData(username)){
-            Snackbar.make(cv, getString(R.string.loginCheckUsernameError), Snackbar.LENGTH_LONG).show();
+            snackBar.setText(getString(R.string.loginCheckUsernameError)).setDuration(Snackbar.LENGTH_LONG).show();
             return;
         }
 
         else if (checkUserData(password)){
-            Snackbar.make(cv, R.string.loginCheckPasswordError, Snackbar.LENGTH_LONG).show();
+            snackBar.setText(R.string.loginCheckPasswordError).setDuration(Snackbar.LENGTH_LONG).show();
             return;
         }
 
@@ -104,19 +106,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onProcess() {
                 enabledButtons(false);
-                Snackbar.make(cv,R.string.loginServerProcess,Snackbar.LENGTH_INDEFINITE).show();
+                snackBar.setText(R.string.loginServerProcess).setDuration(Snackbar.LENGTH_INDEFINITE).show();
             }
 
             @Override
             public void onSuccess(Token token) {
-                Snackbar.make(cv,R.string.loginServerSuccess, Snackbar.LENGTH_SHORT).show();
+                snackBar.dismiss();
                 enabledButtons(true);
-                startMailActivityAnimation();
+                startMainActivity();
             }
 
             @Override
             public void onFailure(HttpMessage httpMessage) {
-                Snackbar.make(cv, httpMessage.getMessage(), Snackbar.LENGTH_LONG).show();
+                snackBar.setText(httpMessage.getMessage()).setDuration(Snackbar.LENGTH_LONG).show();
                 enabledButtons(true);
             }
         });
@@ -124,26 +126,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private boolean checkUserData(String value) {
-        return  (value.isEmpty() || value.trim().isEmpty());
+        return (value.isEmpty() || value.trim().isEmpty());
     }
 
     private void enabledButtons(boolean value) {
         btGo.setEnabled(value);
         fab.setEnabled(value);
-    }
-
-    private void startMailActivityAnimation() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Explode explode = new Explode();
-            explode.setDuration(500);
-
-            getWindow().setExitTransition(explode);
-            getWindow().setEnterTransition(explode);
-        }
-
-        ActivityOptionsCompat oc2 = ActivityOptionsCompat.makeSceneTransitionAnimation(this);
-        Intent mainIntent = new Intent(this, MainActivity_.class);
-        startActivity(mainIntent, oc2.toBundle());
     }
 
     private void startMainActivity(){

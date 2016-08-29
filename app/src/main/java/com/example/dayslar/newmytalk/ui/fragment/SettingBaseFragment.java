@@ -27,6 +27,7 @@ public class SettingBaseFragment extends PreferenceFragment {
         settingUtil = SettingUtil.getInstance(getActivity());
 
         addPreferencesFromResource(R.xml.preferences_base);
+        addPreferencesFromResource(R.xml.preferences_network);
         initListener();
     }
 

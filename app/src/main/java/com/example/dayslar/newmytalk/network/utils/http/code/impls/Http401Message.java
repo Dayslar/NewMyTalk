@@ -6,6 +6,6 @@ public class Http401Message implements HttpMessage {
 
     @Override
     public String getMessage() {
-        return "Пользователь с такими данными не обноружен.";
+        return "Пользователь с такими данными не обнаружен.";
     }
 }

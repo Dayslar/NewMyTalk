@@ -6,7 +6,7 @@ public class Http502Message implements HttpMessage {
 
     @Override
     public String getMessage() {
-        return "Не верный адресс";
+        return "Неверный адресс";
     }
 }
 

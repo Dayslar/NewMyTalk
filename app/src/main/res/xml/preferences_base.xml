@@ -82,11 +82,6 @@
             android:summaryOff="@string/chAdminSummaryOff"
             android:defaultValue="false"/>
 
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title="@string/networkSettingTitle">
-
         <CheckBoxPreference
             android:key="@string/chUnLoadRecordKey"
             android:title="@string/chUnLoadRecordTitle"
@@ -94,24 +89,6 @@
             android:summaryOff="@string/chUnLoadRecordSummaryOff"
             android:defaultValue="false"/>
 
-        <EditTextPreference
-            android:key="@string/etSettingIpKey"
-            android:title="@string/etSettingIpTitle"
-            android:summary="@string/etSettingIpSummary"
-            android:defaultValue="192.168.21.112" />
-
-        <EditTextPreference
-            android:key="@string/etSettingPortKey"
-            android:title="@string/etSettingPortTitle"
-            android:summary="@string/etSettingPortSummary"
-            android:defaultValue="8080"
-            android:maxLength="6"
-            android:inputType="number"
-            android:numeric="integer" />
-
     </PreferenceCategory>
-
-
-
 
 </PreferenceScreen>

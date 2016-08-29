@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.media.MediaRecorder;
+import android.preference.PreferenceManager;
 
 import com.example.dayslar.newmytalk.R;
 
@@ -16,15 +17,15 @@ public class SettingUtil {
     private Setting setting;
 
 
-    private SettingUtil(Context context){
+    private SettingUtil(Context context) {
         setting = new Setting();
         resources = context.getResources();
-        preferences = context.getSharedPreferences(getDefaultSharedPreferencesName(context), getDefaultSharedPreferencesMode());
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         loadSetting();
     }
 
-    public static SettingUtil getInstance(Context context){
+    public static SettingUtil getInstance(Context context) {
         if (instance == null) {
             synchronized (SettingUtil.class) {
                 if (instance == null)
@@ -39,19 +40,17 @@ public class SettingUtil {
         return setting;
     }
 
-    public void loadSetting(){
+    public void loadSetting() {
         setting.setRecordingActive(preferences.getBoolean(resources.getString(R.string.chActiveRecordKey), false))
                 .setManagerActive(preferences.getBoolean(resources.getString(R.string.chActiveManagerKey), false))
                 .setAdminActive(preferences.getBoolean(resources.getString(R.string.chAdminKey), false))
                 .setUnloadActive(preferences.getBoolean(resources.getString(R.string.chUnLoadRecordKey), false))
-
                 .setDelay(Integer.parseInt(preferences.getString(resources.getString(R.string.etDelayRecordIsCallKey), "10")))
-
                 .setServerIp(preferences.getString(resources.getString(R.string.etSettingIpKey), "192.168.21.112"))
                 .setServerPort(preferences.getString(resources.getString(R.string.etSettingPortKey), "8080"));
     }
 
-    public void loadSettingForPlayer(){
+    public void loadSettingForPlayer() {
         String outputFormat = preferences.getString(resources.getString(R.string.listOutputFormatKey), resources.getString(R.string.listValueDefault));
         String audioSource = preferences.getString(resources.getString(R.string.listAudioSourceKey), resources.getString(R.string.listValueDefault));
         String audioEncoder = preferences.getString(resources.getString(R.string.listAudioEncoderKey), resources.getString(R.string.listAudioEncoderKey));
@@ -68,7 +67,7 @@ public class SettingUtil {
         else if (outputFormat.equals(resources.getString(R.string.listOutputFormat3gpp)))
             setting.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
 
-        else  setting.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        else setting.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
 
         //audio source
         if (audioSource.equals(resources.getString(R.string.listAudioSourceVoiceCall)))
@@ -110,11 +109,4 @@ public class SettingUtil {
         setting.setAudioChannels(Integer.parseInt(audioChannels));
     }
 
-    private static String getDefaultSharedPreferencesName(Context context) {
-        return context.getPackageName() + "_preferences";
-    }
-
-    private static int getDefaultSharedPreferencesMode() {
-        return Context.MODE_PRIVATE;
-    }
 }
