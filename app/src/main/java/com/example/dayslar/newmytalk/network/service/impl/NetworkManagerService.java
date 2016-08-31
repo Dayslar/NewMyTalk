@@ -7,8 +7,8 @@ import com.example.dayslar.newmytalk.db.entity.Manager;
 import com.example.dayslar.newmytalk.db.entity.Token;
 import com.example.dayslar.newmytalk.db.impl.SqlManagerDao;
 import com.example.dayslar.newmytalk.db.impl.SqlTokenDao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.ManagerDao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.ManagerDAO;
+import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDAO;
 import com.example.dayslar.newmytalk.network.api.ManagerApi;
 import com.example.dayslar.newmytalk.network.calback.RetrofitCallback;
 import com.example.dayslar.newmytalk.network.service.RetrofitService;
@@ -28,15 +28,15 @@ import retrofit2.Response;
 public class NetworkManagerService implements ManagerService {
 
     private TokenService tokenService;
-    private ManagerDao managerDao;
-    private TokenDao tokenDao;
+    private ManagerDAO managerDao;
+    private TokenDAO tokenDAO;
     private ManagerApi managerApi;
     private HttpMessageSelector messageSelector;
 
 
     public NetworkManagerService(Context context) {
 
-        this.tokenDao = SqlTokenDao.getInstance(context);
+        this.tokenDAO = SqlTokenDao.getInstance(context);
         this.managerDao = SqlManagerDao.getInstance(context);
         this.managerApi = RetrofitService.getInstance(context).getManagerApi();
         this.messageSelector = HttpMessageSelector.getInstance();
@@ -45,7 +45,7 @@ public class NetworkManagerService implements ManagerService {
 
     public void loadManagers(@NonNull final RetrofitCallback<List<Manager>> callback){
 
-        final Token token = tokenDao.get();
+        final Token token = tokenDAO.get();
 
         Call<List<Manager>> call = managerApi.loadManagers(token.getAccess_token());
 

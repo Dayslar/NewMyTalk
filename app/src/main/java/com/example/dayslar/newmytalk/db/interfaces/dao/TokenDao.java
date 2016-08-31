@@ -2,7 +2,7 @@ package com.example.dayslar.newmytalk.db.interfaces.dao;
 
 import com.example.dayslar.newmytalk.db.entity.Token;
 
-public interface TokenDao {
+public interface TokenDAO {
 
     long insert(Token token);
     int update(Token token);

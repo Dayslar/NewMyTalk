@@ -4,9 +4,10 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.example.dayslar.newmytalk.db.entity.Manager;
 import com.example.dayslar.newmytalk.db.impl.SqlRecordDao;
 import com.example.dayslar.newmytalk.db.entity.Record;
-import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDAO;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,10 +18,10 @@ public class RecordsTest {
     @Test
     public void addRecord() throws Exception {
         Context appContext = InstrumentationRegistry.getTargetContext();
-        RecordDao recordDao = SqlRecordDao.getInstance(appContext);
+        RecordDAO recordDao = SqlRecordDao.getInstance(appContext);
 
         Record record = new Record()
-                .setManagerId(2)
+                .setManager(new Manager().setId(2).setName("Коноплич ольга"))
                 .setCallPhone("+375295642388")
                 .setMyPhone("+375295642388")
                 .setCallTime(146734857343L)
@@ -38,7 +39,7 @@ public class RecordsTest {
     @Test
     public void deleteRecord() throws Exception {
         Context appContext = InstrumentationRegistry.getTargetContext();
-        RecordDao recordDao = SqlRecordDao.getInstance(appContext);
+        RecordDAO recordDao = SqlRecordDao.getInstance(appContext);
 
         recordDao.delete(10);
     }
@@ -46,7 +47,7 @@ public class RecordsTest {
     @Test
     public void getRecord() throws Exception  {
         Context appContext = InstrumentationRegistry.getTargetContext();
-        RecordDao recordDao = SqlRecordDao.getInstance(appContext);
+        RecordDAO recordDao = SqlRecordDao.getInstance(appContext);
 
         recordDao.get(3);
     }
@@ -54,7 +55,7 @@ public class RecordsTest {
     @Test
     public void getRecords() throws Exception {
         Context appContext = InstrumentationRegistry.getTargetContext();
-        RecordDao recordDao = SqlRecordDao.getInstance(appContext);
+        RecordDAO recordDao = SqlRecordDao.getInstance(appContext);
 
         recordDao.getRecords();
     }

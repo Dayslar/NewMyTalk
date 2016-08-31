@@ -6,6 +6,7 @@ import android.content.Context;
 import com.example.dayslar.newmytalk.network.api.LockKeyApi;
 import com.example.dayslar.newmytalk.network.api.ManagerApi;
 import com.example.dayslar.newmytalk.network.api.OrganizationApi;
+import com.example.dayslar.newmytalk.network.api.RecordApi;
 import com.example.dayslar.newmytalk.network.api.TokenApi;
 import com.example.dayslar.newmytalk.telephony.impl.SimpleTelephonyHandler;
 import com.example.dayslar.newmytalk.utils.SettingUtil;
@@ -20,6 +21,7 @@ public class RetrofitService {
     private ManagerApi managerApi;
     private OrganizationApi organizationApi;
     private LockKeyApi lockKeyApi;
+    private RecordApi recordApi;
 
 
     private SettingUtil settingUtil;
@@ -59,6 +61,13 @@ public class RetrofitService {
         return tokenApi;
     }
 
+    public RecordApi getRecordApi() {
+        if (recordApi == null){
+            initRecordApi();
+        }
+        return recordApi;
+    }
+
     public LockKeyApi getLockKeyApi() {
         if (lockKeyApi == null){
             initLockKeyApi();
@@ -75,6 +84,15 @@ public class RetrofitService {
         lockKeyApi = retrofitManager.create(LockKeyApi.class);
     }
 
+
+    private void initRecordApi() {
+        Retrofit retrofitManager = new Retrofit.Builder()
+                .baseUrl("http://" + settingUtil.getSetting().getServerIp() + ":" + settingUtil.getSetting().getServerPort() + "/app/api/user/record/")
+                .addConverterFactory(JacksonConverterFactory.create())
+                .build();
+
+        recordApi = retrofitManager.create(RecordApi.class);
+    }
 
     private void initManagerApi() {
         Retrofit retrofitManager = new Retrofit.Builder()

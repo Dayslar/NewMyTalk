@@ -4,12 +4,12 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.example.dayslar.newmytalk.db.impl.SqlManagerDao;
 import com.example.dayslar.newmytalk.db.entity.Manager;
-import com.example.dayslar.newmytalk.db.interfaces.dao.ManagerDao;
+import com.example.dayslar.newmytalk.db.impl.SqlManagerDao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.ManagerDAO;
 
-import org.junit.runner.RunWith;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ public class ManagersTest {
     public void addManager() throws Exception {
 
         Context appContext = InstrumentationRegistry.getTargetContext();
-        ManagerDao managerDao = SqlManagerDao.getInstance(appContext);
+        ManagerDAO managerDao = SqlManagerDao.getInstance(appContext);
 
         Manager manager = new Manager()
                 .setName("Питюня")
@@ -34,7 +34,7 @@ public class ManagersTest {
     public void addManagers() throws Exception{
 
         Context appContext = InstrumentationRegistry.getTargetContext();
-        ManagerDao managerDao = SqlManagerDao.getInstance(appContext);
+        ManagerDAO managerDao = SqlManagerDao.getInstance(appContext);
 
         List<Manager> managers = new ArrayList<>();
 
@@ -62,20 +62,10 @@ public class ManagersTest {
     }
 
     @Test
-    public void deleteManager() throws Exception {
-
-        Context appContext = InstrumentationRegistry.getTargetContext();
-        ManagerDao managerDao = SqlManagerDao.getInstance(appContext);
-
-        managerDao.delete(4);
-    }
-
-
-    @Test
     public void getManager() throws Exception {
 
         Context appContext = InstrumentationRegistry.getTargetContext();
-        ManagerDao managerDao = SqlManagerDao.getInstance(appContext);
+        ManagerDAO managerDao = SqlManagerDao.getInstance(appContext);
 
         managerDao.get(2);
     }
@@ -84,8 +74,28 @@ public class ManagersTest {
     public void getManagers() throws Exception {
 
         Context appContext = InstrumentationRegistry.getTargetContext();
-        ManagerDao managerDao = SqlManagerDao.getInstance(appContext);
+        ManagerDAO managerDao = SqlManagerDao.getInstance(appContext);
 
         managerDao.getManagers();
     }
+
+    @Test
+    public void deleteManager() throws Exception {
+
+        Context appContext = InstrumentationRegistry.getTargetContext();
+        ManagerDAO managerDao = SqlManagerDao.getInstance(appContext);
+
+        managerDao.delete(4);
+    }
+
+    @Test
+    public void deleteManagers() throws Exception {
+
+        Context appContext = InstrumentationRegistry.getTargetContext();
+        ManagerDAO managerDao = SqlManagerDao.getInstance(appContext);
+
+        managerDao.deleteAll();
+    }
+
+
 }

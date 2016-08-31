@@ -1,5 +1,9 @@
 package com.example.dayslar.newmytalk.db.config;
 
+/**
+ * @author Dayslar
+ * Класс описывающий поля для таблицы Record
+ */
 public final class RecordTableConfig {
 
     public static final String CALL_TIME = "call_time";

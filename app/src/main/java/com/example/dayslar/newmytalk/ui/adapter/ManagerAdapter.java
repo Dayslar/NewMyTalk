@@ -16,22 +16,28 @@ import java.util.List;
 public class ManagerAdapter extends RecyclerView.Adapter<ManagerAdapter.ManagerViewHolder>{
 
     private List<Manager> managerList;
-    private View.OnClickListener listener;
+    private AdapterCallback<Manager> callback;
 
-    public ManagerAdapter(List<Manager> managerList, View.OnClickListener listener) {
+    public ManagerAdapter(List<Manager> managerList, AdapterCallback<Manager> callback) {
         this.managerList = managerList;
-        this.listener  = listener;
+        this.callback = callback;
     }
 
     @Override
     public ManagerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.manager, parent, false);
-        return new ManagerViewHolder(v, listener);
+        return new ManagerViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(ManagerViewHolder holder, int position) {
+    public void onBindViewHolder(ManagerViewHolder holder, final int position) {
         holder.managerName.setText(managerList.get(position).getName());
+        holder.managerPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callback.onClick(managerList.get(position));
+            }
+        });
     }
 
     @Override
@@ -50,13 +56,11 @@ public class ManagerAdapter extends RecyclerView.Adapter<ManagerAdapter.ManagerV
         TextView managerName;
         ImageView managerPhoto;
 
-        ManagerViewHolder(View itemView, View.OnClickListener listener) {
+        ManagerViewHolder(View itemView) {
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.cv);
             managerName = (TextView)itemView.findViewById(R.id.managerName);
             managerPhoto = (ImageView) itemView.findViewById(R.id.managerPhoto);
-
-            managerPhoto.setOnClickListener(listener);
 
         }
     }

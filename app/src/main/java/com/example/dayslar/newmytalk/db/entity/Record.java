@@ -1,19 +1,26 @@
 package com.example.dayslar.newmytalk.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+/**
+ * @author Dayslar
+ * Клаас описывающий запись
+ */
 public class Record {
 
-    private long _id;
-    private long callTime;
-    private String callPhone;
-    private String myPhone;
-    private boolean answer;
-    private boolean incoming;
-    private long startRecord;
-    private long endRecord;
-    private int managerId;
-    private String contactName;
-    private String fileName;
+    private long _id; //уникальный id записи
+    private long callTime; //время звонка
+    private String callPhone; //телефон с(на) которого(ый) звонили
+    private String myPhone; //свой телефон
+    private boolean answer; //булево значение ответ/без ответа
+    private boolean incoming; //булево значение входящий/исходящий
+    private long startRecord; //время начала записи
+    private long endRecord; //время окончания записи
+    private Manager manager; //менеджер ответивщий на звонок, может быть null
+    private String contactName; // имя контакта
+    private String fileName; //имя файла записи
 
+    @JsonIgnore
     public long getId() {
         return _id;
     }
@@ -86,12 +93,12 @@ public class Record {
         return this;
     }
 
-    public int getManagerId() {
-        return managerId;
+    public Manager getManager() {
+        return manager;
     }
 
-    public Record setManagerId(int managerId) {
-        this.managerId = managerId;
+    public Record setManager(Manager manager) {
+        this.manager = manager;
         return this;
     }
 
@@ -104,6 +111,7 @@ public class Record {
         return this;
     }
 
+    @JsonIgnore
     public String getFileName() {
         return fileName;
     }
@@ -124,7 +132,7 @@ public class Record {
                 ", incoming=" + incoming +
                 ", startRecord=" + startRecord +
                 ", endRecord=" + endRecord +
-                ", managerId=" + managerId +
+                ", manager=" + manager +
                 ", contactName='" + contactName + '\'' +
                 ", fileName='" + fileName + '\'' +
                 '}';

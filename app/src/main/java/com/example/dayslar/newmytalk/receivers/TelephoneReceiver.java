@@ -14,6 +14,7 @@ public class TelephoneReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         SettingUtil settingUtil = SettingUtil.getInstance(context);
+        settingUtil.loadSetting();
 
         if (settingUtil.getSetting().isRecordingActive()) {
             switch (intent.getAction()) {

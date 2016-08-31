@@ -1,26 +1,24 @@
 package com.example.dayslar.newmytalk.db.impl;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.dayslar.newmytalk.utils.MyLogger;
+import com.example.dayslar.newmytalk.db.CursorUtils;
 import com.example.dayslar.newmytalk.db.DataBaseController;
 import com.example.dayslar.newmytalk.db.config.DbConfig;
-import com.example.dayslar.newmytalk.db.config.ManagerTableConfig;
-import com.example.dayslar.newmytalk.db.interfaces.dao.ManagerDao;
 import com.example.dayslar.newmytalk.db.entity.Manager;
+import com.example.dayslar.newmytalk.db.interfaces.dao.ManagerDAO;
+import com.example.dayslar.newmytalk.utils.MyLogger;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.dayslar.newmytalk.db.CursorUtils.readManager;
-
-public class SqlManagerDao implements ManagerDao {
+public class SqlManagerDao implements ManagerDAO {
 
     private static SqlManagerDao instance;
     private SQLiteDatabase database;
+    private CursorUtils cursorUtils;
 
     public static SqlManagerDao getInstance(Context context){
         if (instance == null) {
@@ -36,17 +34,12 @@ public class SqlManagerDao implements ManagerDao {
 
     private SqlManagerDao(Context context) {
         database = DataBaseController.getInstance(context).getDatabase();
+        cursorUtils = new CursorUtils();
     }
 
     @Override
     public long insert(Manager manager) {
-        ContentValues cv = new ContentValues();
-
-        cv.put(DbConfig.COLUMN_ID, manager.getId());
-        cv.put(ManagerTableConfig.NAME, manager.getName());
-        cv.put(ManagerTableConfig.PHOTO_PATCH, manager.getPhotoPatch());
-
-        long id = database.insert(DbConfig.MANAGER_TABLE_NAME, null, cv);
+        long id = database.insert(DbConfig.MANAGER_TABLE_NAME, null, cursorUtils.getCvForManager(manager));
         MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Запись успешно добавлена " + id);
 
         return id;
@@ -77,10 +70,10 @@ public class SqlManagerDao implements ManagerDao {
     @Override
     public Manager get(long id) {
         Manager manager = null;
-        Cursor cursor = database.query(DbConfig.MANAGER_TABLE_NAME, null, "manager_id = ?", new String[]{id + ""}, null, null, null);
+        Cursor cursor = database.query(DbConfig.MANAGER_TABLE_NAME, null, "_id = ?", new String[]{id + ""}, null, null, null);
 
         if (cursor.moveToFirst()) {
-            manager = readManager(cursor);
+            manager = cursorUtils.readManager(cursor);
         }
 
         cursor.close();
@@ -98,7 +91,7 @@ public class SqlManagerDao implements ManagerDao {
 
         if (cursor.moveToFirst()) {
             do {
-                managers.add(readManager(cursor));
+                managers.add(cursorUtils.readManager(cursor));
             }
 
             while (cursor.moveToNext());

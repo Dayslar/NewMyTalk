@@ -1,28 +1,25 @@
 package com.example.dayslar.newmytalk.db.impl;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.dayslar.newmytalk.utils.MyLogger;
 import com.example.dayslar.newmytalk.db.DataBaseController;
+import com.example.dayslar.newmytalk.db.RecordUtils;
 import com.example.dayslar.newmytalk.db.config.DbConfig;
-import com.example.dayslar.newmytalk.db.config.RecordTableConfig;
-import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDao;
 import com.example.dayslar.newmytalk.db.entity.Record;
+import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDAO;
+import com.example.dayslar.newmytalk.utils.MyLogger;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.dayslar.newmytalk.db.CursorUtils.readRecord;
-
-public class SqlRecordDao implements RecordDao {
+public class SqlRecordDao implements RecordDAO {
 
     private static SqlRecordDao instance;
 
     private SQLiteDatabase database;
-    private ContentValues cv;
+    private RecordUtils cursorUtils;
 
     public static SqlRecordDao getInstance(Context context){
         if (instance == null){
@@ -37,25 +34,12 @@ public class SqlRecordDao implements RecordDao {
 
     private SqlRecordDao(Context context) {
         database = DataBaseController.getInstance(context).getDatabase();
-        cv = new ContentValues();
+        cursorUtils = new RecordUtils(context);
     }
 
     @Override
     public long insert(Record record) {
-        cv.clear();
-
-        cv.put(RecordTableConfig.MANAGER_ID, record.getManagerId());
-        cv.put(RecordTableConfig.CALL_PHONE, record.getCallPhone());
-        cv.put(RecordTableConfig.MY_PHONE, record.getMyPhone());
-        cv.put(RecordTableConfig.CALL_TIME, record.getCallTime());
-        cv.put(RecordTableConfig.START_RECORD, record.getStartRecord());
-        cv.put(RecordTableConfig.END_RECORD, record.getEndRecord());
-        cv.put(RecordTableConfig.CONTACT_NAME, record.getContactName());
-        cv.put(RecordTableConfig.FILE_NAME, record.getFileName());
-        cv.put(RecordTableConfig.ANSWER, record.isAnswer());
-        cv.put(RecordTableConfig.INCOMING, record.isIncoming());
-
-        long id = database.insert(DbConfig.RECORD_TABLE_NAME, null, cv);
+        long id = database.insert(DbConfig.RECORD_TABLE_NAME, null, cursorUtils.getCvForRecord(record));
         MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Запись с " + id + " успешно добавлена");
 
         return id;
@@ -63,20 +47,7 @@ public class SqlRecordDao implements RecordDao {
 
     @Override
     public void update(Record record, long id) {
-        cv.clear();
-
-        cv.put(RecordTableConfig.MANAGER_ID, record.getManagerId());
-        cv.put(RecordTableConfig.CALL_PHONE, record.getCallPhone());
-        cv.put(RecordTableConfig.MY_PHONE, record.getMyPhone());
-        cv.put(RecordTableConfig.CALL_TIME, record.getCallTime());
-        cv.put(RecordTableConfig.START_RECORD, record.getStartRecord());
-        cv.put(RecordTableConfig.END_RECORD, record.getEndRecord());
-        cv.put(RecordTableConfig.CONTACT_NAME, record.getContactName());
-        cv.put(RecordTableConfig.FILE_NAME, record.getFileName());
-        cv.put(RecordTableConfig.ANSWER, record.isAnswer());
-        cv.put(RecordTableConfig.INCOMING, record.isIncoming());
-
-        database.update(DbConfig.RECORD_TABLE_NAME, cv, DbConfig.COLUMN_ID + "= ?", new String[]{id + ""});
+        database.update(DbConfig.RECORD_TABLE_NAME, cursorUtils.getCvForRecord(record), DbConfig.COLUMN_ID + "= ?", new String[]{id + ""});
         MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Запись с " + id + " успешно обновлена");
     }
 
@@ -99,7 +70,7 @@ public class SqlRecordDao implements RecordDao {
                 null, null, null);
 
         if (cursor.moveToFirst()) {
-            record = readRecord(cursor);
+            record = cursorUtils.readRecord(cursor);
         }
         cursor.close();
 
@@ -114,7 +85,7 @@ public class SqlRecordDao implements RecordDao {
 
         if (cursor.moveToFirst()) {
             do {
-                records.add(readRecord(cursor));
+                records.add(cursorUtils.readRecord(cursor));
             }
             while (cursor.moveToNext());
         }

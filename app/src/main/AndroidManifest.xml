@@ -59,6 +59,10 @@
         <service android:name=".services.TelephonyService"
             android:process=":telephony" />
 
+        <!--Службы-->
+        <service android:name=".services.UnloadService"
+            android:process=":unload" />
+
     </application>
 
     <!--Разрешения-->

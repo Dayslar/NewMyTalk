@@ -1,5 +1,9 @@
 package com.example.dayslar.newmytalk.db.config;
 
+/**
+ * @author Dayslar
+ * Класс описывающий поля для таблицы Token
+ */
 public final class TokenTableConfig {
 
     public static final String ACCESS_TOKEN = "access_token";

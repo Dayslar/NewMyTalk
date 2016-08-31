@@ -1,10 +1,16 @@
 package com.example.dayslar.newmytalk.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+/**
+ * @author Dayslar
+ * Класс для описания сущность Manager
+ */
 public class Manager {
 
-    private int _id;
-    private String name;
-    private String photoPatch;
+    private int _id; //уникальный id менеджера
+    private String name; //имя менеджера
+    private String photoPatch; //путь к файлу с картинкой на устройстве
 
 
     public int getId() {
@@ -25,6 +31,7 @@ public class Manager {
         return this;
     }
 
+    @JsonIgnore
     public String getPhotoPatch() {
         return photoPatch;
     }

@@ -19,14 +19,18 @@ import com.example.dayslar.newmytalk.R;
 import com.example.dayslar.newmytalk.db.entity.Manager;
 import com.example.dayslar.newmytalk.db.impl.SqlManagerDao;
 import com.example.dayslar.newmytalk.db.impl.SqlTokenDao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.ManagerDao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.ManagerDAO;
 import com.example.dayslar.newmytalk.network.calback.RetrofitCallback;
 import com.example.dayslar.newmytalk.network.service.impl.NetworkManagerService;
 import com.example.dayslar.newmytalk.network.service.interfaces.ManagerService;
 import com.example.dayslar.newmytalk.network.utils.http.code.interfaces.HttpMessage;
+import com.example.dayslar.newmytalk.services.UnloadService;
+import com.example.dayslar.newmytalk.telephony.TelephoneConfig;
 import com.example.dayslar.newmytalk.telephony.impl.SimpleTelephonyHandler;
+import com.example.dayslar.newmytalk.ui.adapter.AdapterCallback;
 import com.example.dayslar.newmytalk.ui.adapter.ManagerAdapter;
 import com.example.dayslar.newmytalk.utils.MyLogger;
+import com.example.dayslar.newmytalk.utils.ServiceUtils;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -41,12 +45,11 @@ public class MainActivity extends AppCompatActivity {
     @ViewById(R.id.fab) FloatingActionButton fab;
     @ViewById(R.id.toolbar) Toolbar toolbar;
 
-    private ManagerDao managerDao;
+    private ManagerDAO managerDao;
     private ManagerService managerService;
     private Snackbar snackbar;
 
     private Context context;
-    private View.OnClickListener managerListener;
     private boolean isRecording;
 
     @Override
@@ -62,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
         this.context = this;
         this.managerDao = SqlManagerDao.getInstance(this);
         this.managerService = new NetworkManagerService(this);
-        this.managerListener = managerClickListener();
         this.isRecording = getIntent().getBooleanExtra("isRecording", false);
 
         initRecycleView();
@@ -81,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSuccess(List<Manager> managers) {
-                recyclerView.setAdapter(new ManagerAdapter(managers, managerListener));
+                recyclerView.setAdapter(new ManagerAdapter(managers, getManagerAdapterCallback()));
                 snackbar.setText("Обновление успешно завершено.").setDuration(3000).show();
             }
 
@@ -99,6 +101,14 @@ public class MainActivity extends AppCompatActivity {
                 getServerMangers();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        startService(new Intent(this, UnloadService.class));
+
     }
 
     private void initToolbar() {
@@ -134,18 +144,7 @@ public class MainActivity extends AppCompatActivity {
     private void initRecycleView() {
         GridLayoutManager glm = new GridLayoutManager(this, 3);
         recyclerView.setLayoutManager(glm);
-        recyclerView.setAdapter(new ManagerAdapter(managerDao.getManagers(), managerListener));
-    }
-
-    private View.OnClickListener managerClickListener(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isRecording) SimpleTelephonyHandler.answerCall(context);
-                else Snackbar.make(fab, "Сейчас никто не звонит!", Snackbar.LENGTH_LONG).show();
-
-            }
-        };
+        recyclerView.setAdapter(new ManagerAdapter(managerDao.getManagers(), getManagerAdapterCallback()));
     }
 
     private AlertDialog logoutDialog(){
@@ -174,6 +173,22 @@ public class MainActivity extends AppCompatActivity {
                     }
                 })
                 .create();
+    }
+
+    public AdapterCallback<Manager> getManagerAdapterCallback(){
+        return new AdapterCallback<Manager>() {
+            @Override
+            public void onClick(Manager manager) {
+                if (isRecording) {
+                    SimpleTelephonyHandler.answerCall(context);
+
+                    Intent intent = new Intent();
+                    intent.putExtra("managerId", manager.getId());
+
+                    ServiceUtils.sendTelephoneService(context, intent, TelephoneConfig.EXTRA_STATE_MANAGER);
+                } else Snackbar.make(fab, "Сейчас никто не звонит!", Snackbar.LENGTH_LONG).show();
+            }
+        };
     }
 
 }

@@ -9,9 +9,12 @@ import android.os.IBinder;
 import android.util.Log;
 import android.view.KeyEvent;
 
+import com.example.dayslar.newmytalk.db.entity.Manager;
 import com.example.dayslar.newmytalk.db.entity.Record;
+import com.example.dayslar.newmytalk.db.impl.SqlManagerDao;
 import com.example.dayslar.newmytalk.db.impl.SqlRecordDao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.ManagerDAO;
+import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDAO;
 import com.example.dayslar.newmytalk.recorder.impl.SimpleMediaRecorder;
 import com.example.dayslar.newmytalk.recorder.interfaces.Recorder;
 import com.example.dayslar.newmytalk.telephony.TelephoneConfig;
@@ -28,9 +31,10 @@ import java.text.SimpleDateFormat;
 public class SimpleTelephonyHandler implements TelephonyHandler {
 
     private static SimpleTelephonyHandler instance;
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_HH:mm:ss");
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
 
-    private RecordDao recordDao;
+    private RecordDAO recordDao;
+    private ManagerDAO managerDao;
     private Recorder recorder;
     private Context context;
 
@@ -50,6 +54,7 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
     }
 
     private SimpleTelephonyHandler(Context context){
+        managerDao = SqlManagerDao.getInstance(context);
         recordDao = SqlRecordDao.getInstance(context);
         recorder = SimpleMediaRecorder.getInstance(context);
         settingUtil = SettingUtil.getInstance(context);
@@ -64,7 +69,7 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
         if (checkUSSD(callPhone)) return;
         MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Звоним на " + callPhone);
 
-        initBaseRecord(callPhone);
+        if (record == null) initBaseRecord(callPhone);
         record.setIncoming(false);
 
     }
@@ -78,10 +83,11 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
 
         MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Получаем звонок от " + callPhone);
 
-        initBaseRecord(callPhone);
+        if (record == null) initBaseRecord(callPhone);
         record.setIncoming(true);
 
-        if(settingUtil.getSetting().isManagerActive()) startActivity(MainActivity_.class, true);
+        if(settingUtil.getSetting().isManagerActive())
+            startActivity(MainActivity_.class, true);
     }
 
     @Override
@@ -96,10 +102,11 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
 
         record.setFileName(record.getCallPhone() + "_" + sdf.format(record.getCallTime())  + ".mp4");
         record.setAnswer(true);
+        record.setStartRecord(System.currentTimeMillis());
 
         recorder.startRecord(record.getFileName());
 
-        record.setStartRecord(System.currentTimeMillis());
+
     }
 
     @Override
@@ -110,6 +117,7 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
         record.setEndRecord(System.currentTimeMillis());
 
         recordDao.update(record, record.getId());
+
         record = null;
 
 //        startActivity(MainActivity_.class, false);
@@ -117,7 +125,8 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
 
     @Override
     public void setManagerInfo(int managerId) {
-        record.setManagerId(managerId);
+        Manager manager = managerDao.get(managerId);
+        record.setManager(manager);
     }
 
     private void initBaseRecord(String callPhone) {

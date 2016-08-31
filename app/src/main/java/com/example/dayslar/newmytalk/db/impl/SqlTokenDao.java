@@ -10,13 +10,14 @@ import com.example.dayslar.newmytalk.db.CursorUtils;
 import com.example.dayslar.newmytalk.db.config.DbConfig;
 import com.example.dayslar.newmytalk.db.config.TokenTableConfig;
 import com.example.dayslar.newmytalk.db.entity.Token;
-import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDAO;
 import com.example.dayslar.newmytalk.utils.MyLogger;
 
-public class SqlTokenDao implements TokenDao {
+public class SqlTokenDao implements TokenDAO {
 
     private static SqlTokenDao instance;
     private SQLiteDatabase database;
+    private CursorUtils cursorUtils;
 
     public static SqlTokenDao getInstance(Context context){
         if (instance == null) {
@@ -32,6 +33,7 @@ public class SqlTokenDao implements TokenDao {
 
     private SqlTokenDao(Context context) {
         database = DataBaseController.getInstance(context).getDatabase();
+        cursorUtils = new CursorUtils();
     }
 
 
@@ -78,7 +80,7 @@ public class SqlTokenDao implements TokenDao {
         Cursor cursor = database.query(DbConfig.TOKEN_TABLE_NAME, null, null, null, null, null, null);
 
         if (cursor.moveToFirst()){
-            token = CursorUtils.readToken(cursor);
+            token = cursorUtils.readToken(cursor);
         }
 
         return token;

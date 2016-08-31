@@ -1,11 +1,15 @@
 package com.example.dayslar.newmytalk.db.entity;
 
+/**
+ * @author Dayslar
+ * Класс для описания сущности Token
+ */
 public class Token {
 
-    private String access_token;
-    private String refresh_token;
-    private int expires_in;
-    private String token_type;
+    private String access_token; // уникальный токен, необходим для доступа к любым ресурсам сервера, выдается сервером
+    private String refresh_token; //нужен для обновления access_token, выдается сервером
+    private int expires_in; //время жизни токена
+    private String token_type; //тип токена
     private String scope;
 
     public int getExpires_in() {
