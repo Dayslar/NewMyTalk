@@ -77,7 +77,7 @@ public class RetrofitService {
 
     private void initLockKeyApi() {
         Retrofit retrofitManager = new Retrofit.Builder()
-                .baseUrl("http://" + settingUtil.getSetting().getServerIp() + ":" + settingUtil.getSetting().getServerPort() + "/app/api/user/lock-key/")
+                .baseUrl("http://" + settingUtil.getSetting().getServerIp() + ":" + settingUtil.getSetting().getServerPort() + "/app/api/lock-key/")
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
 
@@ -87,7 +87,7 @@ public class RetrofitService {
 
     private void initRecordApi() {
         Retrofit retrofitManager = new Retrofit.Builder()
-                .baseUrl("http://" + settingUtil.getSetting().getServerIp() + ":" + settingUtil.getSetting().getServerPort() + "/app/api/user/record/")
+                .baseUrl("http://" + settingUtil.getSetting().getServerIp() + ":" + settingUtil.getSetting().getServerPort() + "/app/api/record/")
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
 
@@ -96,7 +96,7 @@ public class RetrofitService {
 
     private void initManagerApi() {
         Retrofit retrofitManager = new Retrofit.Builder()
-                .baseUrl("http://" + settingUtil.getSetting().getServerIp() + ":" + settingUtil.getSetting().getServerPort() + "/app/api/user/manager/")
+                .baseUrl("http://" + settingUtil.getSetting().getServerIp() + ":" + settingUtil.getSetting().getServerPort() + "/app/api/manager/")
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
 
@@ -105,7 +105,7 @@ public class RetrofitService {
 
     private void initOrganizationApi() {
         Retrofit retrofitManager = new Retrofit.Builder()
-                .baseUrl("http://" + settingUtil.getSetting().getServerIp() + ":" + settingUtil.getSetting().getServerPort() + "/app/api/user/organization/")
+                .baseUrl("http://" + settingUtil.getSetting().getServerIp() + ":" + settingUtil.getSetting().getServerPort() + "/app/api/organization/")
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
 
