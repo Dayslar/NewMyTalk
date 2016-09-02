@@ -105,7 +105,7 @@ public class SqlRecordDao implements RecordDAO {
                 DbConfig.COLUMN_ID + " = ?",
                 new String[]{id + ""});
 
-        if (!fileName.isEmpty())
+        if (fileName != null)
             FileUtils.deleteQuietly(new File(MyFileUtils.getFolder() + fileName));
 
         MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Запись с " + id + " успешно удалена");
