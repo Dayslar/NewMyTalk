@@ -1,7 +1,6 @@
 package com.example.dayslar.newmytalk.network.service.impl;
 
 import android.content.Context;
-import android.os.Environment;
 
 import com.example.dayslar.newmytalk.db.entity.Record;
 import com.example.dayslar.newmytalk.db.entity.Token;
@@ -12,6 +11,7 @@ import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDAO;
 import com.example.dayslar.newmytalk.network.api.RecordApi;
 import com.example.dayslar.newmytalk.network.service.RetrofitService;
 import com.example.dayslar.newmytalk.network.service.interfaces.RecordService;
+import com.example.dayslar.newmytalk.utils.MyFileUtils;
 import com.example.dayslar.newmytalk.utils.MyLogger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -71,7 +71,7 @@ public class NetworkRecordService implements RecordService {
             e.printStackTrace();
         }
 
-        File recordFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/.MyRecord/" + record.getFileName());
+        File recordFile = new File(MyFileUtils.getFolder() + record.getFileName());
         RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), recordFile);
         RequestBody recordData = RequestBody.create(MediaType.parse("multipart/form-data"), recordDataValue);
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", recordFile.getName(), requestFile);

@@ -28,19 +28,18 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="45dp">
 
                     <View
-                        android:layout_alignParentStart="true"
                         android:layout_width="8dp"
                         android:layout_height="match_parent"
                         android:background="#2fa881" />
 
                     <TextView
-                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="50dp"
@@ -48,7 +47,7 @@
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="20sp"
                         android:textStyle="bold" />
-                </RelativeLayout>
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_marginTop="10dp"
@@ -105,7 +104,7 @@
                     </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_marginTop="20dp"
                     android:gravity="center"
                     android:layout_width="match_parent"
@@ -119,7 +118,7 @@
                         android:layout_height="40dp"
                         android:text="@string/loginBtnLogin"
                         android:textColor="#d3d3d3"/>
-                </RelativeLayout>
+                </LinearLayout>
 
                 <TextView
                     android:layout_marginTop="5dp"

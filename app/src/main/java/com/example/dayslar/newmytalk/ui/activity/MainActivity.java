@@ -36,6 +36,7 @@ import com.example.dayslar.newmytalk.telephony.TelephoneConfig;
 import com.example.dayslar.newmytalk.telephony.impl.SimpleTelephonyHandler;
 import com.example.dayslar.newmytalk.ui.adapter.AdapterCallback;
 import com.example.dayslar.newmytalk.ui.adapter.ManagerAdapter;
+import com.example.dayslar.newmytalk.ui.decorator.GridSpacingDecorator;
 import com.example.dayslar.newmytalk.utils.MyLogger;
 import com.example.dayslar.newmytalk.utils.ServiceUtils;
 
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // TODO: 29.08.2016  
+        // TODO: 29.08.2016
     }
 
     @Override
@@ -195,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
     private void initRecycleView() {
         GridLayoutManager glm = new GridLayoutManager(this, 3);
         recyclerView.setLayoutManager(glm);
+        recyclerView.addItemDecoration(new GridSpacingDecorator(-5));
         recyclerView.setAdapter(new ManagerAdapter(managerDao.getManagers(), getManagerAdapterCallback()));
     }
 

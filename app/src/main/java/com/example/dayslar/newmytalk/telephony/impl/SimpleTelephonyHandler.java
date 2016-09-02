@@ -120,7 +120,7 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
 
         record = null;
 
-//        startActivity(MainActivity_.class, false);
+        startActivity(MainActivity_.class, false);
     }
 
     @Override
