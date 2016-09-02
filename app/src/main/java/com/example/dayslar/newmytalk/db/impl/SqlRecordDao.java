@@ -9,8 +9,12 @@ import com.example.dayslar.newmytalk.db.RecordUtils;
 import com.example.dayslar.newmytalk.db.config.DbConfig;
 import com.example.dayslar.newmytalk.db.entity.Record;
 import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDAO;
+import com.example.dayslar.newmytalk.utils.MyFileUtils;
 import com.example.dayslar.newmytalk.utils.MyLogger;
 
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,18 +50,20 @@ public class SqlRecordDao implements RecordDAO {
     }
 
     @Override
-    public void update(Record record, long id) {
-        database.update(DbConfig.RECORD_TABLE_NAME, cursorUtils.getCvForRecord(record), DbConfig.COLUMN_ID + "= ?", new String[]{id + ""});
-        MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Запись с " + id + " успешно обновлена");
+    public void update(Record record) {
+        database.update(DbConfig.RECORD_TABLE_NAME, cursorUtils.getCvForRecord(record), DbConfig.COLUMN_ID + "= ?", new String[]{record.getId() + ""});
+        MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Запись с " + record.getId() + " успешно обновлена");
     }
 
     @Override
-    public void delete(long id) {
-        database.delete(DbConfig.RECORD_TABLE_NAME,
-                DbConfig.COLUMN_ID + " = ?",
-                new String[]{id + ""});
+    public void delete(Record record) {
+        this.delete(record.getId(), record.getFileName());
+    }
 
-        MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Запись с " + id + " успешно удалена");
+    @Override
+    public void deleteAll() {
+        database.delete(DbConfig.RECORD_TABLE_NAME, null, null);
+        FileUtils.deleteQuietly(new File(MyFileUtils.getFolder()));
     }
 
     @Override
@@ -92,5 +98,16 @@ public class SqlRecordDao implements RecordDAO {
 
         cursor.close();
         return records;
+    }
+
+    private void delete(long id, String fileName){
+        database.delete(DbConfig.RECORD_TABLE_NAME,
+                DbConfig.COLUMN_ID + " = ?",
+                new String[]{id + ""});
+
+        if (!fileName.isEmpty())
+            FileUtils.deleteQuietly(new File(MyFileUtils.getFolder() + fileName));
+
+        MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Запись с " + id + " успешно удалена");
     }
 }

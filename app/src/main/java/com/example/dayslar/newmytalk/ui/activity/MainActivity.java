@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.example.dayslar.newmytalk.R;
 import com.example.dayslar.newmytalk.db.entity.Manager;
 import com.example.dayslar.newmytalk.db.impl.SqlManagerDao;
+import com.example.dayslar.newmytalk.db.impl.SqlRecordDao;
 import com.example.dayslar.newmytalk.db.impl.SqlTokenDao;
 import com.example.dayslar.newmytalk.db.interfaces.dao.ManagerDAO;
 import com.example.dayslar.newmytalk.network.calback.RetrofitCallback;
@@ -205,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         SqlTokenDao.getInstance(context).delete();
                         SqlManagerDao.getInstance(context).deleteAll();
+                        SqlRecordDao.getInstance(context).deleteAll();
 
                         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
                         SharedPreferences.Editor editor = pref.edit();

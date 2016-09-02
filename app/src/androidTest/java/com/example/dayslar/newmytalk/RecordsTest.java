@@ -41,7 +41,7 @@ public class RecordsTest {
         Context appContext = InstrumentationRegistry.getTargetContext();
         RecordDAO recordDao = SqlRecordDao.getInstance(appContext);
 
-        recordDao.delete(10);
+        recordDao.delete(new Record().setId(10));
     }
 
     @Test

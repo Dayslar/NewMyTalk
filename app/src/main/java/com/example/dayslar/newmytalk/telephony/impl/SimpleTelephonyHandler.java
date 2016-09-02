@@ -116,7 +116,7 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
         recorder.stopRecord();
         record.setEndRecord(System.currentTimeMillis());
 
-        recordDao.update(record, record.getId());
+        recordDao.update(record);
 
         record = null;
 

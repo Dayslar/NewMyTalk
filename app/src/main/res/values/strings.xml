@@ -31,7 +31,7 @@
     <!--Main Activity-->
     <string name="mainTvManagers">МЕНЕДЖЕРЫ</string>
     <string name="account_logout">Выйти</string>
-    <string name="logout_message">Вы уверены что ходите выйти из приложения?</string>
+    <string name="logout_message">Все данные о работе приложения, в том числе и записи будут удалены из хранилища. Вы уверены что ходите выйти из приложения? </string>
     <string name="btnDialogYes">Да</string>
     <string name="btnDialogNo">Нет</string>
 

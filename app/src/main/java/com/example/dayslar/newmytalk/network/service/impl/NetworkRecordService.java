@@ -48,7 +48,7 @@ public class NetworkRecordService implements RecordService {
                 MyLogger.printDebug(this.getClass(), "RECORD FILE TRANSFER SUCCESS CODE: " + response.code());
 
                 if (response.code() == 200)
-                    recordDao.delete(record.getId());
+                    recordDao.delete(record);
 
             }
 
@@ -82,7 +82,7 @@ public class NetworkRecordService implements RecordService {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 MyLogger.printDebug(this.getClass(), "RECORD FILE TRANSFER SUCCESS CODE: " + response.code());
                 if (response.code() == 200)
-                    recordDao.delete(record.getId());
+                    recordDao.delete(record);
             }
 
             @Override

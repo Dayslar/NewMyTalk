@@ -7,8 +7,10 @@ import java.util.List;
 public interface RecordDAO {
 
     long insert(Record record);
-    void update(Record record, long id);
-    void delete(long id);
+    void update(Record record);
+
+    void delete(Record record);
+    void deleteAll();
 
     Record get(long id);
     List<Record> getRecords();

@@ -2,13 +2,12 @@ package com.example.dayslar.newmytalk.recorder.impl;
 
 import android.content.Context;
 import android.media.MediaRecorder;
-import android.os.Environment;
 
 import com.example.dayslar.newmytalk.recorder.interfaces.Recorder;
+import com.example.dayslar.newmytalk.utils.MyFileUtils;
 import com.example.dayslar.newmytalk.utils.MyLogger;
 import com.example.dayslar.newmytalk.utils.SettingUtil;
 
-import java.io.File;
 import java.io.IOException;
 
 public class SimpleMediaRecorder implements Recorder {
@@ -67,12 +66,14 @@ public class SimpleMediaRecorder implements Recorder {
 
 
     private void initRecorder(String outputFile) throws IOException {
+        MyFileUtils.checkFolder();
+
         mediaRecorder = new MediaRecorder();
         mediaRecorder.setAudioSource(audioSource);
         mediaRecorder.setOutputFormat(outputFormat);
         mediaRecorder.setAudioEncoder(audioEncoder);
         mediaRecorder.setAudioChannels(audioChannels);
-        mediaRecorder.setOutputFile(getFolder() + outputFile);
+        mediaRecorder.setOutputFile(MyFileUtils.getFolder() + outputFile);
 
         mediaRecorder.prepare();
     }
@@ -96,17 +97,6 @@ public class SimpleMediaRecorder implements Recorder {
         this.outputFormat = settingUtil.getSetting().getOutputFormat();
         this.audioEncoder = settingUtil.getSetting().getAudioEncoder();
         this.audioChannels = settingUtil.getSetting().getAudioChannels();
-    }
-
-    private String getFolder(){
-        String folderPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/.MyRecord/";
-        File folder = new File(folderPath);
-
-        if (!folder.exists())
-            folder.mkdirs();
-
-        return folderPath;
-
     }
 
 }
