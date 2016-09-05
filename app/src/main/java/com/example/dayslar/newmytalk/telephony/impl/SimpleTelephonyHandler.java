@@ -62,7 +62,7 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
 
     @Override
     public void outgoingCall(Intent intent) {
-        String callPhone = intent.getExtras().getString("android.intent.extra.PHONE_NUMBER");
+        String callPhone = intent.getExtras().getString("android.intent.extra.PHONE_NUMBER").replace(" ", "");
 
         if (checkUSSD(callPhone)) return;
         MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Звоним на " + callPhone);
@@ -76,12 +76,9 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
     public void runningCall(Intent intent) {
         settingUtil.loadSetting();
 
-        String callPhone = intent.getExtras().getString("incoming_number");
-        String realCallPhone = callPhone==null?"Скрытый номер":callPhone;
+        MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Получаем звонок от " + getPhone(intent));
 
-        MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Получаем звонок от " + realCallPhone);
-
-        if (record == null) initBaseRecord(callPhone);
+        if (record == null) initBaseRecord(getPhone(intent));
 
         record.setIncoming(true);
         recordDao.update(record);
@@ -92,12 +89,9 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
 
     @Override
     public void offhookCall(Intent intent) {
-        String callPhone = intent.getExtras().getString("incoming_number");
-        String realCallPhone = callPhone==null?"Скрытый номер":callPhone;
+        MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Отвечаем на звонок от " + getPhone(intent));
 
-        MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Отвечаем на звонок от " + realCallPhone);
-
-        if (record == null) initBaseRecord(callPhone);
+        if (record == null) initBaseRecord(getPhone(intent));
 
         record.setFileName(record.getCallPhone() + "_" + sdf.format(record.getCallTime())  + ".mp4");
         record.setAnswer(true);
@@ -136,6 +130,11 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
         record.setId(recordDao.insert(record));
         record.setCallPhone(callPhone);
         record.setCallTime(System.currentTimeMillis());
+    }
+
+    private String getPhone(Intent intent){
+        String callPhone = intent.getExtras().getString("incoming_number");
+        return callPhone==null?"Скрытый номер":callPhone.replaceAll(" ", "");
     }
 
     private boolean checkUSSD(String callNumber) {
