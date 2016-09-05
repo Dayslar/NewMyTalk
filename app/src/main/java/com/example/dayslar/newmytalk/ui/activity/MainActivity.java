@@ -14,30 +14,32 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.dayslar.newmytalk.R;
 import com.example.dayslar.newmytalk.db.entity.Manager;
+import com.example.dayslar.newmytalk.db.entity.Record;
 import com.example.dayslar.newmytalk.db.impl.SqlManagerDao;
 import com.example.dayslar.newmytalk.db.impl.SqlRecordDao;
 import com.example.dayslar.newmytalk.db.impl.SqlTokenDao;
 import com.example.dayslar.newmytalk.db.interfaces.dao.ManagerDAO;
+import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDAO;
 import com.example.dayslar.newmytalk.network.calback.RetrofitCallback;
 import com.example.dayslar.newmytalk.network.service.impl.NetworkManagerService;
 import com.example.dayslar.newmytalk.network.service.interfaces.ManagerService;
 import com.example.dayslar.newmytalk.network.utils.http.code.interfaces.HttpMessage;
-import com.example.dayslar.newmytalk.services.UnloadService;
 import com.example.dayslar.newmytalk.telephony.TelephoneConfig;
 import com.example.dayslar.newmytalk.telephony.impl.SimpleTelephonyHandler;
 import com.example.dayslar.newmytalk.ui.adapter.AdapterCallback;
 import com.example.dayslar.newmytalk.ui.adapter.ManagerAdapter;
 import com.example.dayslar.newmytalk.ui.decorator.GridSpacingDecorator;
-import com.example.dayslar.newmytalk.utils.MyLogger;
 import com.example.dayslar.newmytalk.utils.ServiceUtils;
 
 import org.androidannotations.annotations.AfterViews;
@@ -47,41 +49,47 @@ import org.androidannotations.annotations.ViewById;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.view.View.GONE;
+
 @EActivity(R.layout.main_activity)
 public class MainActivity extends AppCompatActivity {
 
     @ViewById(R.id.rv) RecyclerView recyclerView;
     @ViewById(R.id.fab) FloatingActionButton fab;
     @ViewById(R.id.toolbar) Toolbar toolbar;
+    @ViewById(R.id.callLayout) CardView cardView;
+
+    @ViewById(R.id.tvEndCall) TextView tvEndCall;
+    @ViewById(R.id.contactNumber) TextView contactNumber;
 
     private ManagerDAO managerDao;
+    private RecordDAO recordDAO;
     private ManagerService managerService;
     private Snackbar snackbar;
 
     private Context context;
     private boolean isRecording;
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-
-        this.isRecording = intent.getBooleanExtra("isRecording", false);
-        MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Активите не пересоздавалось второй раз");
-    }
+    private long recordId;
 
     @AfterViews
     void init() {
         this.context = this;
         this.managerDao = SqlManagerDao.getInstance(this);
+        this.recordDAO = SqlRecordDao.getInstance(this);
         this.managerService = new NetworkManagerService(this);
-        this.isRecording = getIntent().getBooleanExtra("isRecording", false);
 
-        initRecycleView();
-        initToolbar();
-        initFab();
-        initPermissions();
+        initData(getIntent());
+        initViews();
+        initCallLayout();
 
+    }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        initData(intent);
+        initCallLayout();
     }
 
     @Override
@@ -108,62 +116,12 @@ public class MainActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    private void initPermissions() {
-
-        ArrayList<String> permissionsList = new ArrayList<>();
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED)
-            permissionsList.add(Manifest.permission.READ_EXTERNAL_STORAGE);
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_DENIED)
-            permissionsList.add(Manifest.permission.CALL_PHONE);
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_DENIED)
-            permissionsList.add(Manifest.permission.READ_PHONE_STATE);
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED)
-            permissionsList.add(Manifest.permission.RECORD_AUDIO);
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_DENIED)
-            permissionsList.add(Manifest.permission.READ_CONTACTS);
-
-
-        if (permissionsList.size() > 0)
-            ActivityCompat.requestPermissions(this, permissionsList.toArray(new String[]{}), 99);
-    }
-
-    private void getServerMangers() {
-        managerService.loadManagers(new RetrofitCallback<List<Manager>>() {
-            @Override
-            public void onProcess() {
-                snackbar = Snackbar.make(fab, "Идет обновление данных...", Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
-            }
-
-            @Override
-            public void onSuccess(List<Manager> managers) {
-                recyclerView.setAdapter(new ManagerAdapter(managers, getManagerAdapterCallback()));
-                snackbar.setText("Обновление успешно завершено.").setDuration(3000).show();
-            }
-
-            @Override
-            public void onFailure(HttpMessage httpMessage) {
-                snackbar.setText(httpMessage.getMessage()).setDuration(4000).show();
-            }
-        });
-    }
-
-    private void initFab() {
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getServerMangers();
-            }
-        });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        startService(new Intent(this, UnloadService.class));
-
+    private void initViews() {
+        initRecycleView();
+        initToolbar();
+        initFab();
+        initPermissions();
+        initTvEndCall();
     }
 
     private void initToolbar() {
@@ -191,13 +149,101 @@ public class MainActivity extends AppCompatActivity {
         toolbar.inflateMenu(R.menu.main_menu);
     }
 
-
-
     private void initRecycleView() {
         GridLayoutManager glm = new GridLayoutManager(this, 3);
         recyclerView.setLayoutManager(glm);
         recyclerView.addItemDecoration(new GridSpacingDecorator(-5));
         recyclerView.setAdapter(new ManagerAdapter(managerDao.getManagers(), getManagerAdapterCallback()));
+    }
+
+    private void initFab() {
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getServerMangers();
+            }
+        });
+    }
+
+    private void initPermissions() {
+
+        ArrayList<String> permissionsList = new ArrayList<>();
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED)
+            permissionsList.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_DENIED)
+            permissionsList.add(Manifest.permission.CALL_PHONE);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_DENIED)
+            permissionsList.add(Manifest.permission.READ_PHONE_STATE);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED)
+            permissionsList.add(Manifest.permission.RECORD_AUDIO);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_DENIED)
+            permissionsList.add(Manifest.permission.READ_CONTACTS);
+
+
+        if (permissionsList.size() > 0)
+            ActivityCompat.requestPermissions(this, permissionsList.toArray(new String[]{}), 99);
+    }
+
+    private void initData(Intent intent) {
+        this.isRecording = intent.getBooleanExtra("isRecording", false);
+        this.recordId = intent.getLongExtra("recordId", -1);
+    }
+
+    private void initCallLayout() {
+        if (isRecording){
+            Record record = recordDAO.get(recordId);
+            contactNumber.setText(record.getCallPhone());
+        }
+
+        cardView.setVisibility(isRecording?View.VISIBLE:GONE);
+
+    }
+
+    private void initTvEndCall() {
+        tvEndCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SimpleTelephonyHandler.endCall();
+            }
+        });
+    }
+
+    private void getServerMangers() {
+        managerService.loadManagers(new RetrofitCallback<List<Manager>>() {
+            @Override
+            public void onProcess() {
+                snackbar = Snackbar.make(fab, "Идет обновление данных...", Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+            }
+
+            @Override
+            public void onSuccess(List<Manager> managers) {
+                recyclerView.setAdapter(new ManagerAdapter(managers, getManagerAdapterCallback()));
+                snackbar.setText("Обновление успешно завершено.").setDuration(3000).show();
+            }
+
+            @Override
+            public void onFailure(HttpMessage httpMessage) {
+                snackbar.setText(httpMessage.getMessage()).setDuration(4000).show();
+            }
+        });
+    }
+
+    public AdapterCallback<Manager> getManagerAdapterCallback(){
+        return new AdapterCallback<Manager>() {
+            @Override
+            public void onClick(Manager manager) {
+                if (isRecording) {
+                    SimpleTelephonyHandler.answerCall(context);
+
+                    Intent intent = new Intent();
+                    intent.putExtra("managerId", manager.getId());
+
+                    ServiceUtils.sendTelephoneService(context, intent, TelephoneConfig.EXTRA_STATE_MANAGER);
+                } else Snackbar.make(fab, "Сейчас никто не звонит!", Snackbar.LENGTH_LONG).show();
+            }
+        };
     }
 
     private AlertDialog logoutDialog(){
@@ -229,20 +275,6 @@ public class MainActivity extends AppCompatActivity {
                 .create();
     }
 
-    public AdapterCallback<Manager> getManagerAdapterCallback(){
-        return new AdapterCallback<Manager>() {
-            @Override
-            public void onClick(Manager manager) {
-                if (isRecording) {
-                    SimpleTelephonyHandler.answerCall(context);
 
-                    Intent intent = new Intent();
-                    intent.putExtra("managerId", manager.getId());
-
-                    ServiceUtils.sendTelephoneService(context, intent, TelephoneConfig.EXTRA_STATE_MANAGER);
-                } else Snackbar.make(fab, "Сейчас никто не звонит!", Snackbar.LENGTH_LONG).show();
-            }
-        };
-    }
 
 }

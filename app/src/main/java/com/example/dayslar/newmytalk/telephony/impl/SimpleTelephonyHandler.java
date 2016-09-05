@@ -1,6 +1,5 @@
 package com.example.dayslar.newmytalk.telephony.impl;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
@@ -17,11 +16,10 @@ import com.example.dayslar.newmytalk.db.interfaces.dao.ManagerDAO;
 import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDAO;
 import com.example.dayslar.newmytalk.recorder.impl.SimpleMediaRecorder;
 import com.example.dayslar.newmytalk.recorder.interfaces.Recorder;
-import com.example.dayslar.newmytalk.telephony.TelephoneConfig;
+import com.example.dayslar.newmytalk.services.UnloadService;
 import com.example.dayslar.newmytalk.telephony.interfaces.TelephonyHandler;
 import com.example.dayslar.newmytalk.ui.activity.MainActivity_;
 import com.example.dayslar.newmytalk.utils.MyLogger;
-import com.example.dayslar.newmytalk.utils.ServiceUtils;
 import com.example.dayslar.newmytalk.utils.SettingUtil;
 
 import java.io.IOException;
@@ -54,9 +52,9 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
     }
 
     private SimpleTelephonyHandler(Context context){
-        managerDao = SqlManagerDao.getInstance(context);
-        recordDao = SqlRecordDao.getInstance(context);
-        recorder = SimpleMediaRecorder.getInstance(context);
+        this.managerDao = SqlManagerDao.getInstance(context);
+        this.recordDao = SqlRecordDao.getInstance(context);
+        this.recorder = SimpleMediaRecorder.getInstance(context);
         settingUtil = SettingUtil.getInstance(context);
 
         this.context = context;
@@ -77,26 +75,27 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
     @Override
     public void runningCall(Intent intent) {
         settingUtil.loadSetting();
-        String callPhone = intent.getExtras().getString("incoming_number") != null ?
-                intent.getExtras().getString("incoming_number")
-                : "Скрытый номер";
 
-        MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Получаем звонок от " + callPhone);
+        String callPhone = intent.getExtras().getString("incoming_number");
+        String realCallPhone = callPhone==null?"Скрытый номер":callPhone;
+
+        MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Получаем звонок от " + realCallPhone);
 
         if (record == null) initBaseRecord(callPhone);
+
         record.setIncoming(true);
+        recordDao.update(record);
 
         if(settingUtil.getSetting().isManagerActive())
-            startActivity(MainActivity_.class, true);
+            startActivity(true, record.getId());
     }
 
     @Override
     public void offhookCall(Intent intent) {
-        String callPhone = intent.getExtras().getString("incoming_number") != null ?
-                intent.getExtras().getString("incoming_number") :
-                "Скрытый номер";
+        String callPhone = intent.getExtras().getString("incoming_number");
+        String realCallPhone = callPhone==null?"Скрытый номер":callPhone;
 
-        MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Отвечаем на звонок от " + callPhone);
+        MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Отвечаем на звонок от " + realCallPhone);
 
         if (record == null) initBaseRecord(callPhone);
 
@@ -120,7 +119,10 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
 
         record = null;
 
-        startActivity(MainActivity_.class, false);
+        if(settingUtil.getSetting().isUnloadActive())
+            context.startService(new Intent(context, UnloadService.class));
+        if(settingUtil.getSetting().isManagerActive())
+            startActivity(false, -1);
     }
 
     @Override
@@ -144,16 +146,17 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
         return false;
     }
 
-    private void startActivity(final Class<?extends Activity> clazz, final boolean code) {
+    private void startActivity(final boolean code, final long recordId) {
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent activityIntent = new Intent(context, clazz);
+                Intent activityIntent = new Intent(context, MainActivity_.class);
                 activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                if (code) activityIntent.putExtra("isRecording", code);
+                activityIntent.putExtra("isRecording", code);
+                activityIntent.putExtra("recordId", recordId);
 
                 context.startActivity(activityIntent);
             }
@@ -175,8 +178,6 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
             context.sendOrderedBroadcast(btnDown, enforcedPerm);
             context.sendOrderedBroadcast(btnUp, enforcedPerm);
         }
-
-        ServiceUtils.sendTelephoneService(context, new Intent(), TelephoneConfig.EXTRA_STATE_MANAGER);
 
     }
 

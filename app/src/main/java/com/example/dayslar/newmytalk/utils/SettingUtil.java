@@ -7,6 +7,7 @@ import android.media.MediaRecorder;
 import android.preference.PreferenceManager;
 
 import com.example.dayslar.newmytalk.R;
+import com.example.dayslar.newmytalk.utils.entity.Setting;
 
 public class SettingUtil {
 
