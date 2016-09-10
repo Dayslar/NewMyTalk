@@ -6,7 +6,7 @@ import com.example.dayslar.newmytalk.db.entity.Record;
 import com.example.dayslar.newmytalk.db.entity.Token;
 import com.example.dayslar.newmytalk.db.impl.SqlRecordDao;
 import com.example.dayslar.newmytalk.db.impl.SqlTokenDao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDAO;
+import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDao;
 import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDao;
 import com.example.dayslar.newmytalk.network.api.RecordApi;
 import com.example.dayslar.newmytalk.network.service.RetrofitService;
@@ -29,7 +29,7 @@ import retrofit2.Response;
 public class NetworkRecordService implements RecordService {
 
     private TokenDao tokenDAO;
-    private RecordDAO recordDao;
+    private RecordDao recordDao;
     private RecordApi recordApi;
 
     public NetworkRecordService(Context context) {

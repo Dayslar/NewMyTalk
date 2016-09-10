@@ -7,7 +7,7 @@ import com.example.dayslar.newmytalk.db.entity.Manager;
 import com.example.dayslar.newmytalk.db.entity.Token;
 import com.example.dayslar.newmytalk.db.impl.SqlManagerDao;
 import com.example.dayslar.newmytalk.db.impl.SqlTokenDao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.ManagerDAO;
+import com.example.dayslar.newmytalk.db.interfaces.dao.ManagerDao;
 import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDao;
 import com.example.dayslar.newmytalk.network.api.ManagerApi;
 import com.example.dayslar.newmytalk.network.calback.RetrofitCallback;
@@ -28,7 +28,7 @@ import retrofit2.Response;
 public class NetworkManagerService implements ManagerService {
 
     private TokenService tokenService;
-    private ManagerDAO managerDao;
+    private ManagerDao managerDao;
     private TokenDao tokenDAO;
     private ManagerApi managerApi;
     private HttpMessageSelector messageSelector;

@@ -13,7 +13,7 @@ import com.example.dayslar.newmytalk.db.entity.Record;
 import com.example.dayslar.newmytalk.db.entity.Token;
 import com.example.dayslar.newmytalk.db.impl.SqlRecordDao;
 import com.example.dayslar.newmytalk.db.impl.SqlTokenDao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDAO;
+import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDao;
 import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDao;
 import com.example.dayslar.newmytalk.network.calback.RetrofitCallback;
 import com.example.dayslar.newmytalk.network.service.impl.NetworkRecordService;
@@ -30,7 +30,7 @@ public class UnloadService extends Service{
     private Notification notification;
     private static final int NOTIFICATION_ID = 876;
 
-    private RecordDAO recordDAO;
+    private RecordDao recordDao;
     private RecordService recordService;
     private TokenDao tokenDAO;
     private TokenService tokenService;
@@ -38,7 +38,7 @@ public class UnloadService extends Service{
     public void onCreate() {
         super.onCreate();
 
-        this.recordDAO = SqlRecordDao.getInstance(this);
+        this.recordDao = SqlRecordDao.getInstance(this);
         this.tokenDAO = SqlTokenDao.getInstance(this);
         this.tokenService = new NetworkTokenService(this);
         this.recordService = new NetworkRecordService(this);
@@ -60,7 +60,7 @@ public class UnloadService extends Service{
 
             @Override
             public void onSuccess(Token object) {
-                List<Record> records = recordDAO.getRecords();
+                List<Record> records = recordDao.getRecords();
                 for (Record record: records){
                     if (record.getFileName() == null) recordService.sendRecord(record);
                     else recordService.sendRecordAndFile(record);

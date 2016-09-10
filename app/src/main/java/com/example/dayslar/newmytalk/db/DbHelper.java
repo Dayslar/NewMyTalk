@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.example.dayslar.newmytalk.db.config.DbConfig;
 import com.example.dayslar.newmytalk.db.config.ManagerTableConfig;
 import com.example.dayslar.newmytalk.db.config.RecordTableConfig;
+import com.example.dayslar.newmytalk.db.config.TelephonyStateTableConfig;
 import com.example.dayslar.newmytalk.db.config.TokenTableConfig;
 
 class DbHelper extends SQLiteOpenHelper {
@@ -20,6 +21,7 @@ class DbHelper extends SQLiteOpenHelper {
         createRecordTable(db, DbConfig.RECORD_TABLE_NAME);
         createManagerTable(db);
         createTokenTable(db);
+        createTelephonyTable(db);
     }
 
     @Override
@@ -56,5 +58,11 @@ class DbHelper extends SQLiteOpenHelper {
                 TokenTableConfig.EXPIRES_IN + " integer, " +
                 TokenTableConfig.TOKEN_TYPE + " text, " +
                 TokenTableConfig.SCOPE + " text);");
+    }
+
+    private void createTelephonyTable(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE " + DbConfig.TELEPHONY_STATE_TABLE_NAME + "(" +
+                TelephonyStateTableConfig.STATE + " text primary key," +
+                TelephonyStateTableConfig.RECORD_ID + " integer);");
     }
 }

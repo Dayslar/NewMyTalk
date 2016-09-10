@@ -8,13 +8,13 @@ import com.example.dayslar.newmytalk.db.CursorUtils;
 import com.example.dayslar.newmytalk.db.DataBaseController;
 import com.example.dayslar.newmytalk.db.config.DbConfig;
 import com.example.dayslar.newmytalk.db.entity.Manager;
-import com.example.dayslar.newmytalk.db.interfaces.dao.ManagerDAO;
+import com.example.dayslar.newmytalk.db.interfaces.dao.ManagerDao;
 import com.example.dayslar.newmytalk.utils.MyLogger;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SqlManagerDao implements ManagerDAO {
+public class SqlManagerDao implements ManagerDao {
 
     private static SqlManagerDao instance;
     private SQLiteDatabase database;

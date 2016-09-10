@@ -8,7 +8,7 @@ import com.example.dayslar.newmytalk.db.DataBaseController;
 import com.example.dayslar.newmytalk.db.RecordUtils;
 import com.example.dayslar.newmytalk.db.config.DbConfig;
 import com.example.dayslar.newmytalk.db.entity.Record;
-import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDAO;
+import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDao;
 import com.example.dayslar.newmytalk.utils.MyFileUtils;
 import com.example.dayslar.newmytalk.utils.MyLogger;
 
@@ -18,7 +18,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SqlRecordDao implements RecordDAO {
+public class SqlRecordDao implements RecordDao {
 
     private static SqlRecordDao instance;
 

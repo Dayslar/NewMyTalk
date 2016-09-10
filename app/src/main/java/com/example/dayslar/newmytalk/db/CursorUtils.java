@@ -33,7 +33,7 @@ public final class CursorUtils {
         cv.put(ManagerTableConfig.PHOTO_PATCH, manager.getPhotoPatch());
 
         return cv;
-}
+    }
 
     public Token readToken(Cursor cursor){
         return new Token()

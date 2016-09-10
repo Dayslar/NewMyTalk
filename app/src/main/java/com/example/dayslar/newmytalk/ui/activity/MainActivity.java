@@ -26,11 +26,14 @@ import android.widget.Toast;
 import com.example.dayslar.newmytalk.R;
 import com.example.dayslar.newmytalk.db.entity.Manager;
 import com.example.dayslar.newmytalk.db.entity.Record;
+import com.example.dayslar.newmytalk.db.entity.TelephonyState;
 import com.example.dayslar.newmytalk.db.impl.SqlManagerDao;
 import com.example.dayslar.newmytalk.db.impl.SqlRecordDao;
+import com.example.dayslar.newmytalk.db.impl.SqlTelephonyStateDao;
 import com.example.dayslar.newmytalk.db.impl.SqlTokenDao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.ManagerDAO;
-import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDAO;
+import com.example.dayslar.newmytalk.db.interfaces.dao.ManagerDao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.TelephonyStateDao;
 import com.example.dayslar.newmytalk.network.calback.RetrofitCallback;
 import com.example.dayslar.newmytalk.network.service.impl.NetworkManagerService;
 import com.example.dayslar.newmytalk.network.service.interfaces.ManagerService;
@@ -62,8 +65,9 @@ public class MainActivity extends AppCompatActivity {
     @ViewById(R.id.tvEndCall) TextView tvEndCall;
     @ViewById(R.id.contactNumber) TextView contactNumber;
 
-    private ManagerDAO managerDao;
-    private RecordDAO recordDAO;
+    private ManagerDao managerDao;
+    private TelephonyStateDao stateDao;
+    private RecordDao recordDao;
     private ManagerService managerService;
     private Snackbar snackbar;
 
@@ -75,10 +79,11 @@ public class MainActivity extends AppCompatActivity {
     void init() {
         this.context = this;
         this.managerDao = SqlManagerDao.getInstance(this);
-        this.recordDAO = SqlRecordDao.getInstance(this);
+        this.recordDao = SqlRecordDao.getInstance(this);
         this.managerService = new NetworkManagerService(this);
+        this.stateDao = SqlTelephonyStateDao.getInstance(this);
 
-        initData(getIntent());
+        initData();
         initViews();
         initCallLayout();
 
@@ -88,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
-        initData(intent);
+        initData();
         initCallLayout();
     }
 
@@ -185,14 +190,14 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, permissionsList.toArray(new String[]{}), 99);
     }
 
-    private void initData(Intent intent) {
-        this.isRecording = intent.getBooleanExtra("isRecording", false);
-        this.recordId = intent.getLongExtra("recordId", -1);
+    private void initData() {
+        this.isRecording = stateDao.getTelephonyState().getState().equals(TelephonyState.State.RINGING);
+        this.recordId = stateDao.getTelephonyState().getRecordId();
     }
 
     private void initCallLayout() {
         if (isRecording){
-            Record record = recordDAO.get(recordId);
+            Record record = recordDao.get(recordId);
             contactNumber.setText(record.getCallPhone());
         }
 
