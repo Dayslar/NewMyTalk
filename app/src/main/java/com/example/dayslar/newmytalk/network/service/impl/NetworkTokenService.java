@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.example.dayslar.newmytalk.db.entity.Token;
 import com.example.dayslar.newmytalk.db.impl.SqlTokenDao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDAO;
+import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDao;
 import com.example.dayslar.newmytalk.network.TokenConfig;
 import com.example.dayslar.newmytalk.network.api.TokenApi;
 import com.example.dayslar.newmytalk.network.calback.RetrofitCallback;
@@ -20,7 +20,7 @@ import retrofit2.Response;
 public class NetworkTokenService implements TokenService {
 
     private TokenApi tokenApi;
-    private TokenDAO tokenDAO;
+    private TokenDao tokenDAO;
 
     private HttpMessageSelector messageSelector;
 

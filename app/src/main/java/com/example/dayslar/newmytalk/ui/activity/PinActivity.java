@@ -12,7 +12,7 @@ import com.andrognito.pinlockview.PinLockView;
 import com.example.dayslar.newmytalk.R;
 import com.example.dayslar.newmytalk.db.entity.Token;
 import com.example.dayslar.newmytalk.db.impl.SqlTokenDao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDAO;
+import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDao;
 import com.example.dayslar.newmytalk.network.service.RetrofitService;
 import com.example.dayslar.newmytalk.network.utils.http.code.impls.Http503Message;
 import com.example.dayslar.newmytalk.utils.entity.LockKey;
@@ -33,7 +33,7 @@ public class PinActivity extends AppCompatActivity {
     @ViewById(R.id.indicator_dots) IndicatorDots indicatorDots;
     @ViewById(R.id.toolbar) Toolbar toolbar;
 
-    private TokenDAO tokenDAO;
+    private TokenDao tokenDAO;
     private Context context;
 
     @AfterViews

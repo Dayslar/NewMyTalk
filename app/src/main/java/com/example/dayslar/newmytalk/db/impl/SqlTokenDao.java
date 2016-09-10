@@ -10,10 +10,10 @@ import com.example.dayslar.newmytalk.db.CursorUtils;
 import com.example.dayslar.newmytalk.db.config.DbConfig;
 import com.example.dayslar.newmytalk.db.config.TokenTableConfig;
 import com.example.dayslar.newmytalk.db.entity.Token;
-import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDAO;
+import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDao;
 import com.example.dayslar.newmytalk.utils.MyLogger;
 
-public class SqlTokenDao implements TokenDAO {
+public class SqlTokenDao implements TokenDao {
 
     private static SqlTokenDao instance;
     private SQLiteDatabase database;

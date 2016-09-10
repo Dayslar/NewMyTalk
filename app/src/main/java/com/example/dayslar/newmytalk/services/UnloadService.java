@@ -14,7 +14,7 @@ import com.example.dayslar.newmytalk.db.entity.Token;
 import com.example.dayslar.newmytalk.db.impl.SqlRecordDao;
 import com.example.dayslar.newmytalk.db.impl.SqlTokenDao;
 import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDAO;
-import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDAO;
+import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDao;
 import com.example.dayslar.newmytalk.network.calback.RetrofitCallback;
 import com.example.dayslar.newmytalk.network.service.impl.NetworkRecordService;
 import com.example.dayslar.newmytalk.network.service.impl.NetworkTokenService;
@@ -32,7 +32,7 @@ public class UnloadService extends Service{
 
     private RecordDAO recordDAO;
     private RecordService recordService;
-    private TokenDAO tokenDAO;
+    private TokenDao tokenDAO;
     private TokenService tokenService;
 
     public void onCreate() {

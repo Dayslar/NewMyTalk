@@ -8,7 +8,7 @@ import com.example.dayslar.newmytalk.db.entity.Token;
 import com.example.dayslar.newmytalk.db.impl.SqlManagerDao;
 import com.example.dayslar.newmytalk.db.impl.SqlTokenDao;
 import com.example.dayslar.newmytalk.db.interfaces.dao.ManagerDAO;
-import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDAO;
+import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDao;
 import com.example.dayslar.newmytalk.network.api.ManagerApi;
 import com.example.dayslar.newmytalk.network.calback.RetrofitCallback;
 import com.example.dayslar.newmytalk.network.service.RetrofitService;
@@ -29,7 +29,7 @@ public class NetworkManagerService implements ManagerService {
 
     private TokenService tokenService;
     private ManagerDAO managerDao;
-    private TokenDAO tokenDAO;
+    private TokenDao tokenDAO;
     private ManagerApi managerApi;
     private HttpMessageSelector messageSelector;
 
