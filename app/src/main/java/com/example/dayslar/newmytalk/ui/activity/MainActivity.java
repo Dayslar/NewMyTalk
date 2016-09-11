@@ -43,6 +43,7 @@ import com.example.dayslar.newmytalk.telephony.impl.SimpleTelephonyHandler;
 import com.example.dayslar.newmytalk.ui.adapter.AdapterCallback;
 import com.example.dayslar.newmytalk.ui.adapter.ManagerAdapter;
 import com.example.dayslar.newmytalk.ui.decorator.GridSpacingDecorator;
+import com.example.dayslar.newmytalk.utils.MyLogger;
 import com.example.dayslar.newmytalk.utils.ServiceUtils;
 
 import org.androidannotations.annotations.AfterViews;
@@ -51,8 +52,6 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.view.View.GONE;
 
 @EActivity(R.layout.main_activity)
 public class MainActivity extends AppCompatActivity {
@@ -72,8 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private Snackbar snackbar;
 
     private Context context;
-    private boolean isRecording;
-    private long recordId;
+    private TelephonyState state;
 
     @AfterViews
     void init() {
@@ -83,9 +81,9 @@ public class MainActivity extends AppCompatActivity {
         this.managerService = new NetworkManagerService(this);
         this.stateDao = SqlTelephonyStateDao.getInstance(this);
 
-        initData();
+        initTelephonyState();
         initViews();
-        initCallLayout();
+        initCallState();
 
     }
 
@@ -93,8 +91,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
-        initData();
-        initCallLayout();
+        initTelephonyState();
+        initCallState();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        initTelephonyState();
+        initCallState();
     }
 
     @Override
@@ -190,19 +196,27 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, permissionsList.toArray(new String[]{}), 99);
     }
 
-    private void initData() {
-        this.isRecording = stateDao.getTelephonyState().getState().equals(TelephonyState.State.RINGING);
-        this.recordId = stateDao.getTelephonyState().getRecordId();
+    private void initTelephonyState() {
+        this.state = stateDao.getTelephonyState();
     }
 
-    private void initCallLayout() {
-        if (isRecording){
-            Record record = recordDao.get(recordId);
-            contactNumber.setText(record.getCallPhone());
+    private void initCallState() {
+        switch (state.getState()){
+            case TelephonyState.State.RINGING:
+                Record record = recordDao.get(state.getRecordId());
+                contactNumber.setText(record.getCallPhone());
+                cardView.setVisibility(View.VISIBLE);
+                break;
+
+            case TelephonyState.State.RECORDING:
+                MyLogger.printDebug(this.getClass(), "Попали в ветку recording");
+                startActivity(new Intent(this, DialogActivity_.class));
+                break;
+
+            case TelephonyState.State.NOT_RINGING:
+                cardView.setVisibility(View.GONE);
+                break;
         }
-
-        cardView.setVisibility(isRecording?View.VISIBLE:GONE);
-
     }
 
     private void initTvEndCall() {
@@ -239,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
         return new AdapterCallback<Manager>() {
             @Override
             public void onClick(Manager manager) {
-                if (isRecording) {
+                if (state.getState().equals(TelephonyState.State.RINGING)) {
                     SimpleTelephonyHandler.answerCall(context);
 
                     Intent intent = new Intent();

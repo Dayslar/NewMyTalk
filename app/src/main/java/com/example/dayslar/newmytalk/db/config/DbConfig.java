@@ -17,6 +17,6 @@ public final class DbConfig {
 
     public static final String COLUMN_ID = "_id"; //Имя поля id для любой таблицы
 
-    public static final int DB_VERSION = 6; //database version
+    public static final int DB_VERSION = 7; //database version
 
 }

@@ -44,7 +44,6 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
     private static SettingUtil settingUtil;
 
     public static SimpleTelephonyHandler getInstance(Context context){
-
         if (instance == null) {
             synchronized (SimpleTelephonyHandler.class) {
                 if (instance == null)
@@ -104,13 +103,15 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
 
         if (record == null) initBaseRecord(getPhone(intent));
 
+        stateDao.setTelephonyState(new TelephonyState()
+                .setState(TelephonyState.State.RECORDING)
+                .setRecordId(record.getId()));
+
         record.setFileName(record.getCallPhone() + "_" + sdf.format(record.getCallTime())  + ".mp4");
         record.setAnswer(true);
         record.setStartRecord(System.currentTimeMillis());
 
         recorder.startRecord(record.getFileName());
-
-
     }
 
     @Override
@@ -157,7 +158,6 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
     }
 
     private void startActivity() {
-
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
