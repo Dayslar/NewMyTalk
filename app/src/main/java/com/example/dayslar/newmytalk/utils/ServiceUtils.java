@@ -14,4 +14,11 @@ public class ServiceUtils {
         intent.putExtra(TelephoneConfig.TELEPHONE_CODE_SERVICE, code);
         context.startService(intent);
     }
+
+    public static void sendTelephoneService(Context context, String code) {
+        Intent intent = new Intent();
+        intent.setClass(context, TelephonyService.class);
+        intent.putExtra(TelephoneConfig.TELEPHONE_CODE_SERVICE, code);
+        context.startService(intent);
+    }
 }

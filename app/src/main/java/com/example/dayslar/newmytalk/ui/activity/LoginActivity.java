@@ -136,6 +136,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void startMainActivity(){
         startActivity(new Intent(this, MainActivity_.class));
+        finish();
     }
 
     private void checkActiveAccount(){

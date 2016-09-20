@@ -1,5 +1,6 @@
 package com.example.dayslar.newmytalk.telephony.impl;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
@@ -21,6 +22,7 @@ import com.example.dayslar.newmytalk.recorder.impl.SimpleMediaRecorder;
 import com.example.dayslar.newmytalk.recorder.interfaces.Recorder;
 import com.example.dayslar.newmytalk.services.UnloadService;
 import com.example.dayslar.newmytalk.telephony.interfaces.TelephonyHandler;
+import com.example.dayslar.newmytalk.ui.activity.DialogActivity_;
 import com.example.dayslar.newmytalk.ui.activity.MainActivity_;
 import com.example.dayslar.newmytalk.utils.MyLogger;
 import com.example.dayslar.newmytalk.utils.SettingUtil;
@@ -41,7 +43,7 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
     private Context context;
 
     private Record record;
-    private static SettingUtil settingUtil;
+    private SettingUtil settingUtil;
 
     public static SimpleTelephonyHandler getInstance(Context context){
         if (instance == null) {
@@ -60,7 +62,7 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
         this.recorder = SimpleMediaRecorder.getInstance(context);
         this.stateDao = SqlTelephonyStateDao.getInstance(context);
 
-        settingUtil = SettingUtil.getInstance(context);
+        this.settingUtil = SettingUtil.getInstance(context);
 
         this.context = context;
     }
@@ -88,13 +90,12 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
         record.setIncoming(true);
         recordDao.update(record);
 
-        stateDao.setTelephonyState(
-                new TelephonyState()
+        stateDao.setTelephonyState(new TelephonyState()
                         .setState(TelephonyState.State.RINGING)
                         .setRecordId(record.getId())
         );
 
-        if(settingUtil.getSetting().isManagerActive()) startActivity();
+        if(settingUtil.getSetting().isManagerActive()) startActivity(MainActivity_.class);
     }
 
     @Override
@@ -112,6 +113,8 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
         record.setStartRecord(System.currentTimeMillis());
 
         recorder.startRecord(record.getFileName());
+
+        if (record.isIncoming() && settingUtil.getSetting().isManagerActive()) startActivity(DialogActivity_.class);
     }
 
     @Override
@@ -128,7 +131,7 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
         record = null;
 
         if(settingUtil.getSetting().isUnloadActive()) context.startService(new Intent(context, UnloadService.class));
-        if(settingUtil.getSetting().isManagerActive()) startActivity();
+        if(settingUtil.getSetting().isManagerActive()) startActivity(MainActivity_.class);
     }
 
     @Override
@@ -157,12 +160,12 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
         return false;
     }
 
-    private void startActivity() {
+    private void startActivity(final Class<? extends Activity> activity) {
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent activityIntent = new Intent(context, MainActivity_.class);
+                Intent activityIntent = new Intent(context,activity);
                 activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 context.startActivity(activityIntent);

@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // TODO: 29.08.2016
+        super.onBackPressed();
     }
 
     @Override
@@ -216,6 +216,10 @@ public class MainActivity extends AppCompatActivity {
             case TelephonyState.State.NOT_RINGING:
                 cardView.setVisibility(View.GONE);
                 break;
+
+            default:
+                cardView.setVisibility(View.GONE);
+                break;
         }
     }
 
@@ -281,6 +285,8 @@ public class MainActivity extends AppCompatActivity {
                         editor.putBoolean(getString(R.string.chActiveRecordKey), false);
                         editor.apply();
 
+                        ServiceUtils.sendTelephoneService(context, TelephoneConfig.STATE_EXIT_SERVICE);
+
                         finish();
 
                     }
@@ -293,7 +299,5 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .create();
     }
-
-
 
 }

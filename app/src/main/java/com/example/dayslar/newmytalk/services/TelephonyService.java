@@ -12,7 +12,7 @@ import com.example.dayslar.newmytalk.R;
 import com.example.dayslar.newmytalk.telephony.TelephoneConfig;
 import com.example.dayslar.newmytalk.telephony.impl.SimpleTelephonyHandler;
 import com.example.dayslar.newmytalk.telephony.interfaces.TelephonyHandler;
-import com.example.dayslar.newmytalk.ui.activity.MainActivity_;
+import com.example.dayslar.newmytalk.ui.activity.LoginActivity_;
 
 public class TelephonyService extends Service{
 
@@ -54,7 +54,14 @@ public class TelephonyService extends Service{
         }
 
         else if (code.equals(TelephoneConfig.EXTRA_STATE_MANAGER)){
-            telManager.setManagerInfo(intent.getIntExtra("managerId", -1));
+            int managerId = intent.getIntExtra("managerId", -1);
+            if (managerId != -1)
+                telManager.setManagerInfo(managerId);
+        }
+
+        else if (code.equals(TelephoneConfig.STATE_EXIT_SERVICE)){
+            stopForeground(true);
+            stopSelf();
         }
 
         return START_STICKY;
@@ -67,7 +74,7 @@ public class TelephonyService extends Service{
     }
 
     private PendingIntent createPendingIntent() {
-        return PendingIntent.getActivity(this, 0, new Intent(this, MainActivity_.class), 0);
+        return PendingIntent.getActivity(this, 0, new Intent(this, LoginActivity_.class), 0);
     }
 
        private void initNotification(PendingIntent intent) {

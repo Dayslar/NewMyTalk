@@ -14,5 +14,6 @@ public final class TelephoneConfig {
     public static final String EXTRA_STATE_MANAGER = "extra_state_manager";
 
     public static final String TELEPHONE_CODE_SERVICE = "telephone_code_service";
+    public static final String STATE_EXIT_SERVICE = "service_exit";
 
 }
