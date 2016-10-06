@@ -77,7 +77,7 @@ public class RetrofitService {
 
     private void initLockKeyApi() {
         Retrofit retrofitManager = new Retrofit.Builder()
-                .baseUrl("http://" + settingUtil.getSetting().getServerIp() + ":" + settingUtil.getSetting().getServerPort() + "/app/api/lock-key/")
+                .baseUrl("http://" + settingUtil.getSetting().getServerIp() + ":" + settingUtil.getSetting().getServerPort() + "/api/lock-key/")
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
 
@@ -87,7 +87,7 @@ public class RetrofitService {
 
     private void initRecordApi() {
         Retrofit retrofitManager = new Retrofit.Builder()
-                .baseUrl("http://" + settingUtil.getSetting().getServerIp() + ":" + settingUtil.getSetting().getServerPort() + "/app/api/record/")
+                .baseUrl("http://" + settingUtil.getSetting().getServerIp() + ":" + settingUtil.getSetting().getServerPort() + "/api/record/")
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
 
@@ -96,7 +96,7 @@ public class RetrofitService {
 
     private void initManagerApi() {
         Retrofit retrofitManager = new Retrofit.Builder()
-                .baseUrl("http://" + settingUtil.getSetting().getServerIp() + ":" + settingUtil.getSetting().getServerPort() + "/app/api/manager/")
+                .baseUrl("http://" + settingUtil.getSetting().getServerIp() + ":" + settingUtil.getSetting().getServerPort() + "/api/manager/")
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
 
@@ -105,7 +105,7 @@ public class RetrofitService {
 
     private void initOrganizationApi() {
         Retrofit retrofitManager = new Retrofit.Builder()
-                .baseUrl("http://" + settingUtil.getSetting().getServerIp() + ":" + settingUtil.getSetting().getServerPort() + "/app/api/organization/")
+                .baseUrl("http://" + settingUtil.getSetting().getServerIp() + ":" + settingUtil.getSetting().getServerPort() + "/api/organization/")
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
 
@@ -114,7 +114,7 @@ public class RetrofitService {
 
     private void initAccessTokenApi() {
         Retrofit retrofitManager = new Retrofit.Builder()
-                .baseUrl("http://" + settingUtil.getSetting().getServerIp() + ":" + settingUtil.getSetting().getServerPort() + "/app/oauth/")
+                .baseUrl("http://" + settingUtil.getSetting().getServerIp() + ":" + settingUtil.getSetting().getServerPort() + "/oauth/")
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
 
