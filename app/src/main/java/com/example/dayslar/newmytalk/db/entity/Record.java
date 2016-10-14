@@ -19,6 +19,7 @@ public class Record {
     private Manager manager; //менеджер ответивщий на звонок, может быть null
     private String contactName; // имя контакта
     private String fileName; //имя файла записи
+    private long duration; //продолжительность записи
 
     @JsonIgnore
     public long getId() {
@@ -121,6 +122,58 @@ public class Record {
         return this;
     }
 
+    public long getDuration() {
+        return duration;
+    }
+
+    public Record setDuration(long duration) {
+        this.duration = duration;
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Record record = (Record) o;
+
+        if (_id != record._id) return false;
+        if (callTime != record.callTime) return false;
+        if (answer != record.answer) return false;
+        if (incoming != record.incoming) return false;
+        if (startRecord != record.startRecord) return false;
+        if (endRecord != record.endRecord) return false;
+        if (duration != record.duration) return false;
+        if (callPhone != null ? !callPhone.equals(record.callPhone) : record.callPhone != null)
+            return false;
+        if (myPhone != null ? !myPhone.equals(record.myPhone) : record.myPhone != null)
+            return false;
+        if (manager != null ? !manager.equals(record.manager) : record.manager != null)
+            return false;
+        if (contactName != null ? !contactName.equals(record.contactName) : record.contactName != null)
+            return false;
+        return fileName != null ? fileName.equals(record.fileName) : record.fileName == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (_id ^ (_id >>> 32));
+        result = 31 * result + (int) (callTime ^ (callTime >>> 32));
+        result = 31 * result + (callPhone != null ? callPhone.hashCode() : 0);
+        result = 31 * result + (myPhone != null ? myPhone.hashCode() : 0);
+        result = 31 * result + (answer ? 1 : 0);
+        result = 31 * result + (incoming ? 1 : 0);
+        result = 31 * result + (int) (startRecord ^ (startRecord >>> 32));
+        result = 31 * result + (int) (endRecord ^ (endRecord >>> 32));
+        result = 31 * result + (manager != null ? manager.hashCode() : 0);
+        result = 31 * result + (contactName != null ? contactName.hashCode() : 0);
+        result = 31 * result + (fileName != null ? fileName.hashCode() : 0);
+        result = 31 * result + (int) (duration ^ (duration >>> 32));
+        return result;
+    }
+
     @Override
     public String toString() {
         return "Record{" +
@@ -135,6 +188,7 @@ public class Record {
                 ", manager=" + manager +
                 ", contactName='" + contactName + '\'' +
                 ", fileName='" + fileName + '\'' +
+                ", duration='" + duration + '\'' +
                 '}';
     }
 

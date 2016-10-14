@@ -42,6 +42,27 @@ public class Manager {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Manager manager = (Manager) o;
+
+        if (_id != manager._id) return false;
+        if (name != null ? !name.equals(manager.name) : manager.name != null) return false;
+        return photoPatch != null ? photoPatch.equals(manager.photoPatch) : manager.photoPatch == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = _id;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (photoPatch != null ? photoPatch.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "Manager{" +
                 "_id=" + _id +

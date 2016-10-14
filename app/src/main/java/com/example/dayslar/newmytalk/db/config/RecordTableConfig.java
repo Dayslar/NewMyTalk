@@ -16,4 +16,5 @@ public final class RecordTableConfig {
     public static final String MANAGER_ID = "manager_id";
     public static final String CONTACT_NAME = "contact_name";
     public static final String FILE_NAME = "file_name";
+    public static final String DURATION = "duration";
 }

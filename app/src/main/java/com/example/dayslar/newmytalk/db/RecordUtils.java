@@ -34,7 +34,8 @@ public final class RecordUtils {
                 .setContactName(cursor.getString(cursor.getColumnIndex(RecordTableConfig.CONTACT_NAME)))
                 .setFileName(cursor.getString(cursor.getColumnIndex(RecordTableConfig.FILE_NAME)))
                 .setAnswer(cursor.getInt(cursor.getColumnIndex(RecordTableConfig.ANSWER)) == 1)
-                .setIncoming(cursor.getInt(cursor.getColumnIndex(RecordTableConfig.INCOMING)) == 1);
+                .setIncoming(cursor.getInt(cursor.getColumnIndex(RecordTableConfig.INCOMING)) == 1)
+                .setDuration(cursor.getLong(cursor.getColumnIndex(RecordTableConfig.DURATION)));
     }
 
 
@@ -51,6 +52,10 @@ public final class RecordUtils {
         cv.put(RecordTableConfig.FILE_NAME, record.getFileName());
         cv.put(RecordTableConfig.ANSWER, record.isAnswer());
         cv.put(RecordTableConfig.INCOMING, record.isIncoming());
+        cv.put(RecordTableConfig.DURATION,
+                record.isAnswer()?
+                record.getEndRecord() - record.getStartRecord(): 0
+        );
 
         return cv;
     }

@@ -48,6 +48,7 @@ class DbHelper extends SQLiteOpenHelper {
                 RecordTableConfig.END_RECORD + " bigint(19)," +
                 RecordTableConfig.MANAGER_ID + " integer," +
                 RecordTableConfig.CONTACT_NAME + " text," +
+                RecordTableConfig.DURATION + " integer," +
                 RecordTableConfig.FILE_NAME + " text);");
     }
 
@@ -63,6 +64,6 @@ class DbHelper extends SQLiteOpenHelper {
     private void createTelephonyTable(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + DbConfig.TELEPHONY_STATE_TABLE_NAME + "(" +
                 TelephonyStateTableConfig.STATE + " text primary key," +
-                TelephonyStateTableConfig.RECORD_ID + " integer);");
+                TelephonyStateTableConfig.RECORD_ID + " bigint(11));");
     }
 }
