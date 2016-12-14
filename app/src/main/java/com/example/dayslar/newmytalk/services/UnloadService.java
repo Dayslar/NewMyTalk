@@ -22,6 +22,7 @@ import com.example.dayslar.newmytalk.network.service.interfaces.RecordService;
 import com.example.dayslar.newmytalk.network.service.interfaces.TokenService;
 import com.example.dayslar.newmytalk.network.utils.http.code.interfaces.HttpMessage;
 import com.example.dayslar.newmytalk.ui.activity.MainActivity_;
+import com.example.dayslar.newmytalk.utils.MyLogger;
 
 import java.util.List;
 
@@ -55,7 +56,7 @@ public class UnloadService extends Service{
         tokenService.loadTokenByRefreshToken(token.getRefresh_token(), new RetrofitCallback<Token>() {
             @Override
             public void onProcess() {
-
+                MyLogger.printDebug(UnloadService.class, "Запись выгружена");
             }
 
             @Override
@@ -64,6 +65,7 @@ public class UnloadService extends Service{
                 for (Record record: records){
                     if (record.getFileName() == null) recordService.sendRecord(record);
                     else recordService.sendRecordAndFile(record);
+                    onProcess();
                 }
             }
 
