@@ -32,26 +32,25 @@ public class TelephonyService extends Service{
     public int onStartCommand(Intent intent, int flags, int startId) {
         startForeground(NOTIFICATION_ID, notification);
 
+        if (intent == null)
+            return START_STICKY;
+
         String code = intent.getStringExtra(TelephoneConfig.TELEPHONE_CODE_SERVICE);
 
         if (code == null)
             return START_STICKY;
 
-        if (code.equals(TelephoneConfig.NEW_OUTGOING_CALL)){
+        if (code.equals(TelephoneConfig.NEW_OUTGOING_CALL))
             telManager.outgoingCall(intent);
-        }
 
-        else if (code.equals(TelephoneConfig.EXTRA_STATE_RUNNING)){
+        else if (code.equals(TelephoneConfig.EXTRA_STATE_RUNNING))
             telManager.runningCall(intent);
-        }
 
-        else if (code.equals(TelephoneConfig.EXTRA_STATE_OFFHOOK)) {
+        else if (code.equals(TelephoneConfig.EXTRA_STATE_OFFHOOK))
             telManager.offhookCall(intent);
-        }
 
-        else if (code.equals(TelephoneConfig.EXTRA_STATE_IDLE)){
+        else if (code.equals(TelephoneConfig.EXTRA_STATE_IDLE))
             telManager.idleCall(intent);
-        }
 
         else if (code.equals(TelephoneConfig.EXTRA_STATE_MANAGER)){
             int managerId = intent.getIntExtra("managerId", -1);

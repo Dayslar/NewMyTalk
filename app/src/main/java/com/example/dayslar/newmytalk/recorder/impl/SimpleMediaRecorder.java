@@ -86,9 +86,14 @@ public class SimpleMediaRecorder implements Recorder {
     }
 
     private void stopRecorder() {
-        mediaRecorder.stop();
-        mediaRecorder.release();
-        mediaRecorder = null;
+        try {
+            mediaRecorder.stop();
+            mediaRecorder.release();
+            mediaRecorder = null;
+        } catch (RuntimeException e){
+            MyLogger.printDebug(this.getClass(), "Ошибка остановки записи: SimpleMediaRecorder - line 94");
+        }
+
     }
 
     private void initPlayer(){

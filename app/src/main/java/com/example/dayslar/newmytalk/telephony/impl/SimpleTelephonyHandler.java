@@ -170,7 +170,7 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
 
                 context.startActivity(activityIntent);
             }
-        }, 700);
+        }, 500);
 
     }
 
