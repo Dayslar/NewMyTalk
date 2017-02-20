@@ -6,6 +6,6 @@ public class Http500Message implements HttpMessage {
 
     @Override
     public String getMessage() {
-        return "Внутренняя ощибка сервера";
+        return "Внутренняя ошибка сервера";
     }
 }
