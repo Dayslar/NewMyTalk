@@ -33,19 +33,6 @@
             android:layout_alignRight="@+id/managerPhoto"
             android:layout_alignEnd="@+id/managerPhoto" />
 
-        <ImageView
-            android:id="@+id/btnFunction"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:padding="2dp"
-            android:background="?attr/selectableItemBackground"
-            android:src="@mipmap/ic_dots_vertical"
-            android:layout_alignBottom="@id/managerPhoto"
-            android:layout_alignRight="@id/managerPhoto"
-            android:layout_alignEnd="@id/managerPhoto"
-            android:scaleType="centerCrop"
-            android:layout_margin="4dp" />
-
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

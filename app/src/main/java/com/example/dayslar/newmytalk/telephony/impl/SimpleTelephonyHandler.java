@@ -178,7 +178,7 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
         }
     }
 
-    public static void endCall(Context context){
+    public static void endCall(Context context) {
         MyLogger.printDebug(SimpleTelephonyHandler.class, "Сбрасываем звонок");
         TelephonyStateDao stateDao = SqlTelephonyStateDao.getInstance(context);
 

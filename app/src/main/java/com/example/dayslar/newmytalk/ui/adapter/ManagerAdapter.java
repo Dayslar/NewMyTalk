@@ -59,7 +59,7 @@ public class ManagerAdapter extends RecyclerView.Adapter<ManagerAdapter.ManagerV
         ManagerViewHolder(View itemView) {
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.cv);
-            managerName = (TextView)itemView.findViewById(R.id.managerName);
+            managerName = (TextView) itemView.findViewById(R.id.managerName);
             managerPhoto = (ImageView) itemView.findViewById(R.id.managerPhoto);
 
         }
