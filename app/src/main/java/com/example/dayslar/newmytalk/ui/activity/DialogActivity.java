@@ -31,8 +31,8 @@ public class DialogActivity extends AppCompatActivity {
     @AfterViews
     public void init(){
 
-        this.stateDao = SqlTelephonyStateDao.getInstance(this);
-        this.recordDao = SqlRecordDao.getInstance(this);
+        stateDao = SqlTelephonyStateDao.getInstance(this);
+        recordDao = SqlRecordDao.getInstance(this);
 
         initToolbar();
         fabEndTalk.setOnClickListener(new View.OnClickListener() {
@@ -45,7 +45,15 @@ public class DialogActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Toast.makeText(this, "Нельзя выйти пока идет разговор", Toast.LENGTH_LONG).show();
+        switch (stateDao.getTelephonyState().getState()) {
+            case TelephonyState.State.RECORDING:
+                Toast.makeText(this, "Нельзя выйти пока идет разговор", Toast.LENGTH_LONG).show();
+                break;
+            case TelephonyState.State.NOT_RINGING:
+                super.onBackPressed();
+                break;
+        }
+
     }
 
     private void initToolbar() {
