@@ -8,17 +8,17 @@ import com.example.dayslar.newmytalk.db.config.DbConfig;
 import com.example.dayslar.newmytalk.db.config.RecordTableConfig;
 import com.example.dayslar.newmytalk.db.entity.Manager;
 import com.example.dayslar.newmytalk.db.entity.Record;
-import com.example.dayslar.newmytalk.db.impl.SqlIManagerDao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.IManagerDao;
+import com.example.dayslar.newmytalk.db.impl.SqlManagerDao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.ManagerDao;
 
 public final class RecordUtils {
 
     private ContentValues cv;
-    private IManagerDao IManagerDao;
+    private ManagerDao ManagerDao;
 
     public RecordUtils(Context context){
         cv = new ContentValues();
-        IManagerDao = SqlIManagerDao.getInstance(context);
+        ManagerDao = SqlManagerDao.getInstance(context);
     }
 
     public Record readRecord(Cursor cursor){
@@ -64,7 +64,7 @@ public final class RecordUtils {
         int managerId = cursor.getInt(cursor.getColumnIndex(RecordTableConfig.MANAGER_ID));
         Manager manager = null;
         if (managerId != 0)
-            manager = IManagerDao.get(managerId);
+            manager = ManagerDao.get(managerId);
         return manager;
     }
 }

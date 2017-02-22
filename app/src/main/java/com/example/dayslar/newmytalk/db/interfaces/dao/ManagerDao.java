@@ -4,7 +4,7 @@ import com.example.dayslar.newmytalk.db.entity.Manager;
 
 import java.util.List;
 
-public interface IManagerDao {
+public interface ManagerDao {
 
     long insert(Manager manager);
     List<Long> insert(List<Manager> managers);

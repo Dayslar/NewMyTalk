@@ -10,10 +10,10 @@ import android.widget.Toast;
 import com.example.dayslar.newmytalk.R;
 import com.example.dayslar.newmytalk.db.entity.Record;
 import com.example.dayslar.newmytalk.db.entity.TelephonyState;
-import com.example.dayslar.newmytalk.db.impl.SqlIRecordDao;
-import com.example.dayslar.newmytalk.db.impl.SqlITelephonyStateDao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.IRecordDao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.ITelephonyStateDao;
+import com.example.dayslar.newmytalk.db.impl.SqlRecordDao;
+import com.example.dayslar.newmytalk.db.impl.SqlTelephonyStateDao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.TelephonyStateDao;
 import com.example.dayslar.newmytalk.telephony.impl.SimpleTelephonyHandler;
 
 import org.androidannotations.annotations.AfterViews;
@@ -26,16 +26,16 @@ public class DialogActivity extends AppCompatActivity {
     @ViewById(R.id.fabEndTalk) FloatingActionButton fabEndTalk;
     @ViewById(R.id.toolbar) Toolbar toolbar;
 
-    private ITelephonyStateDao stateDao;
-    private IRecordDao IRecordDao;
+    private TelephonyStateDao stateDao;
+    private RecordDao RecordDao;
     private Context context;
 
     @AfterViews
     public void init() {
 
         context = this;
-        stateDao = SqlITelephonyStateDao.getInstance(this);
-        IRecordDao = SqlIRecordDao.getInstance(this);
+        stateDao = SqlTelephonyStateDao.getInstance(this);
+        RecordDao = SqlRecordDao.getInstance(this);
 
         initToolbar();
         initFab();
@@ -55,7 +55,7 @@ public class DialogActivity extends AppCompatActivity {
 
     private void initToolbar() {
         TelephonyState telephonyState = stateDao.getTelephonyState();
-        Record record = IRecordDao.get(telephonyState.getRecordId());
+        Record record = RecordDao.get(telephonyState.getRecordId());
 
         toolbar.setLogo(R.mipmap.ic_launcher);
         toolbar.setTitle(record.getContactName() != null

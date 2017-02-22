@@ -8,23 +8,23 @@ import com.example.dayslar.newmytalk.db.CursorUtils;
 import com.example.dayslar.newmytalk.db.DataBaseController;
 import com.example.dayslar.newmytalk.db.config.DbConfig;
 import com.example.dayslar.newmytalk.db.entity.Manager;
-import com.example.dayslar.newmytalk.db.interfaces.dao.IManagerDao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.ManagerDao;
 import com.example.dayslar.newmytalk.utils.MyLogger;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SqlIManagerDao implements IManagerDao {
+public class SqlManagerDao implements ManagerDao {
 
-    private static SqlIManagerDao instance;
+    private static SqlManagerDao instance;
     private SQLiteDatabase database;
     private CursorUtils cursorUtils;
 
-    public static SqlIManagerDao getInstance(Context context){
+    public static SqlManagerDao getInstance(Context context){
         if (instance == null) {
-            synchronized (SqlIManagerDao.class) {
+            synchronized (SqlManagerDao.class) {
                 if (instance == null) {
-                    instance = new SqlIManagerDao(context);
+                    instance = new SqlManagerDao(context);
                 }
             }
         }
@@ -32,7 +32,7 @@ public class SqlIManagerDao implements IManagerDao {
         return instance;
     }
 
-    private SqlIManagerDao(Context context) {
+    private SqlManagerDao(Context context) {
         database = DataBaseController.getInstance(context).getDatabase();
         cursorUtils = new CursorUtils();
     }

@@ -9,19 +9,19 @@ import com.example.dayslar.newmytalk.db.DataBaseController;
 import com.example.dayslar.newmytalk.db.config.DbConfig;
 import com.example.dayslar.newmytalk.db.config.TelephonyStateTableConfig;
 import com.example.dayslar.newmytalk.db.entity.TelephonyState;
-import com.example.dayslar.newmytalk.db.interfaces.dao.ITelephonyStateDao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.TelephonyStateDao;
 
-public class SqlITelephonyStateDao implements ITelephonyStateDao {
+public class SqlTelephonyStateDao implements TelephonyStateDao {
 
-    private static SqlITelephonyStateDao instance;
+    private static SqlTelephonyStateDao instance;
     private SQLiteDatabase database;
     private ContentValues cv;
 
-    public static SqlITelephonyStateDao getInstance(Context context){
+    public static SqlTelephonyStateDao getInstance(Context context){
         if (instance == null) {
-            synchronized (SqlIManagerDao.class) {
+            synchronized (SqlManagerDao.class) {
                 if (instance == null) {
-                    instance = new SqlITelephonyStateDao(context);
+                    instance = new SqlTelephonyStateDao(context);
                 }
             }
         }
@@ -29,7 +29,7 @@ public class SqlITelephonyStateDao implements ITelephonyStateDao {
         return instance;
     }
 
-    private SqlITelephonyStateDao(Context context) {
+    private SqlTelephonyStateDao(Context context) {
         this.database = DataBaseController.getInstance(context).getDatabase();
         this.cv = new ContentValues();
     }
