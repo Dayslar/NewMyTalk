@@ -131,6 +131,23 @@ public class MainActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
+    public AdapterCallback<Manager> getManagerAdapterCallback(){
+        return new AdapterCallback<Manager>() {
+            @Override
+            public void onClick(Manager manager) {
+                if (state.getState().equals(TelephonyState.State.RINGING)) {
+                    SimpleTelephonyHandler.answerCall(context);
+
+                    Intent intent = new Intent();
+                    intent.putExtra("managerId", manager.getId());
+
+                    ServiceUtils.sendTelephoneService(context, intent, TelephoneConfig.EXTRA_STATE_MANAGER);
+                } else Snackbar.make(fab, "Сейчас никто не звонит!", Snackbar.LENGTH_LONG).show();
+            }
+        };
+    }
+
+    //init views
     private void initViews() {
         initRecycleView();
         initToolbar();
@@ -180,6 +197,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
     private void initPermissions() {
 
         ArrayList<String> permissionsList = new ArrayList<>();
@@ -201,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initTelephonyState() {
-        this.state = stateDao.getTelephonyState();
+        state = stateDao.getTelephonyState();
     }
 
     private void initCallState() {
@@ -213,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case TelephonyState.State.RECORDING:
-                MyLogger.printDebug(this.getClass(), "Попали в ветку recording");
+                MyLogger.printDebug(getClass(), "Попали в ветку recording");
                 startActivity(new Intent(this, DialogActivity_.class));
                 break;
 
@@ -257,24 +275,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public AdapterCallback<Manager> getManagerAdapterCallback(){
-        return new AdapterCallback<Manager>() {
-            @Override
-            public void onClick(Manager manager) {
-                if (state.getState().equals(TelephonyState.State.RINGING)) {
-                    SimpleTelephonyHandler.answerCall(context);
-
-                    Intent intent = new Intent();
-                    intent.putExtra("managerId", manager.getId());
-
-                    ServiceUtils.sendTelephoneService(context, intent, TelephoneConfig.EXTRA_STATE_MANAGER);
-                } else Snackbar.make(fab, "Сейчас никто не звонит!", Snackbar.LENGTH_LONG).show();
-            }
-        };
-    }
-
     private void screenLockOff() {
-        Window wind = this.getWindow();
+        Window wind = getWindow();
         wind.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
         wind.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
         wind.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
