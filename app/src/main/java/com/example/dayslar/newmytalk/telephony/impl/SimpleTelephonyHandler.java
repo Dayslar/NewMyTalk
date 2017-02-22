@@ -160,19 +160,22 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
 
     public static void answerCall(Context context) {
         MyLogger.printDebug(SimpleTelephonyHandler.class, "На звонок ответили");
+        TelephonyStateDao stateDao = SqlTelephonyStateDao.getInstance(context);
 
-        try {
-            Runtime.getRuntime().exec("input keyevent " + Integer.toString(KeyEvent.KEYCODE_HEADSETHOOK));
+        if (stateDao.getTelephonyState().getState().equals(TelephonyState.State.RINGING)){
+            try {
+                stateDao.setTelephonyState(new TelephonyState().setState(TelephonyState.State.RECORDING));
+                Runtime.getRuntime().exec("input keyevent " + Integer.toString(KeyEvent.KEYCODE_HEADSETHOOK));
 
-        } catch (IOException e) {
-            String enforcedPerm = "android.permission.CALL_PRIVILEGED";
-            Intent btnDown = new Intent(Intent.ACTION_MEDIA_BUTTON).putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_HEADSETHOOK));
-            Intent btnUp = new Intent(Intent.ACTION_MEDIA_BUTTON).putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_HEADSETHOOK));
+            } catch (IOException e) {
+                String enforcedPerm = "android.permission.CALL_PRIVILEGED";
+                Intent btnDown = new Intent(Intent.ACTION_MEDIA_BUTTON).putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_HEADSETHOOK));
+                Intent btnUp = new Intent(Intent.ACTION_MEDIA_BUTTON).putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_HEADSETHOOK));
 
-            context.sendOrderedBroadcast(btnDown, enforcedPerm);
-            context.sendOrderedBroadcast(btnUp, enforcedPerm);
+                context.sendOrderedBroadcast(btnDown, enforcedPerm);
+                context.sendOrderedBroadcast(btnUp, enforcedPerm);
+            }
         }
-
     }
 
     public static void endCall(){
