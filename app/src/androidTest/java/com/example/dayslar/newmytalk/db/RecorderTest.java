@@ -1,4 +1,4 @@
-package com.example.dayslar.newmytalk;
+package com.example.dayslar.newmytalk.db;
 
 import android.content.Context;
 import android.os.Environment;
