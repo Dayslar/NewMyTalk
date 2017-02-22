@@ -4,7 +4,7 @@ import com.example.dayslar.newmytalk.db.entity.Record;
 
 import java.util.List;
 
-public interface RecordDao {
+public interface RecordDAOSrao {
 
     long insert(Record record);
     void update(Record record);

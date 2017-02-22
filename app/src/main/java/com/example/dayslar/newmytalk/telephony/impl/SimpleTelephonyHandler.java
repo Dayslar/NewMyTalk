@@ -10,12 +10,12 @@ import android.view.KeyEvent;
 import com.example.dayslar.newmytalk.db.entity.Manager;
 import com.example.dayslar.newmytalk.db.entity.Record;
 import com.example.dayslar.newmytalk.db.entity.TelephonyState;
-import com.example.dayslar.newmytalk.db.impl.SqlManagerDao;
-import com.example.dayslar.newmytalk.db.impl.SqlRecordDao;
-import com.example.dayslar.newmytalk.db.impl.SqlTelephonyStateDao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.ManagerDao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.TelephonyStateDao;
+import com.example.dayslar.newmytalk.db.impl.SqlManagerDAOSrao;
+import com.example.dayslar.newmytalk.db.impl.SqlRecordDAOSrao;
+import com.example.dayslar.newmytalk.db.impl.SqlTelephonyStateDaoSrao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.ManagerDAOSrao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDAOSrao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.TelephonyStateDaoSrao;
 import com.example.dayslar.newmytalk.recorder.impl.SimpleMediaRecorder;
 import com.example.dayslar.newmytalk.recorder.interfaces.Recorder;
 import com.example.dayslar.newmytalk.services.UnloadService;
@@ -34,9 +34,9 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
     private static SimpleTelephonyHandler instance;
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
 
-    private RecordDao recordDao;
-    private TelephonyStateDao stateDao;
-    private ManagerDao managerDao;
+    private RecordDAOSrao recordDaoSrao;
+    private TelephonyStateDaoSrao stateDao;
+    private ManagerDAOSrao managerDaoSrao;
     private Recorder recorder;
     private Context context;
 
@@ -55,10 +55,10 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
     }
 
     private SimpleTelephonyHandler(Context context){
-        managerDao = SqlManagerDao.getInstance(context);
-        recordDao = SqlRecordDao.getInstance(context);
+        managerDaoSrao = SqlManagerDAOSrao.getInstance(context);
+        recordDaoSrao = SqlRecordDAOSrao.getInstance(context);
         recorder = SimpleMediaRecorder.getInstance(context);
-        stateDao = SqlTelephonyStateDao.getInstance(context);
+        stateDao = SqlTelephonyStateDaoSrao.getInstance(context);
         settingUtil = SettingUtil.getInstance(context);
 
         this.context = context;
@@ -85,7 +85,7 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
         if (record == null) initBaseRecord(getPhone(intent));
 
         record.setIncoming(true);
-        recordDao.update(record);
+        recordDaoSrao.update(record);
 
         stateDao.setTelephonyState(new TelephonyState()
                         .setState(TelephonyState.State.RINGING)
@@ -124,7 +124,7 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
         recorder.stopRecord();
         record.setEndRecord(System.currentTimeMillis());
 
-        recordDao.update(record);
+        recordDaoSrao.update(record);
 
         record = null;
 
@@ -134,13 +134,13 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
 
     @Override
     public void setManagerInfo(int managerId) {
-        Manager manager = managerDao.get(managerId);
+        Manager manager = managerDaoSrao.get(managerId);
         record.setManager(manager);
     }
 
     private void initBaseRecord(String callPhone) {
         record = Record.emptyRecord();
-        record.setId(recordDao.insert(record));
+        record.setId(recordDaoSrao.insert(record));
         record.setCallPhone(callPhone);
         record.setCallTime(System.currentTimeMillis());
     }
@@ -160,7 +160,7 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
 
     public static void answerCall(Context context) {
         MyLogger.printDebug(SimpleTelephonyHandler.class, "На звонок ответили");
-        TelephonyStateDao stateDao = SqlTelephonyStateDao.getInstance(context);
+        TelephonyStateDaoSrao stateDao = SqlTelephonyStateDaoSrao.getInstance(context);
 
         if (stateDao.getTelephonyState().getState().equals(TelephonyState.State.RINGING)){
             try {
@@ -178,35 +178,41 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
         }
     }
 
-    public static void endCall(){
-        try {
-            String serviceManagerName = "android.os.ServiceManager";
-            String serviceManagerNativeName = "android.os.ServiceManagerNative";
-            String telephonyName = "com.android.internal.telephony.ITelephony";
-            Class<?> telephonyClass;
-            Class<?> telephonyStubClass;
-            Class<?> serviceManagerClass;
-            Class<?> serviceManagerNativeClass;
-            Method telephonyEndCall;
-            Object telephonyObject;
-            Object serviceManagerObject;
-            telephonyClass = Class.forName(telephonyName);
-            telephonyStubClass = telephonyClass.getClasses()[0];
-            serviceManagerClass = Class.forName(serviceManagerName);
-            serviceManagerNativeClass = Class.forName(serviceManagerNativeName);
-            Method getService = serviceManagerClass.getMethod("getService", String.class);
-            Method tempInterfaceMethod = serviceManagerNativeClass.getMethod("asInterface", IBinder.class);
-            Binder tmpBinder = new Binder();
-            tmpBinder.attachInterface(null, "fake");
-            serviceManagerObject = tempInterfaceMethod.invoke(null, tmpBinder);
-            IBinder rebind = (IBinder) getService.invoke(serviceManagerObject, "phone");
-            Method serviceMethod = telephonyStubClass.getMethod("asInterface", IBinder.class);
-            telephonyObject = serviceMethod.invoke(null, rebind);
-            telephonyEndCall = telephonyClass.getMethod("endCall");
-            telephonyEndCall.invoke(telephonyObject);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e("RECORD_ERROR", e.toString());
+    public static void endCall(Context context){
+        MyLogger.printDebug(SimpleTelephonyHandler.class, "Сбрасываем звонок");
+        TelephonyStateDaoSrao stateDao = SqlTelephonyStateDaoSrao.getInstance(context);
+
+        if (stateDao.getTelephonyState().getState().equals(TelephonyState.State.RECORDING)){
+            stateDao.setTelephonyState(new TelephonyState().setState(TelephonyState.State.NOT_RINGING));
+            try {
+                String serviceManagerName = "android.os.ServiceManager";
+                String serviceManagerNativeName = "android.os.ServiceManagerNative";
+                String telephonyName = "com.android.internal.telephony.ITelephony";
+                Class<?> telephonyClass;
+                Class<?> telephonyStubClass;
+                Class<?> serviceManagerClass;
+                Class<?> serviceManagerNativeClass;
+                Method telephonyEndCall;
+                Object telephonyObject;
+                Object serviceManagerObject;
+                telephonyClass = Class.forName(telephonyName);
+                telephonyStubClass = telephonyClass.getClasses()[0];
+                serviceManagerClass = Class.forName(serviceManagerName);
+                serviceManagerNativeClass = Class.forName(serviceManagerNativeName);
+                Method getService = serviceManagerClass.getMethod("getService", String.class);
+                Method tempInterfaceMethod = serviceManagerNativeClass.getMethod("asInterface", IBinder.class);
+                Binder tmpBinder = new Binder();
+                tmpBinder.attachInterface(null, "fake");
+                serviceManagerObject = tempInterfaceMethod.invoke(null, tmpBinder);
+                IBinder rebind = (IBinder) getService.invoke(serviceManagerObject, "phone");
+                Method serviceMethod = telephonyStubClass.getMethod("asInterface", IBinder.class);
+                telephonyObject = serviceMethod.invoke(null, rebind);
+                telephonyEndCall = telephonyClass.getMethod("endCall");
+                telephonyEndCall.invoke(telephonyObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e("RECORD_ERROR", e.toString());
+            }
         }
     }
 

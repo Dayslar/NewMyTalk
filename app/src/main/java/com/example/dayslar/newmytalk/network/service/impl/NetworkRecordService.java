@@ -4,10 +4,10 @@ import android.content.Context;
 
 import com.example.dayslar.newmytalk.db.entity.Record;
 import com.example.dayslar.newmytalk.db.entity.Token;
-import com.example.dayslar.newmytalk.db.impl.SqlRecordDao;
-import com.example.dayslar.newmytalk.db.impl.SqlTokenDao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDao;
+import com.example.dayslar.newmytalk.db.impl.SqlRecordDAOSrao;
+import com.example.dayslar.newmytalk.db.impl.SqlTokenDaoSrao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDAOSrao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDaoSrao;
 import com.example.dayslar.newmytalk.network.api.RecordApi;
 import com.example.dayslar.newmytalk.network.service.RetrofitService;
 import com.example.dayslar.newmytalk.network.service.interfaces.RecordService;
@@ -28,19 +28,19 @@ import retrofit2.Response;
 
 public class NetworkRecordService implements RecordService {
 
-    private TokenDao tokenDAO;
-    private RecordDao recordDao;
+    private TokenDaoSrao tokenDaoSrao;
+    private RecordDAOSrao recordDaoSrao;
     private RecordApi recordApi;
 
     public NetworkRecordService(Context context) {
         this.recordApi = RetrofitService.getInstance(context).getRecordApi();
-        this.recordDao = SqlRecordDao.getInstance(context);
-        this.tokenDAO = SqlTokenDao.getInstance(context);
+        this.recordDaoSrao = SqlRecordDAOSrao.getInstance(context);
+        this.tokenDaoSrao = SqlTokenDaoSrao.getInstance(context);
     }
 
     @Override
     public void sendRecord(final Record record) {
-        final Token token = tokenDAO.get();
+        final Token token = tokenDaoSrao.get();
 
         recordApi.sendRecord(token.getAccess_token(), record).enqueue(new Callback<ResponseBody>() {
             @Override
@@ -48,7 +48,7 @@ public class NetworkRecordService implements RecordService {
                 MyLogger.printDebug(this.getClass(), "RECORD FILE TRANSFER SUCCESS CODE: " + response.code());
 
                 if (response.code() == 200)
-                    recordDao.delete(record);
+                    recordDaoSrao.delete(record);
 
             }
 
@@ -61,7 +61,7 @@ public class NetworkRecordService implements RecordService {
 
     @Override
     public void sendRecordAndFile(final Record record) {
-        final Token token = tokenDAO.get();
+        final Token token = tokenDaoSrao.get();
 
         ObjectMapper objectMapper = new ObjectMapper();
         String recordDataValue = null;
@@ -82,7 +82,7 @@ public class NetworkRecordService implements RecordService {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 MyLogger.printDebug(this.getClass(), "RECORD FILE TRANSFER SUCCESS CODE: " + response.code());
                 if (response.code() == 200)
-                    recordDao.delete(record);
+                    recordDaoSrao.delete(record);
             }
 
             @Override

@@ -11,8 +11,8 @@ import com.andrognito.pinlockview.PinLockListener;
 import com.andrognito.pinlockview.PinLockView;
 import com.example.dayslar.newmytalk.R;
 import com.example.dayslar.newmytalk.db.entity.Token;
-import com.example.dayslar.newmytalk.db.impl.SqlTokenDao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDao;
+import com.example.dayslar.newmytalk.db.impl.SqlTokenDaoSrao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDaoSrao;
 import com.example.dayslar.newmytalk.network.service.RetrofitService;
 import com.example.dayslar.newmytalk.network.utils.http.code.impls.Http503Message;
 import com.example.dayslar.newmytalk.utils.entity.LockKey;
@@ -33,14 +33,14 @@ public class PinActivity extends AppCompatActivity {
     @ViewById(R.id.indicator_dots) IndicatorDots indicatorDots;
     @ViewById(R.id.toolbar) Toolbar toolbar;
 
-    private TokenDao tokenDAO;
+    private TokenDaoSrao tokenDaoSrao;
     private Context context;
 
     @AfterViews
     void init(){
 
         this.context = this;
-        this.tokenDAO = SqlTokenDao.getInstance(context);
+        this.tokenDaoSrao = SqlTokenDaoSrao.getInstance(context);
 
         initializeToolbar();
         initializePinView();
@@ -68,7 +68,7 @@ public class PinActivity extends AppCompatActivity {
                 MyLogger.printDebug(this.getClass(), pin);
 
                 Snackbar.make(pinLockView, "Началась проверка данных ожидайте", Snackbar.LENGTH_INDEFINITE);
-                Token token = tokenDAO.get();
+                Token token = tokenDaoSrao.get();
 
                 Call<LockKey> call = RetrofitService.getInstance(context).getLockKeyApi().getKey(token.getAccess_token());
 

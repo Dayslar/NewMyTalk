@@ -8,7 +8,7 @@ import com.example.dayslar.newmytalk.db.DataBaseController;
 import com.example.dayslar.newmytalk.db.RecordUtils;
 import com.example.dayslar.newmytalk.db.config.DbConfig;
 import com.example.dayslar.newmytalk.db.entity.Record;
-import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDAOSrao;
 import com.example.dayslar.newmytalk.utils.MyFileUtils;
 import com.example.dayslar.newmytalk.utils.MyLogger;
 
@@ -18,25 +18,25 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SqlRecordDao implements RecordDao {
+public class SqlRecordDAOSrao implements RecordDAOSrao {
 
-    private static SqlRecordDao instance;
+    private static SqlRecordDAOSrao instance;
 
     private SQLiteDatabase database;
     private RecordUtils cursorUtils;
 
-    public static SqlRecordDao getInstance(Context context){
+    public static SqlRecordDAOSrao getInstance(Context context){
         if (instance == null){
-            synchronized (SqlRecordDao.class){
+            synchronized (SqlRecordDAOSrao.class){
                 if (instance == null)
-                    instance = new SqlRecordDao(context);
+                    instance = new SqlRecordDAOSrao(context);
             }
         }
 
         return instance;
     }
 
-    private SqlRecordDao(Context context) {
+    private SqlRecordDAOSrao(Context context) {
         database = DataBaseController.getInstance(context).getDatabase();
         cursorUtils = new RecordUtils(context);
     }

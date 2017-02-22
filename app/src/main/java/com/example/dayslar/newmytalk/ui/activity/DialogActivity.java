@@ -1,5 +1,6 @@
 package com.example.dayslar.newmytalk.ui.activity;
 
+import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -9,10 +10,10 @@ import android.widget.Toast;
 import com.example.dayslar.newmytalk.R;
 import com.example.dayslar.newmytalk.db.entity.Record;
 import com.example.dayslar.newmytalk.db.entity.TelephonyState;
-import com.example.dayslar.newmytalk.db.impl.SqlRecordDao;
-import com.example.dayslar.newmytalk.db.impl.SqlTelephonyStateDao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.TelephonyStateDao;
+import com.example.dayslar.newmytalk.db.impl.SqlRecordDAOSrao;
+import com.example.dayslar.newmytalk.db.impl.SqlTelephonyStateDaoSrao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDAOSrao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.TelephonyStateDaoSrao;
 import com.example.dayslar.newmytalk.telephony.impl.SimpleTelephonyHandler;
 
 import org.androidannotations.annotations.AfterViews;
@@ -25,22 +26,19 @@ public class DialogActivity extends AppCompatActivity {
     @ViewById(R.id.fabEndTalk) FloatingActionButton fabEndTalk;
     @ViewById(R.id.toolbar) Toolbar toolbar;
 
-    private TelephonyStateDao stateDao;
-    private RecordDao recordDao;
+    private TelephonyStateDaoSrao stateDao;
+    private RecordDAOSrao recordDaoSrao;
+    private Context context;
 
     @AfterViews
-    public void init(){
+    public void init() {
 
-        stateDao = SqlTelephonyStateDao.getInstance(this);
-        recordDao = SqlRecordDao.getInstance(this);
+        context = this;
+        stateDao = SqlTelephonyStateDaoSrao.getInstance(this);
+        recordDaoSrao = SqlRecordDAOSrao.getInstance(this);
 
         initToolbar();
-        fabEndTalk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SimpleTelephonyHandler.endCall();
-            }
-        });
+        initFab();
     }
 
     @Override
@@ -57,12 +55,21 @@ public class DialogActivity extends AppCompatActivity {
 
     private void initToolbar() {
         TelephonyState telephonyState = stateDao.getTelephonyState();
-        Record record = recordDao.get(telephonyState.getRecordId());
+        Record record = recordDaoSrao.get(telephonyState.getRecordId());
 
         toolbar.setLogo(R.mipmap.ic_launcher);
         toolbar.setTitle(record.getContactName() != null
                 ? record.getContactName()
                 : "Неизвестный обонент");
         toolbar.setSubtitle(record.getCallPhone());
+    }
+
+    private void initFab() {
+        fabEndTalk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SimpleTelephonyHandler.endCall(context);
+            }
+        });
     }
 }

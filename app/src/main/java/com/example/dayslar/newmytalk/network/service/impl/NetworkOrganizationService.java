@@ -4,8 +4,8 @@ import android.content.Context;
 
 import com.example.dayslar.newmytalk.network.api.OrganizationApi;
 import com.example.dayslar.newmytalk.db.entity.Token;
-import com.example.dayslar.newmytalk.db.impl.SqlTokenDao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDao;
+import com.example.dayslar.newmytalk.db.impl.SqlTokenDaoSrao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDaoSrao;
 import com.example.dayslar.newmytalk.network.service.RetrofitService;
 import com.example.dayslar.newmytalk.network.service.interfaces.OrganizationService;
 import com.example.dayslar.newmytalk.utils.entity.Organization;
@@ -18,16 +18,16 @@ import retrofit2.Response;
 public class NetworkOrganizationService implements OrganizationService {
 
     private OrganizationApi organizationApi;
-    private TokenDao tokenDAO;
+    private TokenDaoSrao tokenDaoSrao;
 
     public NetworkOrganizationService(Context context){
         organizationApi = RetrofitService.getInstance(context).getOrganizationApi();
-        tokenDAO = SqlTokenDao.getInstance(context);
+        tokenDaoSrao = SqlTokenDaoSrao.getInstance(context);
     }
 
     @Override
     public void loadOrganization(final RetrofitCallback<Organization> callback) {
-        Token token = tokenDAO.get();
+        Token token = tokenDaoSrao.get();
 
         Call<Organization> call = organizationApi.loadOrganization(token.getAccess_token());
 
