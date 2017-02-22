@@ -9,19 +9,19 @@ import com.example.dayslar.newmytalk.db.DataBaseController;
 import com.example.dayslar.newmytalk.db.config.DbConfig;
 import com.example.dayslar.newmytalk.db.config.TelephonyStateTableConfig;
 import com.example.dayslar.newmytalk.db.entity.TelephonyState;
-import com.example.dayslar.newmytalk.db.interfaces.dao.TelephonyStateDaoSrao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.ITelephonyStateDao;
 
-public class SqlTelephonyStateDaoSrao implements TelephonyStateDaoSrao {
+public class SqlITelephonyStateDao implements ITelephonyStateDao {
 
-    private static SqlTelephonyStateDaoSrao instance;
+    private static SqlITelephonyStateDao instance;
     private SQLiteDatabase database;
     private ContentValues cv;
 
-    public static SqlTelephonyStateDaoSrao getInstance(Context context){
+    public static SqlITelephonyStateDao getInstance(Context context){
         if (instance == null) {
-            synchronized (SqlManagerDAOSrao.class) {
+            synchronized (SqlIManagerDao.class) {
                 if (instance == null) {
-                    instance = new SqlTelephonyStateDaoSrao(context);
+                    instance = new SqlITelephonyStateDao(context);
                 }
             }
         }
@@ -29,7 +29,7 @@ public class SqlTelephonyStateDaoSrao implements TelephonyStateDaoSrao {
         return instance;
     }
 
-    private SqlTelephonyStateDaoSrao(Context context) {
+    private SqlITelephonyStateDao(Context context) {
         this.database = DataBaseController.getInstance(context).getDatabase();
         this.cv = new ContentValues();
     }

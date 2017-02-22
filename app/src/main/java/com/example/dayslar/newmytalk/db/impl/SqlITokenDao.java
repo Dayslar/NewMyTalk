@@ -10,20 +10,20 @@ import com.example.dayslar.newmytalk.db.CursorUtils;
 import com.example.dayslar.newmytalk.db.config.DbConfig;
 import com.example.dayslar.newmytalk.db.config.TokenTableConfig;
 import com.example.dayslar.newmytalk.db.entity.Token;
-import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDaoSrao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.ITokenDao;
 import com.example.dayslar.newmytalk.utils.MyLogger;
 
-public class SqlTokenDaoSrao implements TokenDaoSrao {
+public class SqlITokenDao implements ITokenDao {
 
-    private static SqlTokenDaoSrao instance;
+    private static SqlITokenDao instance;
     private SQLiteDatabase database;
     private CursorUtils cursorUtils;
 
-    public static SqlTokenDaoSrao getInstance(Context context){
+    public static SqlITokenDao getInstance(Context context){
         if (instance == null) {
-            synchronized (SqlManagerDAOSrao.class) {
+            synchronized (SqlIManagerDao.class) {
                 if (instance == null) {
-                    instance = new SqlTokenDaoSrao(context);
+                    instance = new SqlITokenDao(context);
                 }
             }
         }
@@ -31,7 +31,7 @@ public class SqlTokenDaoSrao implements TokenDaoSrao {
         return instance;
     }
 
-    private SqlTokenDaoSrao(Context context) {
+    private SqlITokenDao(Context context) {
         database = DataBaseController.getInstance(context).getDatabase();
         cursorUtils = new CursorUtils();
     }

@@ -5,10 +5,10 @@ import android.support.annotation.NonNull;
 
 import com.example.dayslar.newmytalk.db.entity.Manager;
 import com.example.dayslar.newmytalk.db.entity.Token;
-import com.example.dayslar.newmytalk.db.impl.SqlManagerDao;
-import com.example.dayslar.newmytalk.db.impl.SqlTokenDao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.ManagerDao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDao;
+import com.example.dayslar.newmytalk.db.impl.SqlIManagerDao;
+import com.example.dayslar.newmytalk.db.impl.SqlITokenDao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.IManagerDao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.ITokenDao;
 import com.example.dayslar.newmytalk.network.api.ManagerApi;
 import com.example.dayslar.newmytalk.network.calback.RetrofitCallback;
 import com.example.dayslar.newmytalk.network.service.RetrofitService;
@@ -28,16 +28,16 @@ import retrofit2.Response;
 public class NetworkManagerService implements ManagerService {
 
     private TokenService tokenService;
-    private ManagerDao managerDao;
-    private TokenDao tokenDao;
+    private IManagerDao IManagerDao;
+    private ITokenDao ITokenDao;
     private ManagerApi managerApi;
     private HttpMessageSelector messageSelector;
 
 
     public NetworkManagerService(Context context) {
 
-        this.tokenDao = SqlTokenDao.getInstance(context);
-        this.managerDao = SqlManagerDao.getInstance(context);
+        this.ITokenDao = SqlITokenDao.getInstance(context);
+        this.IManagerDao = SqlIManagerDao.getInstance(context);
         this.managerApi = RetrofitService.getInstance(context).getManagerApi();
         this.messageSelector = HttpMessageSelector.getInstance();
         this.tokenService = new NetworkTokenService(context);
@@ -45,7 +45,7 @@ public class NetworkManagerService implements ManagerService {
 
     public void loadManagers(@NonNull final RetrofitCallback<List<Manager>> callback){
 
-        final Token token = tokenDao.get();
+        final Token token = ITokenDao.get();
 
         Call<List<Manager>> call = managerApi.loadManagers(token.getAccess_token());
 
@@ -80,8 +80,8 @@ public class NetworkManagerService implements ManagerService {
                 }
 
                 else {
-                    managerDao.deleteAll();
-                    managerDao.insert(response.body());
+                    IManagerDao.deleteAll();
+                    IManagerDao.insert(response.body());
                     callback.onSuccess(response.body());
                 }
             }

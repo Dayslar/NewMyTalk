@@ -10,12 +10,12 @@ import android.view.KeyEvent;
 import com.example.dayslar.newmytalk.db.entity.Manager;
 import com.example.dayslar.newmytalk.db.entity.Record;
 import com.example.dayslar.newmytalk.db.entity.TelephonyState;
-import com.example.dayslar.newmytalk.db.impl.SqlManagerDao;
-import com.example.dayslar.newmytalk.db.impl.SqlRecordDao;
-import com.example.dayslar.newmytalk.db.impl.SqlTelephonyStateDao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.ManagerDao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.TelephonyStateDao;
+import com.example.dayslar.newmytalk.db.impl.SqlIManagerDao;
+import com.example.dayslar.newmytalk.db.impl.SqlIRecordDao;
+import com.example.dayslar.newmytalk.db.impl.SqlITelephonyStateDao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.IManagerDao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.IRecordDao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.ITelephonyStateDao;
 import com.example.dayslar.newmytalk.recorder.impl.SimpleMediaRecorder;
 import com.example.dayslar.newmytalk.recorder.interfaces.Recorder;
 import com.example.dayslar.newmytalk.services.UnloadService;
@@ -34,9 +34,9 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
     private static SimpleTelephonyHandler instance;
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
 
-    private RecordDao recordDao;
-    private TelephonyStateDao stateDao;
-    private ManagerDao managerDao;
+    private IRecordDao IRecordDao;
+    private ITelephonyStateDao stateDao;
+    private IManagerDao IManagerDao;
     private Recorder recorder;
     private Context context;
 
@@ -55,10 +55,10 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
     }
 
     private SimpleTelephonyHandler(Context context){
-        managerDao = SqlManagerDao.getInstance(context);
-        recordDao = SqlRecordDao.getInstance(context);
+        IManagerDao = SqlIManagerDao.getInstance(context);
+        IRecordDao = SqlIRecordDao.getInstance(context);
         recorder = SimpleMediaRecorder.getInstance(context);
-        stateDao = SqlTelephonyStateDao.getInstance(context);
+        stateDao = SqlITelephonyStateDao.getInstance(context);
         settingUtil = SettingUtil.getInstance(context);
 
         this.context = context;
@@ -85,7 +85,7 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
         if (record == null) initBaseRecord(getPhone(intent));
 
         record.setIncoming(true);
-        recordDao.update(record);
+        IRecordDao.update(record);
 
         stateDao.setTelephonyState(new TelephonyState()
                         .setState(TelephonyState.State.RINGING)
@@ -124,7 +124,7 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
         recorder.stopRecord();
         record.setEndRecord(System.currentTimeMillis());
 
-        recordDao.update(record);
+        IRecordDao.update(record);
 
         record = null;
 
@@ -134,13 +134,13 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
 
     @Override
     public void setManagerInfo(int managerId) {
-        Manager manager = managerDao.get(managerId);
+        Manager manager = IManagerDao.get(managerId);
         record.setManager(manager);
     }
 
     private void initBaseRecord(String callPhone) {
         record = Record.emptyRecord();
-        record.setId(recordDao.insert(record));
+        record.setId(IRecordDao.insert(record));
         record.setCallPhone(callPhone);
         record.setCallTime(System.currentTimeMillis());
     }
@@ -160,7 +160,7 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
 
     public static void answerCall(Context context) {
         MyLogger.printDebug(SimpleTelephonyHandler.class, "На звонок ответили");
-        TelephonyStateDao stateDao = SqlTelephonyStateDao.getInstance(context);
+        ITelephonyStateDao stateDao = SqlITelephonyStateDao.getInstance(context);
 
         if (stateDao.getTelephonyState().getState().equals(TelephonyState.State.RINGING)){
             try {
@@ -180,7 +180,7 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
 
     public static void endCall(Context context){
         MyLogger.printDebug(SimpleTelephonyHandler.class, "Сбрасываем звонок");
-        TelephonyStateDao stateDao = SqlTelephonyStateDao.getInstance(context);
+        ITelephonyStateDao stateDao = SqlITelephonyStateDao.getInstance(context);
 
         if (stateDao.getTelephonyState().getState().equals(TelephonyState.State.RECORDING)){
             stateDao.setTelephonyState(new TelephonyState().setState(TelephonyState.State.NOT_RINGING));

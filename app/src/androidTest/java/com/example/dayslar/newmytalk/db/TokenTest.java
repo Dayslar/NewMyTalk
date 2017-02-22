@@ -5,8 +5,8 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.example.dayslar.newmytalk.db.entity.Token;
-import com.example.dayslar.newmytalk.db.impl.SqlTokenDao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDao;
+import com.example.dayslar.newmytalk.db.impl.SqlITokenDao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.ITokenDao;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +17,7 @@ public class TokenTest {
     @Test
     public void addToken() throws Exception {
         Context appContext = InstrumentationRegistry.getTargetContext();
-        TokenDao tokenDao = SqlTokenDao.getInstance(appContext);
+        ITokenDao ITokenDao = SqlITokenDao.getInstance(appContext);
 
         Token token = new Token()
                 .setAccess_token("fhgfjsdhgfjsdhgfjsd")
@@ -26,33 +26,33 @@ public class TokenTest {
                 .setScope("write")
                 .setToken_type("bearer");
 
-        tokenDao.insert(token);
+        ITokenDao.insert(token);
 
     }
 
     @Test
     public void updateToken() throws Exception  {
         Context appContext = InstrumentationRegistry.getTargetContext();
-        TokenDao tokenDao = SqlTokenDao.getInstance(appContext);
+        ITokenDao ITokenDao = SqlITokenDao.getInstance(appContext);
 
-        tokenDao.update(new Token().setAccess_token("gdjhfgsdjhfgsdjf"));
+        ITokenDao.update(new Token().setAccess_token("gdjhfgsdjhfgsdjf"));
     }
 
     @Test
     public void getToken() throws Exception  {
         Context appContext = InstrumentationRegistry.getTargetContext();
-        TokenDao tokenDao = SqlTokenDao.getInstance(appContext);
+        ITokenDao ITokenDao = SqlITokenDao.getInstance(appContext);
 
-        tokenDao.get();
+        ITokenDao.get();
     }
 
 
     @Test
     public void deleteToken() throws Exception {
         Context appContext = InstrumentationRegistry.getTargetContext();
-        TokenDao tokenDao = SqlTokenDao.getInstance(appContext);
+        ITokenDao ITokenDao = SqlITokenDao.getInstance(appContext);
 
-        tokenDao.delete();
+        ITokenDao.delete();
     }
 
 }

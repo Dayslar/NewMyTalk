@@ -11,10 +11,10 @@ import android.support.annotation.Nullable;
 import com.example.dayslar.newmytalk.R;
 import com.example.dayslar.newmytalk.db.entity.Record;
 import com.example.dayslar.newmytalk.db.entity.Token;
-import com.example.dayslar.newmytalk.db.impl.SqlRecordDao;
-import com.example.dayslar.newmytalk.db.impl.SqlTokenDao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDao;
+import com.example.dayslar.newmytalk.db.impl.SqlIRecordDao;
+import com.example.dayslar.newmytalk.db.impl.SqlITokenDao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.IRecordDao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.ITokenDao;
 import com.example.dayslar.newmytalk.network.calback.RetrofitCallback;
 import com.example.dayslar.newmytalk.network.service.impl.NetworkRecordService;
 import com.example.dayslar.newmytalk.network.service.impl.NetworkTokenService;
@@ -31,16 +31,16 @@ public class UnloadService extends Service{
     private Notification notification;
     private static final int NOTIFICATION_ID = 876;
 
-    private RecordDao recordDao;
+    private IRecordDao IRecordDao;
     private RecordService recordService;
-    private TokenDao tokenDao;
+    private ITokenDao ITokenDao;
     private TokenService tokenService;
 
     public void onCreate() {
         super.onCreate();
 
-        this.recordDao = SqlRecordDao.getInstance(this);
-        this.tokenDao = SqlTokenDao.getInstance(this);
+        this.IRecordDao = SqlIRecordDao.getInstance(this);
+        this.ITokenDao = SqlITokenDao.getInstance(this);
         this.tokenService = new NetworkTokenService(this);
         this.recordService = new NetworkRecordService(this);
 
@@ -52,7 +52,7 @@ public class UnloadService extends Service{
     public int onStartCommand(Intent intent, int flags, int startId) {
         startForeground(NOTIFICATION_ID, notification);
 
-        Token token = tokenDao.get();
+        Token token = ITokenDao.get();
         tokenService.loadTokenByRefreshToken(token.getRefresh_token(), new RetrofitCallback<Token>() {
             @Override
             public void onProcess() {
@@ -61,7 +61,7 @@ public class UnloadService extends Service{
 
             @Override
             public void onSuccess(Token object) {
-                List<Record> records = recordDao.getRecords();
+                List<Record> records = IRecordDao.getRecords();
                 for (Record record: records){
                     if (record.getFileName() == null) recordService.sendRecord(record);
                     else recordService.sendRecordAndFile(record);
