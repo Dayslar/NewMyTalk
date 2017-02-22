@@ -29,13 +29,13 @@ import com.example.dayslar.newmytalk.R;
 import com.example.dayslar.newmytalk.db.entity.Manager;
 import com.example.dayslar.newmytalk.db.entity.Record;
 import com.example.dayslar.newmytalk.db.entity.TelephonyState;
-import com.example.dayslar.newmytalk.db.impl.SqlManagerDAOSrao;
-import com.example.dayslar.newmytalk.db.impl.SqlRecordDAOSrao;
-import com.example.dayslar.newmytalk.db.impl.SqlTelephonyStateDaoSrao;
-import com.example.dayslar.newmytalk.db.impl.SqlTokenDaoSrao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.ManagerDAOSrao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDAOSrao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.TelephonyStateDaoSrao;
+import com.example.dayslar.newmytalk.db.impl.SqlManagerDao;
+import com.example.dayslar.newmytalk.db.impl.SqlRecordDao;
+import com.example.dayslar.newmytalk.db.impl.SqlTelephonyStateDao;
+import com.example.dayslar.newmytalk.db.impl.SqlTokenDao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.ManagerDao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.RecordDao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.TelephonyStateDao;
 import com.example.dayslar.newmytalk.network.calback.RetrofitCallback;
 import com.example.dayslar.newmytalk.network.service.impl.NetworkManagerService;
 import com.example.dayslar.newmytalk.network.service.interfaces.ManagerService;
@@ -66,9 +66,9 @@ public class MainActivity extends AppCompatActivity {
     @ViewById(R.id.tvEndCall) TextView tvEndCall;
     @ViewById(R.id.contactNumber) TextView contactNumber;
 
-    private ManagerDAOSrao managerDaoSrao;
-    private TelephonyStateDaoSrao stateDao;
-    private RecordDAOSrao recordDaoSrao;
+    private ManagerDao managerDao;
+    private TelephonyStateDao stateDao;
+    private RecordDao recordDao;
     private ManagerService managerService;
     private Snackbar snackbar;
 
@@ -78,10 +78,10 @@ public class MainActivity extends AppCompatActivity {
     @AfterViews
     void init() {
         this.context = this;
-        this.managerDaoSrao = SqlManagerDAOSrao.getInstance(this);
-        this.recordDaoSrao = SqlRecordDAOSrao.getInstance(this);
+        this.managerDao = SqlManagerDao.getInstance(this);
+        this.recordDao = SqlRecordDao.getInstance(this);
         this.managerService = new NetworkManagerService(this);
-        this.stateDao = SqlTelephonyStateDaoSrao.getInstance(this);
+        this.stateDao = SqlTelephonyStateDao.getInstance(this);
 
         initTelephonyState();
         initViews();
@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
         GridLayoutManager glm = new GridLayoutManager(this, 3);
         recyclerView.setLayoutManager(glm);
         recyclerView.addItemDecoration(new GridSpacingDecorator(-5));
-        recyclerView.setAdapter(new ManagerAdapter(managerDaoSrao.getManagers(), getManagerAdapterCallback()));
+        recyclerView.setAdapter(new ManagerAdapter(managerDao.getManagers(), getManagerAdapterCallback()));
     }
 
     private void initFab() {
@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
     private void initCallState() {
         switch (state.getState()){
             case TelephonyState.State.RINGING:
-                Record record = recordDaoSrao.get(state.getRecordId());
+                Record record = recordDao.get(state.getRecordId());
                 contactNumber.setText(record.getCallPhone());
                 cardView.setVisibility(View.VISIBLE);
                 break;
@@ -288,9 +288,9 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton(getString(R.string.btnDialogYes), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        SqlTokenDaoSrao.getInstance(context).delete();
-                        SqlManagerDAOSrao.getInstance(context).deleteAll();
-                        SqlRecordDAOSrao.getInstance(context).deleteAll();
+                        SqlTokenDao.getInstance(context).delete();
+                        SqlManagerDao.getInstance(context).deleteAll();
+                        SqlRecordDao.getInstance(context).deleteAll();
 
                         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
                         SharedPreferences.Editor editor = pref.edit();

@@ -16,8 +16,8 @@ import android.widget.EditText;
 
 import com.example.dayslar.newmytalk.R;
 import com.example.dayslar.newmytalk.db.entity.Token;
-import com.example.dayslar.newmytalk.db.impl.SqlTokenDaoSrao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDaoSrao;
+import com.example.dayslar.newmytalk.db.impl.SqlTokenDao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDao;
 import com.example.dayslar.newmytalk.network.calback.RetrofitCallback;
 import com.example.dayslar.newmytalk.network.service.impl.NetworkTokenService;
 import com.example.dayslar.newmytalk.network.service.interfaces.TokenService;
@@ -39,14 +39,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @ViewById(R.id.toolbar) Toolbar toolbar;
 
     private TokenService tokenService;
-    private TokenDaoSrao tokenDaoSrao;
+    private TokenDao tokenDao;
     private Snackbar snackBar;
 
     @AfterViews
     void init() {
 
         tokenService = new NetworkTokenService(this);
-        tokenDaoSrao = SqlTokenDaoSrao.getInstance(this);
+        tokenDao = SqlTokenDao.getInstance(this);
 
         initToolbar();
 
@@ -140,7 +140,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void checkActiveAccount(){
-        if (tokenDaoSrao.get() != null)
+        if (tokenDao.get() != null)
             startMainActivity();
     }
 

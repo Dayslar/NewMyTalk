@@ -3,8 +3,8 @@ package com.example.dayslar.newmytalk.network.service.impl;
 import android.content.Context;
 
 import com.example.dayslar.newmytalk.db.entity.Token;
-import com.example.dayslar.newmytalk.db.impl.SqlTokenDaoSrao;
-import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDaoSrao;
+import com.example.dayslar.newmytalk.db.impl.SqlTokenDao;
+import com.example.dayslar.newmytalk.db.interfaces.dao.TokenDao;
 import com.example.dayslar.newmytalk.network.TokenConfig;
 import com.example.dayslar.newmytalk.network.api.TokenApi;
 import com.example.dayslar.newmytalk.network.calback.RetrofitCallback;
@@ -20,13 +20,13 @@ import retrofit2.Response;
 public class NetworkTokenService implements TokenService {
 
     private TokenApi tokenApi;
-    private TokenDaoSrao tokenDaoSrao;
+    private TokenDao tokenDao;
 
     private HttpMessageSelector messageSelector;
 
     public NetworkTokenService(Context context){
         tokenApi = RetrofitService.getInstance(context).getTokenApi();
-        tokenDaoSrao = SqlTokenDaoSrao.getInstance(context);
+        tokenDao = SqlTokenDao.getInstance(context);
 
         messageSelector = HttpMessageSelector.getInstance();
     }
@@ -43,8 +43,8 @@ public class NetworkTokenService implements TokenService {
 
                 if (response.body() == null) callback.onFailure(messageSelector.getMessage(response.code()));
                 else {
-                    tokenDaoSrao.delete();
-                    tokenDaoSrao.insert(response.body());
+                    tokenDao.delete();
+                    tokenDao.insert(response.body());
                     callback.onSuccess(response.body());
                 }
 
@@ -71,7 +71,7 @@ public class NetworkTokenService implements TokenService {
                 MyLogger.printDebug(this.getClass(), "Получили ответ");
                 if (response.body() == null) callback.onFailure(messageSelector.getMessage(response.code()));
                 else {
-                    tokenDaoSrao.update(response.body());
+                    tokenDao.update(response.body());
                     callback.onSuccess(response.body());
                 }
             }
