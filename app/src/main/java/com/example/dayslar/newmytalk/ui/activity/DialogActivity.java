@@ -53,7 +53,6 @@ public class DialogActivity extends AppCompatActivity {
                 super.onBackPressed();
                 break;
         }
-
     }
 
     private void initToolbar() {
@@ -61,7 +60,9 @@ public class DialogActivity extends AppCompatActivity {
         Record record = recordDao.get(telephonyState.getRecordId());
 
         toolbar.setLogo(R.mipmap.ic_launcher);
-        toolbar.setTitle(record.getContactName()!=null?record.getContactName(): "Неизвестный обонент");
+        toolbar.setTitle(record.getContactName() != null
+                ? record.getContactName()
+                : "Неизвестный обонент");
         toolbar.setSubtitle(record.getCallPhone());
     }
 }
