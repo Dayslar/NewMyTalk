@@ -34,9 +34,9 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
     private static SimpleTelephonyHandler instance;
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
 
-    private RecordDao RecordDao;
+    private RecordDao recordDao;
     private TelephonyStateDao stateDao;
-    private ManagerDao ManagerDao;
+    private ManagerDao managerDao;
     private Recorder recorder;
     private Context context;
 
@@ -55,8 +55,8 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
     }
 
     private SimpleTelephonyHandler(Context context){
-        ManagerDao = SqlManagerDao.getInstance(context);
-        RecordDao = SqlRecordDao.getInstance(context);
+        managerDao = SqlManagerDao.getInstance(context);
+        recordDao = SqlRecordDao.getInstance(context);
         recorder = SimpleMediaRecorder.getInstance(context);
         stateDao = SqlTelephonyStateDao.getInstance(context);
         settingUtil = SettingUtil.getInstance(context);
@@ -85,7 +85,7 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
         if (record == null) initBaseRecord(getPhone(intent));
 
         record.setIncoming(true);
-        RecordDao.update(record);
+        recordDao.update(record);
 
         stateDao.setTelephonyState(new TelephonyState()
                         .setState(TelephonyState.State.RINGING)
@@ -124,7 +124,7 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
         recorder.stopRecord();
         record.setEndRecord(System.currentTimeMillis());
 
-        RecordDao.update(record);
+        recordDao.update(record);
 
         record = null;
 
@@ -134,13 +134,13 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
 
     @Override
     public void setManagerInfo(int managerId) {
-        Manager manager = ManagerDao.get(managerId);
+        Manager manager = managerDao.get(managerId);
         record.setManager(manager);
     }
 
     private void initBaseRecord(String callPhone) {
         record = Record.emptyRecord();
-        record.setId(RecordDao.insert(record));
+        record.setId(recordDao.insert(record));
         record.setCallPhone(callPhone);
         record.setCallTime(System.currentTimeMillis());
     }

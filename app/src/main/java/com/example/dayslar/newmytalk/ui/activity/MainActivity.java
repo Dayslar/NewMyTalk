@@ -66,9 +66,9 @@ public class MainActivity extends AppCompatActivity {
     @ViewById(R.id.tvEndCall) TextView tvEndCall;
     @ViewById(R.id.contactNumber) TextView contactNumber;
 
-    private ManagerDao ManagerDao;
+    private ManagerDao managerDao;
     private TelephonyStateDao stateDao;
-    private RecordDao RecordDao;
+    private RecordDao mecordDao;
     private ManagerService managerService;
     private Snackbar snackbar;
 
@@ -77,13 +77,12 @@ public class MainActivity extends AppCompatActivity {
 
     @AfterViews
     void init() {
-        this.context = this;
-        this.ManagerDao = SqlManagerDao.getInstance(this);
-        this.RecordDao = SqlRecordDao.getInstance(this);
-        this.managerService = new NetworkManagerService(this);
-        this.stateDao = SqlTelephonyStateDao.getInstance(this);
+        context = this;
+        managerDao = SqlManagerDao.getInstance(this);
+        mecordDao = SqlRecordDao.getInstance(this);
+        managerService = new NetworkManagerService(this);
+        stateDao = SqlTelephonyStateDao.getInstance(this);
 
-        initTelephonyState();
         initViews();
         initCallState();
 
@@ -93,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
-        initTelephonyState();
         initCallState();
     }
 
@@ -101,9 +99,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        initTelephonyState();
         initCallState();
-
         screenLockOff();
     }
 
@@ -185,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
         GridLayoutManager glm = new GridLayoutManager(this, 3);
         recyclerView.setLayoutManager(glm);
         recyclerView.addItemDecoration(new GridSpacingDecorator(-5));
-        recyclerView.setAdapter(new ManagerAdapter(ManagerDao.getManagers(), getManagerAdapterCallback()));
+        recyclerView.setAdapter(new ManagerAdapter(managerDao.getManagers(), getManagerAdapterCallback()));
     }
 
     private void initFab() {
@@ -218,14 +214,11 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, permissionsList.toArray(new String[]{}), 99);
     }
 
-    private void initTelephonyState() {
-        state = stateDao.getTelephonyState();
-    }
-
     private void initCallState() {
+        state = stateDao.getTelephonyState();
         switch (state.getState()){
             case TelephonyState.State.RINGING:
-                Record record = RecordDao.get(state.getRecordId());
+                Record record = mecordDao.get(state.getRecordId());
                 contactNumber.setText(record.getCallPhone());
                 cardView.setVisibility(View.VISIBLE);
                 break;
