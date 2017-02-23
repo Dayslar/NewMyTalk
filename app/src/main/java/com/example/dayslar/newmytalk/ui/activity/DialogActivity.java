@@ -27,7 +27,7 @@ public class DialogActivity extends AppCompatActivity {
     @ViewById(R.id.toolbar) Toolbar toolbar;
 
     private TelephonyStateDao stateDao;
-    private RecordDao RecordDao;
+    private RecordDao recordDao;
     private Context context;
 
     @AfterViews
@@ -35,7 +35,7 @@ public class DialogActivity extends AppCompatActivity {
 
         context = this;
         stateDao = SqlTelephonyStateDao.getInstance(this);
-        RecordDao = SqlRecordDao.getInstance(this);
+        recordDao = SqlRecordDao.getInstance(this);
 
         initToolbar();
         initFab();
@@ -55,7 +55,7 @@ public class DialogActivity extends AppCompatActivity {
 
     private void initToolbar() {
         TelephonyState telephonyState = stateDao.getTelephonyState();
-        Record record = RecordDao.get(telephonyState.getRecordId());
+        Record record = recordDao.get(telephonyState.getRecordId());
 
         initToolbarData(record);
     }

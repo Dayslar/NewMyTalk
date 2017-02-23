@@ -33,14 +33,14 @@ public class PinActivity extends AppCompatActivity {
     @ViewById(R.id.indicator_dots) IndicatorDots indicatorDots;
     @ViewById(R.id.toolbar) Toolbar toolbar;
 
-    private TokenDao TokenDao;
+    private TokenDao tokenDao;
     private Context context;
 
     @AfterViews
     void init(){
 
         this.context = this;
-        this.TokenDao = SqlTokenDao.getInstance(context);
+        this.tokenDao = SqlTokenDao.getInstance(context);
 
         initializeToolbar();
         initializePinView();
@@ -68,7 +68,7 @@ public class PinActivity extends AppCompatActivity {
                 MyLogger.printDebug(this.getClass(), pin);
 
                 Snackbar.make(pinLockView, "Началась проверка данных ожидайте", Snackbar.LENGTH_INDEFINITE);
-                Token token = TokenDao.get();
+                Token token = tokenDao.get();
 
                 Call<LockKey> call = RetrofitService.getInstance(context).getLockKeyApi().getKey(token.getAccess_token());
 

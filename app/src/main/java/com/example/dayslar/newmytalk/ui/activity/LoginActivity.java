@@ -39,14 +39,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @ViewById(R.id.toolbar) Toolbar toolbar;
 
     private TokenService tokenService;
-    private TokenDao TokenDao;
+    private TokenDao tokenDao;
     private Snackbar snackBar;
 
     @AfterViews
     void init() {
 
         tokenService = new NetworkTokenService(this);
-        TokenDao = SqlTokenDao.getInstance(this);
+        tokenDao = SqlTokenDao.getInstance(this);
 
         initToolbar();
 
@@ -140,7 +140,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void checkActiveAccount(){
-        if (TokenDao.get() != null)
+        if (tokenDao.get() != null)
             startMainActivity();
     }
 

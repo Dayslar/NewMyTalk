@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ManagerDao managerDao;
     private TelephonyStateDao stateDao;
-    private RecordDao mecordDao;
+    private RecordDao recordDao;
     private ManagerService managerService;
     private Snackbar snackbar;
 
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
     void init() {
         context = this;
         managerDao = SqlManagerDao.getInstance(this);
-        mecordDao = SqlRecordDao.getInstance(this);
+        recordDao = SqlRecordDao.getInstance(this);
         managerService = new NetworkManagerService(this);
         stateDao = SqlTelephonyStateDao.getInstance(this);
 
@@ -218,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
         state = stateDao.getTelephonyState();
         switch (state.getState()){
             case TelephonyState.State.RINGING:
-                Record record = mecordDao.get(state.getRecordId());
+                Record record = recordDao.get(state.getRecordId());
                 contactNumber.setText(record.getCallPhone());
                 cardView.setVisibility(View.VISIBLE);
                 break;
