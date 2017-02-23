@@ -57,11 +57,21 @@ public class DialogActivity extends AppCompatActivity {
         TelephonyState telephonyState = stateDao.getTelephonyState();
         Record record = RecordDao.get(telephonyState.getRecordId());
 
+        initToolbarData(record);
+    }
+
+    private void initToolbarData(Record record) {
+        if (record == null) {
+            toolbar.setTitle("Неизвестный обонент");
+            toolbar.setSubtitle("Скрытый номер");
+        }
+        else {
+            toolbar.setTitle(record.getContactName() == null
+                    ? "Неизвестный обонент"
+                    : record.getContactName());
+            toolbar.setSubtitle(record.getCallPhone());
+        }
         toolbar.setLogo(R.mipmap.ic_launcher);
-        toolbar.setTitle(record.getContactName() != null
-                ? record.getContactName()
-                : "Неизвестный обонент");
-        toolbar.setSubtitle(record.getCallPhone());
     }
 
     private void initFab() {

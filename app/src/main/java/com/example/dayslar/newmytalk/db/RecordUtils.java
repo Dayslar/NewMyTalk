@@ -52,9 +52,9 @@ public final class RecordUtils {
         cv.put(RecordTableConfig.FILE_NAME, record.getFileName());
         cv.put(RecordTableConfig.ANSWER, record.isAnswer());
         cv.put(RecordTableConfig.INCOMING, record.isIncoming());
-        cv.put(RecordTableConfig.DURATION,
-                record.isAnswer()?
-                record.getEndRecord() - record.getStartRecord(): 0
+        cv.put(RecordTableConfig.DURATION, record.isAnswer()
+                ? record.getEndRecord() - record.getStartRecord()
+                : 0
         );
 
         return cv;
