@@ -18,10 +18,10 @@ public class RecordsTest {
     @Test
     public void addRecord() throws Exception {
         Context appContext = InstrumentationRegistry.getTargetContext();
-        RecordDao RecordDao = SqlRecordDao.getInstance(appContext);
+        RecordDao recordDao = SqlRecordDao.getInstance(appContext);
 
         Record record = new Record()
-                .setManager(new Manager().setId(2).setName("Коноплич ольга"))
+                .setManager(new Manager().setId(2).setName("Коноплич Ольга"))
                 .setCallPhone("+375295642388")
                 .setMyPhone("+375295642388")
                 .setCallTime(146734857343L)
@@ -32,31 +32,31 @@ public class RecordsTest {
                 .setIncoming(true)
                 .setFileName("1.mp3");
 
-        RecordDao.insert(record);
+        recordDao.insert(record);
 
     }
 
     @Test
     public void deleteRecord() throws Exception {
         Context appContext = InstrumentationRegistry.getTargetContext();
-        RecordDao RecordDao = SqlRecordDao.getInstance(appContext);
+        RecordDao recordDao = SqlRecordDao.getInstance(appContext);
 
-        RecordDao.delete(new Record().setId(10));
+        recordDao.delete(new Record().setId(10));
     }
 
     @Test
     public void getRecord() throws Exception  {
         Context appContext = InstrumentationRegistry.getTargetContext();
-        RecordDao RecordDao = SqlRecordDao.getInstance(appContext);
+        RecordDao recordDao = SqlRecordDao.getInstance(appContext);
 
-        RecordDao.get(3);
+        recordDao.get(0);
     }
 
     @Test
     public void getRecords() throws Exception {
         Context appContext = InstrumentationRegistry.getTargetContext();
-        RecordDao RecordDao = SqlRecordDao.getInstance(appContext);
+        RecordDao recordDao = SqlRecordDao.getInstance(appContext);
 
-        RecordDao.getRecords();
+        recordDao.getRecords();
     }
 }

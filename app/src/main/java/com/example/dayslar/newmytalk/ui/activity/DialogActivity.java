@@ -32,7 +32,6 @@ public class DialogActivity extends AppCompatActivity {
 
     @AfterViews
     public void init() {
-
         context = this;
         stateDao = SqlTelephonyStateDao.getInstance(this);
         recordDao = SqlRecordDao.getInstance(this);
