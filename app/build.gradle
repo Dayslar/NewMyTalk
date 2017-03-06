@@ -3,7 +3,7 @@ apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '25.0.0'
+    buildToolsVersion '23.0.3'
 
     useLibrary 'org.apache.http.legacy'
 
@@ -36,7 +36,7 @@ android {
 
 def aa_version = '4.0.0'
 def retrofit_version = '2.1.0'
-def project_version = '23.1.1'
+def project_version = '23.4.0'
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
