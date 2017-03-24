@@ -136,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
                     intent.putExtra("managerId", manager.getId());
 
                     ServiceUtils.sendTelephoneService(context, intent, TelephoneConfig.EXTRA_STATE_MANAGER);
+                    ActivityUtils.lockScreen(context);
                 } else Snackbar.make(fab, "Сейчас никто не звонит!", Snackbar.LENGTH_LONG).show();
             }
         };
@@ -261,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(HttpMessage httpMessage) {
-                snackbar.setText(httpMessage.getMessage()).setDuration(4000).show();
+                snackbar.setText(httpMessage.getMessage()).setDuration(3000).show();
             }
         });
     }
