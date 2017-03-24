@@ -61,12 +61,12 @@ public class DialogActivity extends AppCompatActivity {
 
     private void initToolbarData(Record record) {
         if (record == null) {
-            toolbar.setTitle("Неизвестный обонент");
+            toolbar.setTitle("Неизвестный абонент");
             toolbar.setSubtitle("Скрытый номер");
         }
         else {
             toolbar.setTitle(record.getContactName() == null
-                    ? "Неизвестный обонент"
+                    ? "Неизвестный абонент"
                     : record.getContactName());
             toolbar.setSubtitle(record.getCallPhone());
         }
