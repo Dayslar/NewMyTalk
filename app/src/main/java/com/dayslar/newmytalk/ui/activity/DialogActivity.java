@@ -15,6 +15,7 @@ import com.dayslar.newmytalk.db.impl.SqlTelephonyStateDao;
 import com.dayslar.newmytalk.db.interfaces.dao.RecordDao;
 import com.dayslar.newmytalk.db.interfaces.dao.TelephonyStateDao;
 import com.dayslar.newmytalk.telephony.impl.SimpleTelephonyHandler;
+import com.dayslar.newmytalk.utils.ActivityUtils;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -38,6 +39,13 @@ public class DialogActivity extends AppCompatActivity {
 
         initToolbar();
         initFab();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        ActivityUtils.screenLockOff(this);
     }
 
     @Override

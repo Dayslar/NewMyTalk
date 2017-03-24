@@ -20,8 +20,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +43,7 @@ import com.dayslar.newmytalk.telephony.impl.SimpleTelephonyHandler;
 import com.dayslar.newmytalk.ui.adapter.AdapterCallback;
 import com.dayslar.newmytalk.ui.adapter.ManagerAdapter;
 import com.dayslar.newmytalk.ui.decorator.GridSpacingDecorator;
+import com.dayslar.newmytalk.utils.ActivityUtils;
 import com.dayslar.newmytalk.utils.MyLogger;
 import com.dayslar.newmytalk.utils.ServiceUtils;
 
@@ -85,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
 
         initViews();
         initCallState();
-
     }
 
     @Override
@@ -100,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         initCallState();
-        screenLockOff();
+        ActivityUtils.screenLockOff(this);
     }
 
     @Override
@@ -266,13 +264,6 @@ public class MainActivity extends AppCompatActivity {
                 snackbar.setText(httpMessage.getMessage()).setDuration(4000).show();
             }
         });
-    }
-
-    private void screenLockOff() {
-        Window wind = getWindow();
-        wind.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
-        wind.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-        wind.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
     }
 
     private AlertDialog logoutDialog(){

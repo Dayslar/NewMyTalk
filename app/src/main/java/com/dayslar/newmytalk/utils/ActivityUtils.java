@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.view.Window;
+import android.view.WindowManager;
 
 public class ActivityUtils {
 
@@ -26,5 +28,12 @@ public class ActivityUtils {
         activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         context.startActivity(activityIntent);
+    }
+
+    public static void screenLockOff(Activity activity) {
+        Window wind = activity.getWindow();
+        wind.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+        wind.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+        wind.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
     }
 }
