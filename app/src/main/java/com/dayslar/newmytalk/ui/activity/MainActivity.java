@@ -164,9 +164,9 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
 
-                    case R.id.account_logout:
-                        logoutDialog().show();
-                        break;
+//                    case R.id.account_logout:
+//                        logoutDialog().show();
+//                        break;
                 }
                 return false;
             }

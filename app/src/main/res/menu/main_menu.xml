@@ -5,9 +5,9 @@
         android:id="@+id/setting"
         android:title="@string/app_setting" />
 
-    <item
-        android:id="@+id/account_logout"
-        android:title="@string/account_logout" />
+    <!--<item-->
+        <!--android:id="@+id/account_logout"-->
+        <!--android:title="@string/account_logout" />-->
 
     <!--<item-->
         <!--android:id="@+id/record"-->
