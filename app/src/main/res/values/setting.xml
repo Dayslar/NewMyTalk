@@ -43,12 +43,14 @@
     <string name="etSettingIpTitle">IP адресс</string>
     <string name="etSettingIpSummary">Адрес сервера</string>
     <string name="etSettingIpDependency">@string/chUnLoadRecordKey</string>
+    <string name="etSettingIpDefault">87.252.238.185</string>
 
     <!-- для порта -->
     <string name="etSettingPortKey">etSettingPort</string>
     <string name="etSettingPortTitle">Порт</string>
     <string name="etSettingPortSummary">Укажите порт</string>
     <string name="etSettingPortDependency">@string/chUnLoadRecordKey</string>
+    <string name="etSettingPortDefault">7878</string>
 
     <!--Каналы записи-->
     <string name="channelRecordingKey">chanelRecordKey</string>

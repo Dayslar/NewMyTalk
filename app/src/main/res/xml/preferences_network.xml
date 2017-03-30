@@ -7,12 +7,12 @@
             android:key="@string/etSettingIpKey"
             android:title="@string/etSettingIpTitle"
             android:summary="@string/etSettingIpSummary"
-            android:defaultValue="192.168.21.112" />
+            android:defaultValue="@string/etSettingIpDefault" />
         <EditTextPreference
             android:key="@string/etSettingPortKey"
             android:title="@string/etSettingPortTitle"
             android:summary="@string/etSettingPortSummary"
-            android:defaultValue="8080"
+            android:defaultValue="@string/etSettingPortDefault"
             android:maxLength="6"
             android:inputType="number"
             android:numeric="integer" />
