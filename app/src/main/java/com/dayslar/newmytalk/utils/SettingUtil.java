@@ -47,8 +47,8 @@ public class SettingUtil {
                 .setAdminActive(preferences.getBoolean(resources.getString(R.string.chAdminKey), false))
                 .setUnloadActive(preferences.getBoolean(resources.getString(R.string.chUnLoadRecordKey), false))
                 .setDelay(Integer.parseInt(preferences.getString(resources.getString(R.string.etDelayRecordIsCallKey), "10")))
-                .setServerIp(preferences.getString(resources.getString(R.string.etSettingIpKey), "192.168.21.112"))
-                .setServerPort(preferences.getString(resources.getString(R.string.etSettingPortKey), "8080"));
+                .setServerIp(preferences.getString(resources.getString(R.string.etSettingIpKey), "87.252.238.185"))
+                .setServerPort(preferences.getString(resources.getString(R.string.etSettingPortKey), "7878"));
     }
 
     public void loadSettingForPlayer() {
