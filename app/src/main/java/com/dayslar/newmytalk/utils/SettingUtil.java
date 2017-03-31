@@ -1,13 +1,13 @@
 package com.dayslar.newmytalk.utils;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.media.MediaRecorder;
-import android.preference.PreferenceManager;
+        import android.content.Context;
+        import android.content.SharedPreferences;
+        import android.content.res.Resources;
+        import android.media.MediaRecorder;
+        import android.preference.PreferenceManager;
 
-import com.dayslar.newmytalk.R;
-import com.dayslar.newmytalk.utils.entity.Setting;
+        import com.dayslar.newmytalk.R;
+        import com.dayslar.newmytalk.utils.entity.Setting;
 
 public class SettingUtil {
 
