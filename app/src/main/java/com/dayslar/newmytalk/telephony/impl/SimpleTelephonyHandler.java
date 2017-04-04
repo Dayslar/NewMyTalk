@@ -2,8 +2,7 @@ package com.dayslar.newmytalk.telephony.impl;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Binder;
-import android.os.IBinder;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.KeyEvent;
 
@@ -182,33 +181,18 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
         MyLogger.printDebug(SimpleTelephonyHandler.class, "Сбрасываем звонок");
         TelephonyStateDao stateDao = SqlTelephonyStateDao.getInstance(context);
 
-        if (stateDao.getTelephonyState().getState().equals(TelephonyState.State.RECORDING)){
+        if (stateDao.getTelephonyState().getState().equals(TelephonyState.State.RINGING)){
             stateDao.setTelephonyState(new TelephonyState().setState(TelephonyState.State.NOT_RINGING));
             try {
-                String serviceManagerName = "android.os.ServiceManager";
-                String serviceManagerNativeName = "android.os.ServiceManagerNative";
-                String telephonyName = "com.android.internal.telephony.ITelephony";
-                Class<?> telephonyClass;
-                Class<?> telephonyStubClass;
-                Class<?> serviceManagerClass;
-                Class<?> serviceManagerNativeClass;
-                Method telephonyEndCall;
-                Object telephonyObject;
-                Object serviceManagerObject;
-                telephonyClass = Class.forName(telephonyName);
-                telephonyStubClass = telephonyClass.getClasses()[0];
-                serviceManagerClass = Class.forName(serviceManagerName);
-                serviceManagerNativeClass = Class.forName(serviceManagerNativeName);
-                Method getService = serviceManagerClass.getMethod("getService", String.class);
-                Method tempInterfaceMethod = serviceManagerNativeClass.getMethod("asInterface", IBinder.class);
-                Binder tmpBinder = new Binder();
-                tmpBinder.attachInterface(null, "fake");
-                serviceManagerObject = tempInterfaceMethod.invoke(null, tmpBinder);
-                IBinder rebind = (IBinder) getService.invoke(serviceManagerObject, "phone");
-                Method serviceMethod = telephonyStubClass.getMethod("asInterface", IBinder.class);
-                telephonyObject = serviceMethod.invoke(null, rebind);
-                telephonyEndCall = telephonyClass.getMethod("endCall");
-                telephonyEndCall.invoke(telephonyObject);
+                TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+                Class classTelephony = Class.forName(telephonyManager.getClass().getName());
+                Method methodGetITelephony = classTelephony.getDeclaredMethod("getITelephony");
+                methodGetITelephony.setAccessible(true);
+                Object telephonyInterface = methodGetITelephony.invoke(telephonyManager);
+                Class telephonyInterfaceClass = Class.forName(telephonyInterface.getClass().getName());
+                Method methodEndCall = telephonyInterfaceClass.getDeclaredMethod("endCall");
+                methodEndCall.invoke(telephonyInterface);
+
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.e("RECORD_ERROR", e.toString());
