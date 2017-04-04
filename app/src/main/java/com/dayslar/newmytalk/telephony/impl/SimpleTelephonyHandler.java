@@ -180,8 +180,9 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
     public static void endCall(Context context) {
         MyLogger.printDebug(SimpleTelephonyHandler.class, "Сбрасываем звонок");
         TelephonyStateDao stateDao = SqlTelephonyStateDao.getInstance(context);
+        String state = stateDao.getTelephonyState().getState();
 
-        if (stateDao.getTelephonyState().getState().equals(TelephonyState.State.RINGING)){
+        if (state.equals(TelephonyState.State.RINGING) || state.equals(TelephonyState.State.RECORDING)){
             stateDao.setTelephonyState(new TelephonyState().setState(TelephonyState.State.NOT_RINGING));
             try {
                 TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
