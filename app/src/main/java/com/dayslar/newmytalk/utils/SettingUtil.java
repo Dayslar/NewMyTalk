@@ -1,6 +1,6 @@
 package com.dayslar.newmytalk.utils;
 
-        import android.content.Context;
+import android.content.Context;
         import android.content.SharedPreferences;
         import android.content.res.Resources;
         import android.media.MediaRecorder;

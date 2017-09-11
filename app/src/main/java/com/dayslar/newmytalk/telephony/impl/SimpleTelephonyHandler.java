@@ -121,9 +121,11 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
         stateDao.setTelephonyState(new TelephonyState().setState(TelephonyState.State.NOT_RINGING));
 
         recorder.stopRecord();
-        record.setEndRecord(System.currentTimeMillis());
 
-        recordDao.update(record);
+        if (record != null){
+            record.setEndRecord(System.currentTimeMillis());
+            recordDao.update(record);
+        }
 
         record = null;
 
