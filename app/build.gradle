@@ -11,8 +11,8 @@ android {
         applicationId "com.dayslar.newmytalk"
         minSdkVersion 17
         targetSdkVersion 26
-        versionCode 8
-        versionName "1.08"
+        versionCode 9
+        versionName "1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
