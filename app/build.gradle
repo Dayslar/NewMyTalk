@@ -2,15 +2,15 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '25.0.0'
+    compileSdkVersion 26
+    buildToolsVersion '25.0.2'
 
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
         applicationId "com.dayslar.newmytalk"
         minSdkVersion 17
-        targetSdkVersion 23
+        targetSdkVersion 26
         versionCode 8
         versionName "1.08"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -34,9 +34,10 @@ android {
     }
 }
 
-def aa_version = '4.0.0'
 def retrofit_version = '2.1.0'
-def project_version = '23.4.0'
+def aa_version = '4.3.1'
+def project_version = '26.0.2'
+def pin_lock_view_version = '1.0.0'
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -51,13 +52,15 @@ dependencies {
     compile "com.squareup.retrofit2:retrofit:$retrofit_version"
     compile "com.squareup.retrofit2:converter-jackson:$retrofit_version"
 
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     apt "org.androidannotations:androidannotations:$aa_version"
     compile "org.androidannotations:androidannotations-api:$aa_version"
-    compile 'com.andrognito.pinlockview:pinlockview:1.0.0'
+    compile "com.andrognito.pinlockview:pinlockview:$pin_lock_view_version"
 
     compile group: 'commons-io', name: 'commons-io', version: '2.4'
 
     testCompile 'junit:junit:4.12'
+    debugCompile 'com.amitshekhar.android:debug-db:1.0.1'
 }
 
 

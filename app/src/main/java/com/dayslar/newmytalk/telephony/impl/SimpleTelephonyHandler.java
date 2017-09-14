@@ -1,7 +1,14 @@
 package com.dayslar.newmytalk.telephony.impl;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.media.session.MediaController;
+import android.media.session.MediaSessionManager;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -18,6 +25,7 @@ import com.dayslar.newmytalk.db.interfaces.dao.TelephonyStateDao;
 import com.dayslar.newmytalk.recorder.impl.SimpleMediaRecorder;
 import com.dayslar.newmytalk.recorder.interfaces.Recorder;
 import com.dayslar.newmytalk.services.UnloadService;
+import com.dayslar.newmytalk.services.NotificationCall;
 import com.dayslar.newmytalk.telephony.interfaces.TelephonyHandler;
 import com.dayslar.newmytalk.ui.activity.MainActivity_;
 import com.dayslar.newmytalk.utils.ActivityUtils;
@@ -87,12 +95,12 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
         recordDao.update(record);
 
         stateDao.setTelephonyState(new TelephonyState()
-                        .setState(TelephonyState.State.RINGING)
-                        .setRecordId(record.getId())
+                .setState(TelephonyState.State.RINGING)
+                .setRecordId(record.getId())
         );
 
         if(settingUtil.getSetting().isManagerActive())
-            ActivityUtils.startActivityUseHandler(context, MainActivity_.class, 500);
+            ActivityUtils.startActivityUseHandler(context, MainActivity_.class, 1000);
     }
 
     @Override
@@ -163,20 +171,10 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
         MyLogger.printDebug(SimpleTelephonyHandler.class, "На звонок ответили");
         TelephonyStateDao stateDao = SqlTelephonyStateDao.getInstance(context);
 
-        if (stateDao.getTelephonyState().getState().equals(TelephonyState.State.RINGING)){
-            try {
-                stateDao.setTelephonyState(new TelephonyState().setState(TelephonyState.State.RECORDING));
-                Runtime.getRuntime().exec("input keyevent " + Integer.toString(KeyEvent.KEYCODE_HEADSETHOOK));
-
-            } catch (IOException e) {
-                String enforcedPerm = "android.permission.CALL_PRIVILEGED";
-                Intent btnDown = new Intent(Intent.ACTION_MEDIA_BUTTON).putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_HEADSETHOOK));
-                Intent btnUp = new Intent(Intent.ACTION_MEDIA_BUTTON).putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_HEADSETHOOK));
-
-                context.sendOrderedBroadcast(btnDown, enforcedPerm);
-                context.sendOrderedBroadcast(btnUp, enforcedPerm);
-            }
-        }
+        if (Build.VERSION.SDK_INT >= 21)
+            answerCallNewVersions(context, stateDao);
+        else
+            answerCallOldVersions(context, stateDao);
     }
 
     public static void endCall(Context context) {
@@ -199,6 +197,43 @@ public class SimpleTelephonyHandler implements TelephonyHandler {
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.e("RECORD_ERROR", e.toString());
+            }
+        }
+    }
+
+    //new answer functions
+    private static void answerCallOldVersions(Context context, TelephonyStateDao stateDao){
+        if (stateDao.getTelephonyState().getState().equals(TelephonyState.State.RINGING)){
+            try {
+                stateDao.setTelephonyState(new TelephonyState().setState(TelephonyState.State.RECORDING));
+                Runtime.getRuntime().exec("input keyevent " + Integer.toString(KeyEvent.KEYCODE_HEADSETHOOK));
+
+            } catch (IOException e) {
+                String enforcedPerm = "android.permission.CALL_PRIVILEGED";
+                Intent btnDown = new Intent(Intent.ACTION_MEDIA_BUTTON).putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_HEADSETHOOK));
+                Intent btnUp = new Intent(Intent.ACTION_MEDIA_BUTTON).putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_HEADSETHOOK));
+
+                context.sendOrderedBroadcast(btnDown, enforcedPerm);
+                context.sendOrderedBroadcast(btnUp, enforcedPerm);
+            }
+        }
+    }
+
+    @SuppressLint("WrongConstant")
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+    private static void answerCallNewVersions(Context context, TelephonyStateDao stateDao){
+        if (stateDao.getTelephonyState().getState().equals(TelephonyState.State.RINGING)){
+            try {
+                stateDao.setTelephonyState(new TelephonyState().setState(TelephonyState.State.RECORDING));
+                for (MediaController mediaController : ((MediaSessionManager) context.getSystemService("media_session")).getActiveSessions(new ComponentName(context, NotificationCall.class))) {
+                    if ("com.android.server.telecom".equals(mediaController.getPackageName())) {
+                        mediaController.dispatchMediaButtonEvent(new KeyEvent(1, 79));
+                        return;
+                    }
+                }
+            } catch (SecurityException e2) {
+                e2.printStackTrace();
             }
         }
     }
