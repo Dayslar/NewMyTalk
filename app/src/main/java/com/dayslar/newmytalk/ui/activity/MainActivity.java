@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -212,11 +213,13 @@ public class MainActivity extends AppCompatActivity {
         if (permissionsList.size() > 0)
             ActivityCompat.requestPermissions(this, permissionsList.toArray(new String[]{}), 99);
 
-        if (!Settings.Secure.getString(getContentResolver(), "enabled_notification_listeners").contains(getApplicationContext().getPackageName()))
-        {
-            Intent i = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(i);
+        if (Build.VERSION.SDK_INT >= 21){
+            if (!Settings.Secure.getString(getContentResolver(), "enabled_notification_listeners").contains(getApplicationContext().getPackageName()))
+            {
+                Intent i = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+            }
         }
     }
 
