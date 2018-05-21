@@ -43,7 +43,6 @@ import com.dayslar.newmytalk.ui.decorator.GridSpacingDecorator;
 import com.dayslar.newmytalk.utils.ActivityUtils;
 import com.dayslar.newmytalk.utils.MyLogger;
 import com.dayslar.newmytalk.utils.ServiceUtils;
-import com.idescout.sql.SqlScoutServer;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -83,8 +82,6 @@ public class MainActivity extends AppCompatActivity {
 
         initViews();
         initCallState();
-
-        SqlScoutServer.create(context, getPackageName());
     }
 
     @Override
