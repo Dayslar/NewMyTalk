@@ -7,8 +7,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0-beta5'
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        classpath 'com.android.tools.build:gradle:3.2.0-alpha06'
     }
 }
 
@@ -18,7 +17,8 @@ allprojects {
         google()
         mavenCentral()
         mavenLocal()
-}
+        maven { url 'http://www.idescout.com/maven/repo/' }
+    }
 }
 
 task clean(type: Delete) {

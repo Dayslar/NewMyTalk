@@ -1,16 +1,15 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '25.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
 
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
         applicationId "com.dayslar.newmytalk"
         minSdkVersion 17
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 10
         versionName "1.2.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -32,35 +31,34 @@ android {
         exclude 'META-INF/notice.txt'
         exclude 'META-INF/ASL2.0'
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+    }
 }
 
 def retrofit_version = '2.1.0'
 def aa_version = '4.3.1'
-def project_version = '26.0.2'
+def project_version = '27.1.1'
 def pin_lock_view_version = '1.0.0'
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compile "com.android.support:appcompat-v7:$project_version"
-    compile "com.android.support:cardview-v7:$project_version"
-    compile "com.android.support:recyclerview-v7:$project_version"
-    compile "com.android.support:design:$project_version"
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {})
+    implementation 'commons-io:commons-io:2.4'
+    implementation "com.android.support:appcompat-v7:$project_version"
+    implementation "com.android.support:cardview-v7:$project_version"
+    implementation "com.android.support:recyclerview-v7:$project_version"
+    implementation "com.android.support:design:$project_version"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-jackson:$retrofit_version"
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor "org.androidannotations:androidannotations:$aa_version"
+    implementation "org.androidannotations:androidannotations-api:$aa_version"
+    implementation "com.andrognito.pinlockview:pinlockview:$pin_lock_view_version"
+    testImplementation 'junit:junit:4.12'
 
-    compile "com.squareup.retrofit2:retrofit:$retrofit_version"
-    compile "com.squareup.retrofit2:converter-jackson:$retrofit_version"
-
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
-    apt "org.androidannotations:androidannotations:$aa_version"
-    compile "org.androidannotations:androidannotations-api:$aa_version"
-    compile "com.andrognito.pinlockview:pinlockview:$pin_lock_view_version"
-
-    compile group: 'commons-io', name: 'commons-io', version: '2.4'
-
-    testCompile 'junit:junit:4.12'
-    debugCompile 'com.amitshekhar.android:debug-db:1.0.1'
+    debugImplementation 'com.idescout.sql:sqlscout-server:4.0'
 }
 
 

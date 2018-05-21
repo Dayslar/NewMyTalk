@@ -2,19 +2,15 @@ package com.dayslar.newmytalk.ui.activity;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
@@ -32,7 +28,6 @@ import com.dayslar.newmytalk.db.entity.TelephonyState;
 import com.dayslar.newmytalk.db.impl.SqlManagerDao;
 import com.dayslar.newmytalk.db.impl.SqlRecordDao;
 import com.dayslar.newmytalk.db.impl.SqlTelephonyStateDao;
-import com.dayslar.newmytalk.db.impl.SqlTokenDao;
 import com.dayslar.newmytalk.db.interfaces.dao.ManagerDao;
 import com.dayslar.newmytalk.db.interfaces.dao.RecordDao;
 import com.dayslar.newmytalk.db.interfaces.dao.TelephonyStateDao;
@@ -48,6 +43,7 @@ import com.dayslar.newmytalk.ui.decorator.GridSpacingDecorator;
 import com.dayslar.newmytalk.utils.ActivityUtils;
 import com.dayslar.newmytalk.utils.MyLogger;
 import com.dayslar.newmytalk.utils.ServiceUtils;
+import com.idescout.sql.SqlScoutServer;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -55,6 +51,7 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @EActivity(R.layout.main_activity)
 public class MainActivity extends AppCompatActivity {
@@ -86,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
 
         initViews();
         initCallState();
+
+        SqlScoutServer.create(context, getPackageName());
     }
 
     @Override
@@ -143,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         };
     }
 
-    //init views
+
     private void initViews() {
         initRecycleView();
         initToolbar();
@@ -151,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
         initPermissions();
         initTvEndCall();
     }
-
     private void initToolbar() {
         toolbar.setLogo(R.mipmap.ic_launcher);
         toolbar.setSubtitle(R.string.app_name);
@@ -165,10 +163,6 @@ public class MainActivity extends AppCompatActivity {
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                         startActivity(intent);
                         break;
-
-//                    case R.id.account_logout:
-//                        logoutDialog().show();
-//                        break;
                 }
                 return false;
             }
@@ -176,14 +170,12 @@ public class MainActivity extends AppCompatActivity {
 
         toolbar.inflateMenu(R.menu.main_menu);
     }
-
     private void initRecycleView() {
         GridLayoutManager glm = new GridLayoutManager(this, 3);
         recyclerView.setLayoutManager(glm);
         recyclerView.addItemDecoration(new GridSpacingDecorator(-5));
         recyclerView.setAdapter(new ManagerAdapter(managerDao.getManagers(), getManagerAdapterCallback()));
     }
-
     private void initFab() {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,7 +187,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void initPermissions() {
-
         ArrayList<String> permissionsList = new ArrayList<>();
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED)
@@ -214,7 +205,9 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, permissionsList.toArray(new String[]{}), 99);
 
         if (Build.VERSION.SDK_INT >= 21){
-            if (!Settings.Secure.getString(getContentResolver(), "enabled_notification_listeners").contains(getApplicationContext().getPackageName()))
+            Set<String> packageNames = NotificationManagerCompat.getEnabledListenerPackages (context);
+            System.out.println(packageNames);
+            if (!packageNames.contains(getApplicationContext().getPackageName()))
             {
                 Intent i = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -222,7 +215,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
     private void initCallState() {
         state = stateDao.getTelephonyState();
         switch (state.getState()){
@@ -246,7 +238,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
-
     private void initTvEndCall() {
         tvEndCall.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -276,36 +267,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-    private AlertDialog logoutDialog(){
-        return new AlertDialog.Builder(this, R.style.AlertDialogCustomLight)
-                .setMessage(getString(R.string.logout_message))
-                .setPositiveButton(getString(R.string.btnDialogYes), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        SqlTokenDao.getInstance(context).delete();
-                        SqlManagerDao.getInstance(context).deleteAll();
-                        SqlRecordDao.getInstance(context).deleteAll();
-
-                        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-                        SharedPreferences.Editor editor = pref.edit();
-
-                        editor.putBoolean(getString(R.string.chActiveRecordKey), false);
-                        editor.apply();
-
-                        ServiceUtils.sendTelephoneService(context, TelephoneConfig.STATE_EXIT_SERVICE);
-
-                        finish();
-
-                    }
-                })
-                .setNegativeButton(getString(R.string.btnDialogNo), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                })
-                .create();
-    }
-
 }
