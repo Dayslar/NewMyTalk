@@ -17,7 +17,8 @@ allprojects {
         google()
         mavenCentral()
         mavenLocal()
-        maven { url 'http://www.idescout.com/maven/repo/' }
+        maven {url 'http://www.idescout.com/maven/repo/'}
+        maven  {url "http://dl.bintray.com/euzee/Libs"}
     }
 }
 

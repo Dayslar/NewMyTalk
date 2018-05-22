@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -50,7 +49,6 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @EActivity(R.layout.main_activity)
 public class MainActivity extends AppCompatActivity {
@@ -201,15 +199,11 @@ public class MainActivity extends AppCompatActivity {
         if (permissionsList.size() > 0)
             ActivityCompat.requestPermissions(this, permissionsList.toArray(new String[]{}), 99);
 
-        if (Build.VERSION.SDK_INT >= 21){
-            Set<String> packageNames = NotificationManagerCompat.getEnabledListenerPackages (context);
-            System.out.println(packageNames);
-            if (!packageNames.contains(getApplicationContext().getPackageName()))
-            {
-                Intent i = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(i);
-            }
+        if (!NotificationManagerCompat.from(context).areNotificationsEnabled())
+        {
+            Intent i = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(i);
         }
     }
     private void initCallState() {
