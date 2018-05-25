@@ -13,5 +13,6 @@ public interface RecordDao {
     void deleteAll();
 
     Record get(long id);
+    Record last();
     List<Record> getRecords();
 }

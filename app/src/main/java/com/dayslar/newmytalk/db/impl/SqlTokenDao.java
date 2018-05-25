@@ -11,7 +11,6 @@ import com.dayslar.newmytalk.db.config.DbConfig;
 import com.dayslar.newmytalk.db.config.TokenTableConfig;
 import com.dayslar.newmytalk.db.entity.Token;
 import com.dayslar.newmytalk.db.interfaces.dao.TokenDao;
-import com.dayslar.newmytalk.utils.MyLogger;
 
 public class SqlTokenDao implements TokenDao {
 
@@ -47,10 +46,7 @@ public class SqlTokenDao implements TokenDao {
         cv.put(TokenTableConfig.SCOPE, token.getScope());
         cv.put(TokenTableConfig.TOKEN_TYPE, token.getToken_type());
 
-        long id = database.insert(DbConfig.TOKEN_TABLE_NAME, null, cv);
-        MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Запись успешно добавлена " + id);
-
-        return id;
+        return database.insert(DbConfig.TOKEN_TABLE_NAME, null, cv);
     }
 
     @Override
@@ -63,10 +59,7 @@ public class SqlTokenDao implements TokenDao {
         cv.put(TokenTableConfig.SCOPE, token.getScope());
         cv.put(TokenTableConfig.TOKEN_TYPE, token.getToken_type());
 
-        int id = database.update(DbConfig.TOKEN_TABLE_NAME, cv, TokenTableConfig.REFRESH_TOKEN  + "= ?", new String[]{token.getRefresh_token()});
-        MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Запись успешно добавлена " + id);
-
-        return id;
+        return database.update(DbConfig.TOKEN_TABLE_NAME, cv, TokenTableConfig.REFRESH_TOKEN  + "= ?", new String[]{token.getRefresh_token()});
     }
 
     @Override

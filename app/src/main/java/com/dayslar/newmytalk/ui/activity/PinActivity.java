@@ -16,7 +16,6 @@ import com.dayslar.newmytalk.db.interfaces.dao.TokenDao;
 import com.dayslar.newmytalk.network.service.RetrofitService;
 import com.dayslar.newmytalk.network.utils.http.code.impls.Http503Message;
 import com.dayslar.newmytalk.utils.entity.LockKey;
-import com.dayslar.newmytalk.utils.MyLogger;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -49,8 +48,8 @@ public class PinActivity extends AppCompatActivity {
 
     private void initializePinView() {
 
-        pinLockView = (PinLockView) findViewById(R.id.pin_lock_view);
-        indicatorDots = (IndicatorDots) findViewById(R.id.indicator_dots);
+        pinLockView =  findViewById(R.id.pin_lock_view);
+        indicatorDots = findViewById(R.id.indicator_dots);
 
         pinLockView.attachIndicatorDots(indicatorDots);
         pinLockView.setPinLockListener(initPinLockListener());
@@ -64,9 +63,6 @@ public class PinActivity extends AppCompatActivity {
 
             @Override
             public void onComplete(final String pin) {
-
-                MyLogger.printDebug(this.getClass(), pin);
-
                 Snackbar.make(pinLockView, "Началась проверка данных ожидайте", Snackbar.LENGTH_INDEFINITE);
                 Token token = tokenDao.get();
 

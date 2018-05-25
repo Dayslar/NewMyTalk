@@ -1,6 +1,5 @@
 package com.dayslar.newmytalk.services;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -10,9 +9,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.content.LocalBroadcastManager;
 
 
-
-@SuppressLint({"OverrideAbstract", "Registered"})
-@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class NotificationCall extends NotificationListenerService {
 
     static StatusBarNotification mysbn;

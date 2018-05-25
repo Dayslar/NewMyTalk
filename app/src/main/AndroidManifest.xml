@@ -15,36 +15,22 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
         <activity android:name=".ui.activity.MainActivity_"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-
         <activity android:name=".ui.activity.RegisterActivity_"
             android:screenOrientation="portrait"/>
-
         <activity android:name=".ui.activity.SettingActivity_"
             android:screenOrientation="portrait"/>
-
         <activity android:name=".ui.activity.PinActivity_"
             android:noHistory="true"
             android:screenOrientation="portrait"/>
-
         <activity android:name=".ui.activity.DialogActivity_"
             android:noHistory="true"
             android:screenOrientation="portrait"/>
 
         <!--Ресиверы-->
-        <receiver android:name=".receivers.TelephoneReceiver"
-            android:enabled="true">
-            <intent-filter>
-                <action android:name="android.intent.action.PHONE_STATE"/>
-                <action android:name="android.intent.action.NEW_OUTGOING_CALL"/>
-            </intent-filter>
-
-        </receiver>
-
-        <receiver android:name="com.dayslar.newmytalk.receivers.AdminReceiver"
+        <receiver android:name=".receivers.AdminReceiver"
             android:description="@string/app_admin_receiver_description"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_DEVICE_ADMIN" >
@@ -57,17 +43,24 @@
                 <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".receivers.BootReceiver"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
 
-        <!--Службы-->
-        <service android:name=".services.TelephonyService"
-            android:process=":telephony" />
-
-        <!--Службы-->
+        <service android:name=".services.TalkForegroundService"
+            android:enabled="true"
+            android:exported="true"  />
         <service android:name=".services.UnloadService"
-            android:process=":unload" />
-
-        <!--Службы-->
-        <service android:name=".services.NotificationCall"
+            android:enabled="true"
+            android:exported="true"  />
+        <service android:name=".services.NotificationCall" android:exported="true" android:enabled="true"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
             <intent-filter>
                 <action android:name="android.service.notification.NotificationListenerService" />
@@ -88,6 +81,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" />
 
 </manifest>

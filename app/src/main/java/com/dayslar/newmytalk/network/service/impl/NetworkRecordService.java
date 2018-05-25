@@ -12,7 +12,6 @@ import com.dayslar.newmytalk.network.api.RecordApi;
 import com.dayslar.newmytalk.network.service.RetrofitService;
 import com.dayslar.newmytalk.network.service.interfaces.RecordService;
 import com.dayslar.newmytalk.utils.MyFileUtils;
-import com.dayslar.newmytalk.utils.MyLogger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -45,16 +44,12 @@ public class NetworkRecordService implements RecordService {
         recordApi.sendRecord(token.getAccess_token(), record).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                MyLogger.printDebug(this.getClass(), "RECORD FILE TRANSFER SUCCESS CODE: " + response.code());
-
                 if (response.code() == 200)
                     RecordDao.delete(record);
-
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                MyLogger.printDebug(this.getClass(), "RECORD FILE TRANSFER FAILURE: " + t.getMessage());
             }
         });
     }
@@ -80,14 +75,12 @@ public class NetworkRecordService implements RecordService {
         recordApi.sendRecordAndFile(token.getAccess_token(), recordData, body).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                MyLogger.printDebug(this.getClass(), "RECORD FILE TRANSFER SUCCESS CODE: " + response.code());
                 if (response.code() == 200)
                     RecordDao.delete(record);
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                MyLogger.printDebug(this.getClass(), "RECORD FILE TRANSFER FAILURE: " + t.getMessage());
             }
         });
     }

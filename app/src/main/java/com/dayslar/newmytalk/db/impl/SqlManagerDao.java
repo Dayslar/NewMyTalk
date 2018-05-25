@@ -9,7 +9,6 @@ import com.dayslar.newmytalk.db.DataBaseController;
 import com.dayslar.newmytalk.db.config.DbConfig;
 import com.dayslar.newmytalk.db.entity.Manager;
 import com.dayslar.newmytalk.db.interfaces.dao.ManagerDao;
-import com.dayslar.newmytalk.utils.MyLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +39,6 @@ public class SqlManagerDao implements ManagerDao {
     @Override
     public long insert(Manager manager) {
         long id = database.insert(DbConfig.MANAGER_TABLE_NAME, null, cursorUtils.getCvForManager(manager));
-        MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Запись успешно добавлена " + id);
-
         return id;
     }
 
@@ -57,14 +54,12 @@ public class SqlManagerDao implements ManagerDao {
     @Override
     public void delete(long id) {
         database.delete(DbConfig.MANAGER_TABLE_NAME, DbConfig.COLUMN_ID + "=" + id, null);
-        MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Запись с " + DbConfig.COLUMN_ID + " = " + id + " успешно удалена");
     }
 
 
     @Override
     public void deleteAll() {
         database.delete(DbConfig.MANAGER_TABLE_NAME, null, null);
-        MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Все записи из таблицы менеджеров удалены");
     }
 
     @Override
@@ -77,9 +72,6 @@ public class SqlManagerDao implements ManagerDao {
         }
 
         cursor.close();
-
-        MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Получена запись" + manager);
-
         return manager;
 
     }

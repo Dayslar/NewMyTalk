@@ -17,7 +17,6 @@ import com.dayslar.newmytalk.network.service.interfaces.TokenService;
 import com.dayslar.newmytalk.network.utils.http.code.HttpMessageSelector;
 import com.dayslar.newmytalk.network.utils.http.code.impls.Http401Message;
 import com.dayslar.newmytalk.network.utils.http.code.interfaces.HttpMessage;
-import com.dayslar.newmytalk.utils.MyLogger;
 
 import java.util.List;
 
@@ -54,8 +53,6 @@ public class NetworkManagerService implements ManagerService {
 
             @Override
             public void onResponse(Call<List<Manager>> call, Response<List<Manager>> response) {
-                MyLogger.printDebug(this.getClass(), "Запрос отработал успешно");
-
                 if (response.body() == null){
                     HttpMessage message = messageSelector.getMessage(response.code());
                     if (message instanceof Http401Message)
@@ -88,7 +85,6 @@ public class NetworkManagerService implements ManagerService {
 
             @Override
             public void onFailure(Call<List<Manager>> call, Throwable t) {
-                MyLogger.printDebug(this.getClass(), "Не удалось подключиться к серверу");
                 callback.onFailure(messageSelector.getMessage(503));
             }
         });

@@ -61,9 +61,7 @@ public class DialogActivity extends AppCompatActivity {
     }
 
     private void initToolbar() {
-        TelephonyState telephonyState = stateDao.getTelephonyState();
-        Record record = recordDao.get(telephonyState.getRecordId());
-
+        Record record = recordDao.last();
         initToolbarData(record);
     }
 

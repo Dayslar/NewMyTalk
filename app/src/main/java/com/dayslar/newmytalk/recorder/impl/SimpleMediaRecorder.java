@@ -5,7 +5,6 @@ import android.media.MediaRecorder;
 
 import com.dayslar.newmytalk.recorder.interfaces.Recorder;
 import com.dayslar.newmytalk.utils.MyFileUtils;
-import com.dayslar.newmytalk.utils.MyLogger;
 import com.dayslar.newmytalk.utils.SettingUtil;
 
 import java.io.IOException;
@@ -45,11 +44,8 @@ public class SimpleMediaRecorder implements Recorder {
         if (!isRecording){
             try {
                 startRecorder(outputFile);
-                MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Запись запущена");
-
             } catch (IOException e) {
                 e.printStackTrace();
-                MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Произошла ошибка инициализации рекордера: " + e.getMessage());
             }
         }
     }
@@ -59,9 +55,7 @@ public class SimpleMediaRecorder implements Recorder {
         if (isRecording && mediaRecorder != null) {
             stopRecorder();
         }
-
         isRecording = false;
-        MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Запись остановлена");
     }
 
 
@@ -90,9 +84,8 @@ public class SimpleMediaRecorder implements Recorder {
             mediaRecorder.stop();
             mediaRecorder.release();
             mediaRecorder = null;
-        } catch (RuntimeException e){
-            MyLogger.printDebug(this.getClass(), "Ошибка остановки записи: SimpleMediaRecorder - line 94");
         }
+        catch (RuntimeException ignored){ }
 
     }
 

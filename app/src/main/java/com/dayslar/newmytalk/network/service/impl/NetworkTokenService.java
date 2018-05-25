@@ -11,7 +11,6 @@ import com.dayslar.newmytalk.network.calback.RetrofitCallback;
 import com.dayslar.newmytalk.network.service.RetrofitService;
 import com.dayslar.newmytalk.network.service.interfaces.TokenService;
 import com.dayslar.newmytalk.network.utils.http.code.HttpMessageSelector;
-import com.dayslar.newmytalk.utils.MyLogger;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,8 +38,6 @@ public class NetworkTokenService implements TokenService {
         call.enqueue(new Callback<Token>() {
             @Override
             public void onResponse(Call<Token> call, Response<Token> response) {
-                MyLogger.printDebug(this.getClass(), "Получили ответ");
-
                 if (response.body() == null) callback.onFailure(messageSelector.getMessage(response.code()));
                 else {
                     TokenDao.delete();
@@ -52,7 +49,6 @@ public class NetworkTokenService implements TokenService {
 
             @Override
             public void onFailure(Call<Token> call, Throwable t) {
-                MyLogger.printDebug(this.getClass(), "Не достучались до сервера");
                 callback.onFailure(messageSelector.getMessage(503));
             }
         });
@@ -63,12 +59,10 @@ public class NetworkTokenService implements TokenService {
         Call<Token> call = tokenApi.getTokenByRefresh(TokenConfig.CLIENT_ID, TokenConfig.CLIENT_SECRET, TokenConfig.GrandType.REFRESH_TOKEN, refreshToken);
 
         callback.onProcess();
-
         call.enqueue(new Callback<Token>() {
 
             @Override
             public void onResponse(Call<Token> call, Response<Token> response) {
-                MyLogger.printDebug(this.getClass(), "Получили ответ");
                 if (response.body() == null) callback.onFailure(messageSelector.getMessage(response.code()));
                 else {
                     TokenDao.update(response.body());

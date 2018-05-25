@@ -3,7 +3,6 @@ package com.dayslar.newmytalk;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.dayslar.newmytalk.utils.MyFileUtils;
-import com.dayslar.newmytalk.utils.MyLogger;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
@@ -17,7 +16,7 @@ public class DirectoryTest {
 
     @Test
     public void deleteFile() throws InterruptedException {
-        MyLogger.printDebug(this.getClass(), FileUtils.deleteQuietly(new File(MyFileUtils.getFolder() + "1.txt")) + "");
+        FileUtils.deleteQuietly(new File(MyFileUtils.getFolder() + "1.txt"));
 
     }
 

@@ -1,15 +1,11 @@
 package com.dayslar.newmytalk.ui.activity;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
+import android.os.Build;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationManagerCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
@@ -18,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dayslar.newmytalk.R;
 import com.dayslar.newmytalk.db.entity.Manager;
@@ -34,20 +29,18 @@ import com.dayslar.newmytalk.network.calback.RetrofitCallback;
 import com.dayslar.newmytalk.network.service.impl.NetworkManagerService;
 import com.dayslar.newmytalk.network.service.interfaces.ManagerService;
 import com.dayslar.newmytalk.network.utils.http.code.interfaces.HttpMessage;
-import com.dayslar.newmytalk.telephony.TelephoneConfig;
+import com.dayslar.newmytalk.services.TalkForegroundService;
 import com.dayslar.newmytalk.telephony.impl.SimpleTelephonyHandler;
 import com.dayslar.newmytalk.ui.adapter.AdapterCallback;
 import com.dayslar.newmytalk.ui.adapter.ManagerAdapter;
 import com.dayslar.newmytalk.ui.decorator.GridSpacingDecorator;
 import com.dayslar.newmytalk.utils.ActivityUtils;
-import com.dayslar.newmytalk.utils.MyLogger;
-import com.dayslar.newmytalk.utils.ServiceUtils;
+import com.dayslar.newmytalk.utils.PermissionUtil;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @EActivity(R.layout.main_activity)
@@ -66,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private RecordDao recordDao;
     private ManagerService managerService;
     private Snackbar snackbar;
+    private PermissionUtil permissionUtil;
 
     private Context context;
     private TelephonyState state;
@@ -77,9 +71,14 @@ public class MainActivity extends AppCompatActivity {
         recordDao = SqlRecordDao.getInstance(this);
         managerService = new NetworkManagerService(this);
         stateDao = SqlTelephonyStateDao.getInstance(this);
+        permissionUtil = new PermissionUtil();
 
         initViews();
         initCallState();
+        TalkForegroundService.start(this);
+        initNotificationDialer();
+
+
     }
 
     @Override
@@ -102,25 +101,6 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        boolean isActivePermission = true;
-        if (requestCode == 99) {
-
-            for (int grantResult : grantResults) {
-                if (grantResult == PackageManager.PERMISSION_DENIED)
-                    isActivePermission = false;
-            }
-
-            if (!isActivePermission) {
-                Toast.makeText(this, "Для корректной работы приложения неоходимы все разрешения!", Toast.LENGTH_SHORT).show();
-                initPermissions();
-            }
-        }
-
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
     public AdapterCallback<Manager> getManagerAdapterCallback(){
         return new AdapterCallback<Manager>() {
             @Override
@@ -128,10 +108,11 @@ public class MainActivity extends AppCompatActivity {
                 if (state.getState().equals(TelephonyState.State.RINGING)) {
                     SimpleTelephonyHandler.answerCall(context);
 
-                    Intent intent = new Intent();
-                    intent.putExtra("managerId", manager.getId());
-
-                    ServiceUtils.sendTelephoneService(context, intent, TelephoneConfig.EXTRA_STATE_MANAGER);
+                    Record record = recordDao.last();
+                    if (record != null){
+                        record.setManager(manager);
+                        recordDao.update(record);
+                    }
                 } else Snackbar.make(fab, "Сейчас никто не звонит!", Snackbar.LENGTH_LONG).show();
             }
         };
@@ -142,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         initRecycleView();
         initToolbar();
         initFab();
-        initPermissions();
+        permissionUtil.initRequiredPermission(this);
         initTvEndCall();
     }
     private void initToolbar() {
@@ -179,44 +160,28 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
-    private void initPermissions() {
-        ArrayList<String> permissionsList = new ArrayList<>();
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED)
-            permissionsList.add(Manifest.permission.READ_EXTERNAL_STORAGE);
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_DENIED)
-            permissionsList.add(Manifest.permission.CALL_PHONE);
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_DENIED)
-            permissionsList.add(Manifest.permission.READ_PHONE_STATE);
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED)
-            permissionsList.add(Manifest.permission.RECORD_AUDIO);
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_DENIED)
-            permissionsList.add(Manifest.permission.READ_CONTACTS);
-
-
-        if (permissionsList.size() > 0)
-            ActivityCompat.requestPermissions(this, permissionsList.toArray(new String[]{}), 99);
-
-        if (!NotificationManagerCompat.from(context).areNotificationsEnabled())
-        {
-            Intent i = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(i);
+    private void initNotificationDialer() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
+            if (Settings.Secure.getString(getContentResolver(), "enabled_notification_listeners").contains(getApplicationContext().getPackageName())) { }
+            else
+            {
+                Intent i = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+            }
         }
     }
+
     private void initCallState() {
         state = stateDao.getTelephonyState();
         switch (state.getState()){
             case TelephonyState.State.RINGING:
-                Record record = recordDao.get(state.getRecordId());
+                Record record = recordDao.last();
                 contactNumber.setText(record.getCallPhone());
                 cardView.setVisibility(View.VISIBLE);
                 break;
 
             case TelephonyState.State.RECORDING:
-                MyLogger.printDebug(getClass(), "Попали в ветку recording");
                 startActivity(new Intent(this, DialogActivity_.class));
                 break;
 

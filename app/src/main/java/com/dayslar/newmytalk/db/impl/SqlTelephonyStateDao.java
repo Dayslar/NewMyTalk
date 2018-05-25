@@ -37,13 +37,11 @@ public class SqlTelephonyStateDao implements TelephonyStateDao {
 
     @Override
     public TelephonyState getTelephonyState() {
-        TelephonyState state = null;
+        TelephonyState state;
         Cursor cursor = database.query(DbConfig.TELEPHONY_STATE_TABLE_NAME, null, null, null, null, null, null);
 
         if (cursor.moveToFirst()){
-            state =  new TelephonyState()
-                    .setState(cursor.getString(cursor.getColumnIndex(TelephonyStateTableConfig.STATE)))
-                    .setRecordId(cursor.getLong(cursor.getColumnIndex(TelephonyStateTableConfig.RECORD_ID)));
+            state =  new TelephonyState().setState(cursor.getString(cursor.getColumnIndex(TelephonyStateTableConfig.STATE)));
         }
 
         else  {
@@ -67,8 +65,6 @@ public class SqlTelephonyStateDao implements TelephonyStateDao {
     public void setTelephonyState(TelephonyState state) {
         cv.clear();
         cv.put(TelephonyStateTableConfig.STATE, state.getState());
-        cv.put(TelephonyStateTableConfig.RECORD_ID, state.getRecordId());
-
         database.update(DbConfig.TELEPHONY_STATE_TABLE_NAME, cv, null, null);
     }
 }

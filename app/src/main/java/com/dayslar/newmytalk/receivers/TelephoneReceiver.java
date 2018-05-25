@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.dayslar.newmytalk.telephony.TelephoneConfig;
-import com.dayslar.newmytalk.utils.ServiceUtils;
+import com.dayslar.newmytalk.telephony.impl.SimpleTelephonyHandler;
 import com.dayslar.newmytalk.utils.SettingUtil;
 
 public class TelephoneReceiver extends BroadcastReceiver {
@@ -19,21 +19,23 @@ public class TelephoneReceiver extends BroadcastReceiver {
         if (settingUtil.getSetting().isRecordingActive()) {
             switch (intent.getAction()) {
                 case TelephoneConfig.NEW_OUTGOING_CALL:
-                    ServiceUtils.sendTelephoneService(context, intent, TelephoneConfig.NEW_OUTGOING_CALL);
+                    SimpleTelephonyHandler.getInstance(context).outgoingCall(intent);
                     break;
 
                 case TelephoneConfig.PHONE_STATE:
                     String phoneState = intent.getStringExtra(TelephoneConfig.EXTRA_STATE);
 
-                    if (phoneState.equals(TelephoneConfig.EXTRA_STATE_RUNNING))
-                        ServiceUtils.sendTelephoneService(context, intent, TelephoneConfig.EXTRA_STATE_RUNNING);
+                    if (phoneState.equals(TelephoneConfig.EXTRA_STATE_RUNNING)){
+                        SimpleTelephonyHandler.getInstance(context).runningCall(intent);
+                    }
 
-                    if (phoneState.equals(TelephoneConfig.EXTRA_STATE_OFFHOOK))
-                        ServiceUtils.sendTelephoneService(context, intent, TelephoneConfig.EXTRA_STATE_OFFHOOK);
+                    if (phoneState.equals(TelephoneConfig.EXTRA_STATE_OFFHOOK)) {
+                        SimpleTelephonyHandler.getInstance(context).offhookCall(intent);
+                    }
 
-                    if (phoneState.equals(TelephoneConfig.EXTRA_STATE_IDLE))
-                        ServiceUtils.sendTelephoneService(context, intent, TelephoneConfig.EXTRA_STATE_IDLE);
-
+                    if (phoneState.equals(TelephoneConfig.EXTRA_STATE_IDLE)) {
+                        SimpleTelephonyHandler.getInstance(context).idleCall(intent);
+                    }
                     break;
             }
         }

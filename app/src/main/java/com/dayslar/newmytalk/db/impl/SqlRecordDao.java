@@ -10,7 +10,6 @@ import com.dayslar.newmytalk.db.config.DbConfig;
 import com.dayslar.newmytalk.db.entity.Record;
 import com.dayslar.newmytalk.db.interfaces.dao.RecordDao;
 import com.dayslar.newmytalk.utils.MyFileUtils;
-import com.dayslar.newmytalk.utils.MyLogger;
 
 import org.apache.commons.io.FileUtils;
 
@@ -44,15 +43,12 @@ public class SqlRecordDao implements RecordDao {
     @Override
     public long insert(Record record) {
         long id = database.insert(DbConfig.RECORD_TABLE_NAME, null, cursorUtils.getCvForRecord(record));
-        MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Запись с " + id + " успешно добавлена");
-
         return id;
     }
 
     @Override
     public void update(Record record) {
         database.update(DbConfig.RECORD_TABLE_NAME, cursorUtils.getCvForRecord(record), DbConfig.COLUMN_ID + "= ?", new String[]{record.getId() + ""});
-        MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Запись с " + record.getId() + " успешно обновлена");
     }
 
     @Override
@@ -79,8 +75,18 @@ public class SqlRecordDao implements RecordDao {
             record = cursorUtils.readRecord(cursor);
         }
         cursor.close();
+        return record;
+    }
 
-        MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Запись с " + id + " успешно получена");
+    @Override
+    public Record last() {
+        Record record = null;
+        Cursor cursor =database.query(DbConfig.RECORD_TABLE_NAME, null, null, null, null, null, DbConfig.COLUMN_ID + " DESC", "1");
+
+        if (cursor.moveToFirst()) {
+            record = cursorUtils.readRecord(cursor);
+        }
+        cursor.close();
         return record;
     }
 
@@ -107,7 +113,5 @@ public class SqlRecordDao implements RecordDao {
 
         if (fileName != null)
             FileUtils.deleteQuietly(new File(MyFileUtils.getFolder() + fileName));
-
-        MyLogger.print(this.getClass(), MyLogger.LOG_DEBUG, "Запись с " + id + " успешно удалена");
     }
 }
